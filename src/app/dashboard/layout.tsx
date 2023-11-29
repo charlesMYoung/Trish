@@ -1,6 +1,6 @@
 "use client";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import SideBar from "@/components/sidebar/sidebar";
+import { SideBar } from "@/components";
 export default function DashboardLayout({
   children,
 }: {

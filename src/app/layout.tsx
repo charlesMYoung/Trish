@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
+
 import "@/styles/globals.css";
+import Link from "next/link";
+import { Button } from "@nextui-org/button";
+import { AppNavbar } from "@/components/navbar/navbar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>
+        <AppNavbar />
         <Providers>{children}</Providers>
       </body>
     </html>
