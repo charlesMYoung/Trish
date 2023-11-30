@@ -1,6 +1,7 @@
 'use client'
 import { Navbar, NavbarContent, NavbarItem } from '@nextui-org/navbar'
 import { Avatar } from '@nextui-org/react'
+import { MdTipsAndUpdates } from 'react-icons/md'
 
 export function AppNavbar() {
   return (
@@ -9,6 +10,9 @@ export function AppNavbar() {
         <NavbarItem className="hidden lg:flex">start</NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
+        <NavbarItem className="hidden text-2xl text-default-400 lg:flex">
+          <MdTipsAndUpdates />
+        </NavbarItem>
         <NavbarItem className="hidden lg:flex">
           <Avatar
             showFallback

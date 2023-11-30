@@ -6,7 +6,7 @@ import { SidebarMenu } from './sidebar-menu'
 import { SidebarTop } from './sidebar-top'
 export function SideBar() {
   return (
-    <div className="box-border flex w-72 flex-col space-y-2 border-r-1  border-default-100 px-4">
+    <div className="sticky box-border flex h-full w-72 flex-col  space-y-2 border-r-1 border-default-100 px-4">
       <SidebarTop />
       {SideBarConfig.map((sidebar) => {
         return sidebar.path ? (

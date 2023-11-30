@@ -34,7 +34,7 @@ export const InfoCard = ({
           {value}
         </div>
       </CardHeader>
-      <div className="aspect-video w-80">
+      <div className="aspect-video w-72">
         <Image
           fill
           src={bgImg}

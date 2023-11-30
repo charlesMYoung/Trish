@@ -8,9 +8,9 @@ export default function DashboardLayout({
   return (
     <section className="flex h-screen">
       <SideBar />
-      <div className="w-full">
+      <div className="container">
         <AppNavbar />
-        <div className="box-border p-4 ">
+        <div className="box-border p-4">
           <Breadcrumb />
           <main className="mt-4">{children}</main>
         </div>
