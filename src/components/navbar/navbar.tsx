@@ -1,47 +1,26 @@
 "use client";
 import {
   Navbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
 } from "@nextui-org/navbar";
-import { Button } from "@nextui-org/button";
-import Link from "next/link";
+import { Avatar } from "@nextui-org/react";
 
 export function AppNavbar() {
   return (
     <Navbar position="static">
-      <NavbarBrand>
-        <p className="font-bold text-inherit">ACME</p>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
+      <NavbarContent justify="start">
+        <NavbarItem className="hidden lg:flex">
+          start
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
+          <Avatar
+            showFallback
+            name="Jane"
+            src="https://images.unsplash.com/broken"
+          />
         </NavbarItem>
       </NavbarContent>
     </Navbar>
