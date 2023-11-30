@@ -23,7 +23,7 @@ export const SideBarConfig = [
     children: [
       {
         host: true,
-        name: '所有',
+        name: '列表',
         path: '/dashboard/article',
       },
       {
