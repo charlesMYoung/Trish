@@ -1,4 +1,5 @@
-import { SideBar, AppNavbar } from "@/components";
+import { SideBar, AppNavbar, Breadcrumb } from "@/components";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -6,10 +7,13 @@ export default function DashboardLayout({
 }) {
   return (
     <section className="flex h-screen">
-      <SideBar></SideBar>
+      <SideBar/>
       <div className="w-full">
         <AppNavbar />
-        {children}
+        <div className="box-border p-4 ">
+          <Breadcrumb />
+          <main className="mt-4">{children}</main>
+        </div>
       </div>
     </section>
   );

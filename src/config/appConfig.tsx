@@ -24,33 +24,33 @@ export const SideBarConfig = [
     children: [
       {
         name: "所有",
-        path: "/article",
+        path: "/dashboard/article",
       },
       {
         name: "分类",
-        path: "/article/category",
+        path: "/dashboard/article/category",
       },
       {
         name: "标签",
-        path: "/article/tags",
+        path: "/dashboard/article/tags",
       },
     ],
   },
   {
     name: "图片管理",
     icon: <FaImages />,
-    path: "/images",
+    path: "/dashboard/images",
   },
 
   {
     name: "菜单",
     icon: <AiOutlineMenu />,
-    path: "/menus",
+    path: "/dashboard/menus",
   },
   {
     name: "关于",
     icon: <SiAboutdotme />,
-    path: "/article",
+    path: "/dashboard/about",
   },
   {
     name: "系统",
@@ -58,11 +58,11 @@ export const SideBarConfig = [
   {
     name: "操作日志",
     icon: <PiReadCvLogoThin />,
-    path: "/operation",
+    path: "/dashboard/operation",
   },
   {
     name: "系统更新",
     icon: <MdOutlineTipsAndUpdates />,
-    path: "/update",
+    path: "/dashboard/update",
   },
 ];
