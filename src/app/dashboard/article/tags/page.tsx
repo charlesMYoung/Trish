@@ -1,3 +1,3 @@
 export default function Tags() {
-  return <>Tags</>;
+  return <>Tags</>
 }

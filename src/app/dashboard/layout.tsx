@@ -1,13 +1,13 @@
-import { SideBar, AppNavbar, Breadcrumb } from "@/components";
+import { AppNavbar, Breadcrumb, SideBar } from '@/components'
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <section className="flex h-screen">
-      <SideBar/>
+      <SideBar />
       <div className="w-full">
         <AppNavbar />
         <div className="box-border p-4 ">
@@ -16,5 +16,5 @@ export default function DashboardLayout({
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-"use client";
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import { SideBarConfig } from "@/config/appConfig";
-import { SidebarItem } from "./sidebar-item";
-import { SidebarMenu } from "./sidebar-menu";
-import { SidebarTop } from "./sidebar-top";
+'use client'
+import { SideBarConfig } from '@/config/appConfig'
+import { Accordion, AccordionItem } from '@nextui-org/react'
+import { SidebarItem } from './sidebar-item'
+import { SidebarMenu } from './sidebar-menu'
+import { SidebarTop } from './sidebar-top'
 export function SideBar() {
   return (
-    <div className="flex w-72 flex-col box-border px-4 space-y-2  border-r-1 border-default-100">
-      <SidebarTop/>
+    <div className="box-border flex w-72 flex-col space-y-2 border-r-1  border-default-100 px-4">
+      <SidebarTop />
       {SideBarConfig.map((sidebar) => {
         return sidebar.path ? (
           <SidebarItem
@@ -23,12 +23,12 @@ export function SideBar() {
             key={sidebar.name}
             className="p-0"
             itemClasses={{
-              base: "py-0 w-full",
-              title: "font-normal text-medium",
+              base: 'py-0 w-full',
+              title: 'font-normal text-medium',
               trigger:
-                "py-0 px-3 data-[hover=true]:bg-primary-100 rounded-lg flex items-center h-11",
-              indicator: "text-medium px-2",
-              content: "text-small px-2 ",
+                'py-0 px-3 data-[hover=true]:bg-primary-100 rounded-lg flex items-center h-11',
+              indicator: 'text-medium px-2',
+              content: 'text-small px-2 ',
             }}
           >
             <AccordionItem
@@ -45,15 +45,15 @@ export function SideBar() {
                       <SidebarItem key={child.name} href={child.path}>
                         {child.name}
                       </SidebarItem>
-                    );
+                    )
                   })
                 : null}
             </AccordionItem>
           </Accordion>
         ) : (
           <SidebarMenu key={sidebar.name}>{sidebar.name}</SidebarMenu>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

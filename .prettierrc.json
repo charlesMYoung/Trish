@@ -1,11 +1,12 @@
 {
-    "plugins": [
-        "prettier-plugin-organize-imports",
-        "prettier-plugin-tailwindcss"
-    ],
-    "tailwindFunctions": [
-        "classNames"
-    ],
-    "singleQuote": true,
-    "trailingComma": "es5" 
+  "plugins": [
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "tailwindFunctions": ["classNames", "clsx"],
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "semi": false
 }

@@ -1,3 +1,3 @@
 export default function Images() {
-  return <>Images</>;
+  return <>Images</>
 }

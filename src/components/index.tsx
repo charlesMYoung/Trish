@@ -1,4 +1,4 @@
-export * from "./sidebar/sidebar";
-export * from "./breadcrumb/breadcrumb";
-export * from "./navbar/navbar";
+export * from './breadcrumb/breadcrumb'
 export * from './info-card/info-card'
+export * from './navbar/navbar'
+export * from './sidebar/sidebar'

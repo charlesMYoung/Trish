@@ -1,3 +1,3 @@
 export default function Update() {
-  return <>Update</>;
+  return <>Update</>
 }

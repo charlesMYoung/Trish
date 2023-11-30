@@ -1,33 +1,47 @@
-import { Card, CardHeader } from "@nextui-org/react";
-import Image from "next/image";
-import React from "react";
+import { Card, CardHeader } from '@nextui-org/react'
+import Image from 'next/image'
+import React from 'react'
 import { ClassNameValue, twMerge } from 'tailwind-merge'
 
 export type InfoCardProps = {
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  bgImg: string;
+  title: string
+  value: string | number
+  icon: React.ReactNode
+  bgImg: string
   valueClass?: ClassNameValue
-};
+}
 
-export const InfoCard = ({ icon, title, value, bgImg, valueClass }: InfoCardProps) => {
-  return <Card>
-    <CardHeader className="absolute z-10 top-1 flex-col !items-start h-full">
-      <div className="text-2xl text-zinc-50 uppercase font-bold flex leading-1 items-center">
-        {icon} <span className="ml-2">{title}</span>
+export const InfoCard = ({
+  icon,
+  title,
+  value,
+  bgImg,
+  valueClass,
+}: InfoCardProps) => {
+  return (
+    <Card>
+      <CardHeader className="absolute top-1 z-10 h-full flex-col !items-start">
+        <div className="leading-1 flex items-center text-2xl font-bold uppercase text-zinc-50">
+          {icon} <span className="ml-2">{title}</span>
+        </div>
+        <div
+          className={twMerge(
+            'text-blue-300',
+            'flex w-full flex-1 items-end justify-end text-6xl font-medium',
+            valueClass
+          )}
+        >
+          {value}
+        </div>
+      </CardHeader>
+      <div className="aspect-video w-80">
+        <Image
+          fill
+          src={bgImg}
+          alt={title}
+          className="z-0 h-full w-full object-cover dark:brightness-75"
+        ></Image>
       </div>
-      <div className={twMerge('text-blue-300', "font-medium text-6xl flex-1 w-full flex items-end justify-end", valueClass)}>
-        {value}
-      </div>
-    </CardHeader>
-    <div className="w-80 aspect-video">
-      <Image
-        fill
-        src={bgImg}
-        alt={title}
-        className="dark:brightness-75 z-0 w-full h-full object-cover"
-      ></Image>
-    </div>
-  </Card>
-};
+    </Card>
+  )
+}

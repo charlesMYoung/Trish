@@ -1,15 +1,15 @@
-import { Button, Input } from "@nextui-org/react";
-import { CgFileAdd } from "react-icons/cg";
+import { Button, Input } from '@nextui-org/react'
+import { CgFileAdd } from 'react-icons/cg'
 
 type ListToolProps = {
-  title: string;
-  onAdd?: () => void;
-};
+  title: string
+  onAdd?: () => void
+}
 
 export function ListTool({ title, onAdd }: ListToolProps) {
   const addHandle = () => {
-    onAdd && onAdd();
-  };
+    onAdd && onAdd()
+  }
   return (
     <div>
       <div className="text-large text-default-500">{title}</div>
@@ -25,5 +25,5 @@ export function ListTool({ title, onAdd }: ListToolProps) {
         </Button>
       </div>
     </div>
-  );
+  )
 }
