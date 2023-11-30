@@ -1,15 +1,24 @@
 "use client";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { RiDashboard2Fill } from "react-icons/ri";
+import { useBreadcrub } from "@/hooks/useBreadcrub";
+
+
 export function Breadcrumb() {
-  const { } = useRouter()
+  const { breadcrubs } = useBreadcrub();
   return (
     <Breadcrumbs>
-      <BreadcrumbItem>Home</BreadcrumbItem>
-      <BreadcrumbItem>Music</BreadcrumbItem>
-      <BreadcrumbItem>Artist</BreadcrumbItem>
-      <BreadcrumbItem>Album</BreadcrumbItem>
-      <BreadcrumbItem>Song</BreadcrumbItem>
+      <BreadcrumbItem startContent={<RiDashboard2Fill />}>仪表盘</BreadcrumbItem>
+      {
+        breadcrubs.map(breadcrub => {
+          return <BreadcrumbItem
+            key={breadcrub.name}
+            startContent={breadcrub.icon}
+          >
+            {breadcrub.name}
+          </BreadcrumbItem>
+        })
+      }
     </Breadcrumbs>
   );
 }

@@ -23,6 +23,7 @@ export const SideBarConfig = [
     icon: <PiArticleMediumBold />,
     children: [
       {
+        host: true,
         name: "所有",
         path: "/dashboard/article",
       },
