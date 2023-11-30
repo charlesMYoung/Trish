@@ -1,16 +1,13 @@
 "use client";
-import {
-  Accordion,
-  AccordionItem,
-  Listbox,
-  ListboxItem,
-} from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 import { SideBarConfig } from "@/config/appConfig";
 import { SidebarItem } from "./sidebar-item";
 import { SidebarMenu } from "./sidebar-menu";
+import { SidebarTop } from "./sidebar-top";
 export function SideBar() {
   return (
-    <div className="flex w-72 flex-col box-border px-4 space-y-3">
+    <div className="flex w-72 flex-col box-border px-4 space-y-2  border-r-1 border-default-100">
+      <SidebarTop/>
       {SideBarConfig.map((sidebar) => {
         return sidebar.path ? (
           <SidebarItem
@@ -23,12 +20,14 @@ export function SideBar() {
         ) : sidebar.children && sidebar.children.length > 0 ? (
           <Accordion
             title={sidebar.name}
+            key={sidebar.name}
+            className="p-0"
             itemClasses={{
               base: "py-0 w-full",
               title: "font-normal text-medium",
               trigger:
-                "px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center",
-              indicator: "text-medium",
+                "py-0 px-3 data-[hover=true]:bg-primary-100 rounded-lg flex items-center h-11",
+              indicator: "text-medium px-2",
               content: "text-small px-2 ",
             }}
           >

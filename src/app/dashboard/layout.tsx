@@ -1,22 +1,14 @@
-"use client";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import { SideBar } from "@/components";
+import { SideBar, AppNavbar } from "@/components";
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex">
+    <section className="flex h-screen">
       <SideBar></SideBar>
-      <div>
-        <Breadcrumbs>
-          <BreadcrumbItem>Home</BreadcrumbItem>
-          <BreadcrumbItem>Music</BreadcrumbItem>
-          <BreadcrumbItem>Artist</BreadcrumbItem>
-          <BreadcrumbItem>Album</BreadcrumbItem>
-          <BreadcrumbItem>Song</BreadcrumbItem>
-        </Breadcrumbs>
+      <div className="w-full">
+        <AppNavbar />
         {children}
       </div>
     </section>
