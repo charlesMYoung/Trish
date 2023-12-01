@@ -5,7 +5,7 @@ import { appRouter } from '@/server/_app'
 export const ServeTRPC = appRouter.createCaller({
   links: [
     httpBatchLink({
-      url: 'http://localhost:3000/trpc',
+      url: 'http://localhost:3000/api/trpc',
     }),
   ],
 })
