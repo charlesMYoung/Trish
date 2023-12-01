@@ -7,8 +7,8 @@ const pool = new Pool({
   host: '127.0.0.1',
   port: 5432,
   user: 'postgres',
-  password: 'password',
-  database: 'db_name',
+  password: '123456',
+  database: 'postgres',
 })
 const db = drizzle(pool, { schema })
 await migrate(db, {

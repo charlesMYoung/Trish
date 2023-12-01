@@ -10,7 +10,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-const postImageType = pgEnum('cover', ['content', 'avatar'])
+export const postImageType = pgEnum('cover', ['content', 'avatar'])
 
 export const article = pgTable('t_blog_article', {
   id: varchar('id')
@@ -29,8 +29,8 @@ export const article = pgTable('t_blog_article', {
   category_id: varchar('category_id'),
 })
 
-export const articleRealation = relations(article, ({ one, many }) => ({
-  catagory: one(category, {
+export const articleRelation = relations(article, ({ one, many }) => ({
+  category: one(category, {
     fields: [article.category_id],
     references: [category.id],
   }),
@@ -58,7 +58,7 @@ export const image = pgTable('t_blog_image', {
   article_id: varchar('article_id'),
 })
 
-export const imageRealation = relations(image, ({ one }) => ({
+export const imageRelation = relations(image, ({ one }) => ({
   article: one(article, {
     fields: [image.article_id],
     references: [article.id],
@@ -76,7 +76,7 @@ export const category = pgTable('t_blog_category', {
   modified_at: timestamp('modified_at').defaultNow(),
 })
 
-export const categoryRealation = relations(category, ({ many }) => ({
+export const categoryRelation = relations(category, ({ many }) => ({
   articles: many(article),
 }))
 
@@ -91,7 +91,7 @@ export const tag = pgTable('t_blog_tag', {
   modified_at: timestamp('modified_at').defaultNow(),
 })
 
-export const tagRealation = relations(tag, ({ many }) => ({
+export const tagRelation = relations(tag, ({ many }) => ({
   articles: many(articleToTag),
 }))
 
@@ -114,7 +114,7 @@ export const articleToTag = pgTable(
   }
 )
 
-export const articleToTagRealation = relations(articleToTag, ({ one }) => ({
+export const articleToTagRelation = relations(articleToTag, ({ one }) => ({
   article: one(article, {
     fields: [articleToTag.article_id],
     references: [article.id],
