@@ -66,3 +66,14 @@ export const SideBarConfig = [
     path: '/dashboard/update',
   },
 ]
+
+export const GalleryList = [
+  {
+    name: 'chat',
+    url: 'chat.jpg',
+  },
+  {
+    name: 'postbg',
+    url: 'postbg.jpg',
+  },
+]
