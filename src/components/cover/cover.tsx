@@ -8,8 +8,13 @@ import { CoverCloseParam, CoverModal } from './modal-cover'
 export type CoverProps = {
   coverUrl: string
   onRemoveCover?: () => void
+  onCoverChange?: (coverUrl: string) => void
 }
-export const Cover = ({ coverUrl, onRemoveCover }: CoverProps) => {
+export const Cover = ({
+  coverUrl,
+  onRemoveCover,
+  onCoverChange,
+}: CoverProps) => {
   const [isShowTool, setShowTool] = useState<boolean>(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -24,8 +29,13 @@ export const Cover = ({ coverUrl, onRemoveCover }: CoverProps) => {
     if (onRemoveCover) onRemoveCover()
   }
 
-  const onCloseChangeHandle = (data: CoverCloseParam) => {
+  const onCloseChangeHandle = ({ key, data }: CoverCloseParam) => {
     console.log('data', data)
+    if (!onCoverChange) return
+    if (key === 'photos' && data) {
+      onCoverChange(data.url as string)
+    }
+
     onClose()
   }
 

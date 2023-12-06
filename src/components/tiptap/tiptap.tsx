@@ -26,6 +26,8 @@ export const TipTapEditor = ({
     onUpdateDebounce && onUpdateDebounce(content)
   }, 200)
 
+  const [coverUrl, setCoverUrl] = useState<string>('')
+
   const [isShowLongPress, setShowlongpress] = useState<boolean>(false)
   const [isShowCover, setShowCover] = useState<boolean>(false)
 
@@ -94,9 +96,8 @@ export const TipTapEditor = ({
       {isShowCover ? (
         <Cover
           onRemoveCover={onRemoveCover}
-          coverUrl={
-            'https://ts1.cn.mm.bing.net/th/id/R-C.3edbd350d03c25ed988236c50d0733e6?rik=txi3%2f%2b%2fVYUJofg&riu=http%3a%2f%2fpic.zsucai.com%2ffiles%2f2013%2f0802%2fwmdqfj4.jpg&ehk=TY9%2f90VQn6m3NYCoiPX2UyRYQIT7dkGJtTJli1W7pfo%3d&risl=&pid=ImgRaw&r=0'
-          }
+          onCoverChange={setCoverUrl}
+          coverUrl={coverUrl}
         />
       ) : (
         []

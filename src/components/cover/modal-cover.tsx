@@ -13,7 +13,7 @@ import { BackgroundPanel } from './background-panel'
 
 export type CoverCloseParam = {
   key?: string
-  data?: unknown
+  data?: Record<string, unknown>
 }
 
 export type CoverModalProps = {
@@ -24,7 +24,7 @@ export type CoverModalProps = {
 export const CoverModal = ({ isOpen, onCloseChange }: CoverModalProps) => {
   return (
     <>
-      <Modal isOpen={isOpen} placement="top" size="3xl">
+      <Modal isOpen={isOpen} placement="top" size="3xl" backdrop="blur">
         <ModalContent>
           <ModalBody className="flex w-full flex-col items-center">
             <Tabs aria-label="Options">
