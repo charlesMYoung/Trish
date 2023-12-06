@@ -3,7 +3,7 @@
     "prettier-plugin-organize-imports",
     "prettier-plugin-tailwindcss"
   ],
-  "tailwindFunctions": ["classNames", "clsx", "twMerge"],
+  "tailwindFunctions": ["classNames", "clsx", "twMerge","class"],
   "tabWidth": 2,
   "useTabs": false,
   "singleQuote": true,
