@@ -1,3 +1,4 @@
+'use client'
 import { TipTapEditor } from '@/components'
 
 export default function Write() {

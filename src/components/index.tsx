@@ -1,4 +1,5 @@
 export * from './breadcrumb/breadcrumb'
+export * from './cover/cover'
 export * from './info-card/info-card'
 export * from './navbar/navbar'
 export * from './sidebar/sidebar'
