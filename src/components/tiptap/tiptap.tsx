@@ -25,6 +25,7 @@ export const TipTapEditor = ({
     console.log('content', content)
     onUpdateDebounce && onUpdateDebounce(content)
   }, 200)
+
   const [isShowLongPress, setShowlongpress] = useState<boolean>(false)
   const [isShowCover, setShowCover] = useState<boolean>(false)
 
@@ -68,7 +69,7 @@ export const TipTapEditor = ({
   const ToolButtonGroup = () => {
     return (
       <div className="flex space-x-2">
-        <Button isIconOnly onClick={showCoverHandel}>
+        <Button isIconOnly onPress={showCoverHandel}>
           <FaImages />
         </Button>
       </div>

@@ -70,10 +70,26 @@ export const SideBarConfig = [
 export const GalleryList = [
   {
     name: 'chat',
-    url: 'chat.jpg',
+    url: '/images/chat.jpg',
   },
   {
     name: 'postbg',
-    url: 'postbg.jpg',
+    url: '/images/postbg.jpg',
+  },
+  {
+    name: 'chat2',
+    url: '/images/chat.jpg',
+  },
+  {
+    name: 'postbg3',
+    url: '/images/postbg.jpg',
+  },
+  {
+    name: 'chat4',
+    url: '/images/chat.jpg',
+  },
+  {
+    name: 'postbg5',
+    url: '/images/postbg.jpg',
   },
 ]

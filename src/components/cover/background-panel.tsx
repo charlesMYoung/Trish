@@ -13,25 +13,32 @@ type BackgroundProps = {
 
 export const BackgroundPanel = ({ onChosen }: BackgroundProps) => {
   const onChosenHandle = (gallery: Gallery) => {
+    console.log('gallery', gallery)
     if (onChosen) onChosen(gallery)
   }
   return (
-    <>
+    <div className="grid grid-cols-2 md:grid-cols-4">
       {GalleryList.map((item) => {
         return (
           <Card
+            className="m-2 aspect-video w-40 cursor-pointer"
             key={item.name}
-            onClick={() => {
-              onChosenHandle({
-                name: item.name,
-                url: item.url,
-              })
-            }}
           >
-            <Image src={item.url} alt={item.name} fill />
+            <Image
+              onClick={() => {
+                onChosenHandle({
+                  name: item.name,
+                  url: item.url,
+                })
+              }}
+              src={item.url}
+              alt={item.name}
+              fill
+              className="z-0 h-full w-full object-cover dark:brightness-75"
+            />
           </Card>
         )
       })}
-    </>
+    </div>
   )
 }
