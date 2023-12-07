@@ -41,7 +41,7 @@ export const TipTapEditor = ({
         content,
       })
     },
-    200
+    2000
   )
 
   const editor = useEditor({

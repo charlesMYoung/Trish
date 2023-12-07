@@ -7,12 +7,15 @@ import { appRouter } from '@/server/_app'
  * @param req
  * @returns
  */
-const handler = (req: Request) =>
-  fetchRequestHandler({
-    endpoint: '/trpc',
+const handler = async (req: Request) => {
+  const result = fetchRequestHandler({
+    endpoint: '/api/trpc',
     req,
     router: appRouter,
     createContext: () => ({}),
   })
+
+  return result
+}
 
 export { handler as GET, handler as POST }

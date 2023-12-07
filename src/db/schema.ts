@@ -10,7 +10,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-export const postImageType = pgEnum('cover', ['content', 'avatar'])
+export const postImageType = pgEnum('cover', ['content', 'avatar', 'cover'])
 
 export const article = pgTable('t_blog_article', {
   id: varchar('id')
