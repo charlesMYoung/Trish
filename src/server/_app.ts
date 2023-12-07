@@ -61,14 +61,14 @@ export const appRouter = router({
         if (covers.length === 0) {
           await db.insert(image).values({
             url: coverUrl,
-            type: 'cover',
+            type: 'COIVER',
           })
         } else {
           await db
             .update(image)
             .set({
               url: coverUrl,
-              type: 'cover',
+              type: 'COIVER',
               modified_at: new Date(),
             })
             .where(eq(image.id, covers[0].id))
