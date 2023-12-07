@@ -10,7 +10,7 @@ const pool = new Pool({
   password: '123456',
   database: 'postgres',
 })
-const db = drizzle(pool, { schema })
+const db = drizzle(pool, { schema, logger: true })
 await migrate(db, {
   migrationsFolder: 'drizzle',
 })

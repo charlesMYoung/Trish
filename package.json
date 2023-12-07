@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "drizzle-kit push:pg",
-    "db:generate": "drizzle-kit generate:pg"
+    "db:p": "drizzle-kit push:pg",
+    "db:g": "drizzle-kit generate:pg",
+    "db:drop": "drizzle-kit drop",
+    "db:check": "drizzle-kit check:pg"
   },
   "dependencies": {
     "@nextui-org/navbar": "^2.0.27",

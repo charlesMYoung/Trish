@@ -10,7 +10,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-export const postImageType = pgEnum('cover', ['CONTENT', 'AVATAR', 'COIVER'])
+export const postImageType = pgEnum('type', ['CONTENT', 'AVATAR', 'COVER'])
 
 export const article = pgTable('t_blog_article', {
   id: varchar('id')
@@ -51,7 +51,7 @@ export const image = pgTable('t_blog_image', {
   path: varchar('path', {
     length: 256,
   }),
-  type: postImageType('cover'),
+  type: postImageType('type'),
   created_at: timestamp('created_at').defaultNow(),
   modified_at: timestamp('modified_at').defaultNow(),
 

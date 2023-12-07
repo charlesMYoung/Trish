@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { queryCoverbyArticleId } from '@/db/prepared'
+import { queryCoverByArticleId } from '@/db/prepared'
 import { article, image } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
@@ -18,7 +18,7 @@ export const appRouter = router({
       })
     }),
 
-  upsetAritcle: publicProcedure
+  upsetArticle: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -54,21 +54,22 @@ export const appRouter = router({
             await tx.rollback()
           })
 
-        const covers = await queryCoverbyArticleId.execute({
+        const covers = await queryCoverByArticleId.execute({
           id,
         })
 
         if (covers.length === 0) {
           await db.insert(image).values({
             url: coverUrl,
-            type: 'COIVER',
+            type: 'COVER',
+            article_id: id,
           })
         } else {
           await db
             .update(image)
             .set({
               url: coverUrl,
-              type: 'COIVER',
+              type: 'COVER',
               modified_at: new Date(),
             })
             .where(eq(image.id, covers[0].id))
