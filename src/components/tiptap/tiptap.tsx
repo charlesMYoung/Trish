@@ -1,6 +1,7 @@
 'use client'
 
 import { Cover } from '@/components'
+import { useToggle } from '@/hooks'
 import { useDebounce } from '@/hooks/useDebounce'
 import { Button, Input } from '@nextui-org/react'
 import Blockquote from '@tiptap/extension-blockquote'
@@ -9,12 +10,18 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { KeyboardEvent, useState } from 'react'
+import { ChangeEventHandler, KeyboardEvent, useEffect, useState } from 'react'
 import { FaImages } from 'react-icons/fa6'
+
+export type OnUpdateParam = {
+  content?: string
+  title: string
+  coverUrl: string
+}
 
 export type TipTapEditorProps = {
   defaultContent?: string
-  onUpdateDebounce?: (content: string) => void
+  onUpdateDebounce?: (param: OnUpdateParam) => void
 }
 
 export const TipTapEditor = ({
@@ -22,11 +29,20 @@ export const TipTapEditor = ({
   onUpdateDebounce,
 }: TipTapEditorProps) => {
   const [coverUrl, setCoverUrl] = useState<string>('')
-  const [isShowLongPress, setShowlongpress] = useState<boolean>(false)
-  const [isShowCover, setShowCover] = useState<boolean>(false)
-  const { start } = useDebounce<string>((content) => {
-    onUpdateDebounce && onUpdateDebounce(content)
-  }, 200)
+  const [articleContent, setArticleContent] = useState<string>('')
+  const inputButtonToggle = useToggle(false)
+  const coverButtonToggle = useToggle(false)
+  const [title, setTitle] = useState<string>('')
+  const { start } = useDebounce<OnUpdateParam>(
+    ({ title, coverUrl, content }) => {
+      onTipTapEditorUpdate({
+        title,
+        coverUrl,
+        content,
+      })
+    },
+    200
+  )
 
   const editor = useEditor({
     extensions: [
@@ -51,9 +67,22 @@ export const TipTapEditor = ({
     content: defaultContent,
     onUpdate: ({ editor }) => {
       const content = editor.getHTML()
-      start(content)
+      setArticleContent(content)
     },
   })
+
+  /**
+   * 监听三个状态变化
+   */
+  useEffect(
+    () =>
+      start({
+        content: articleContent,
+        title,
+        coverUrl,
+      }),
+    [title, coverUrl, articleContent]
+  )
 
   const onKeyUpHandle = ({ key }: KeyboardEvent) => {
     if (key === 'Enter' && editor && !editor.isFocused) {
@@ -61,35 +90,31 @@ export const TipTapEditor = ({
     }
   }
 
+  const onChangeTitle: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const value = event.target.value || ''
+    setTitle(value)
+  }
+
+  const onTipTapEditorUpdate = (param: OnUpdateParam) =>
+    onUpdateDebounce && onUpdateDebounce(param)
+
   const ToolButtonGroup = () => {
     return (
       <div className="flex space-x-2">
-        <Button isIconOnly onPress={showCoverHandel}>
+        <Button isIconOnly onPress={coverButtonToggle.open}>
           <FaImages />
         </Button>
       </div>
     )
   }
 
-  const showCoverHandel = () => {
-    setShowCover(true)
-  }
-
-  const onMouseOverHandle = () => {
-    setShowlongpress(true)
-  }
-
-  const onMouseLeaveHandle = () => {
-    setShowlongpress(false)
-  }
-
   const onRemoveCover = () => {
-    setShowCover(false)
+    coverButtonToggle.close()
     setCoverUrl('')
   }
   return (
     <>
-      {isShowCover ? (
+      {coverButtonToggle.isToggle ? (
         <Cover
           onRemoveCover={onRemoveCover}
           onCoverChange={setCoverUrl}
@@ -102,13 +127,17 @@ export const TipTapEditor = ({
       <div
         className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-2xl"
         onKeyUp={onKeyUpHandle}
-        onMouseOver={onMouseOverHandle}
-        onMouseLeave={onMouseLeaveHandle}
+        onMouseOver={inputButtonToggle.open}
+        onMouseLeave={inputButtonToggle.close}
       >
         <div className={'h-12'}>
-          {isShowLongPress && !isShowCover ? <ToolButtonGroup /> : null}
+          {inputButtonToggle.isToggle && !coverButtonToggle.isToggle ? (
+            <ToolButtonGroup />
+          ) : null}
         </div>
         <Input
+          value={title}
+          onChange={onChangeTitle}
           tabIndex={1}
           placeholder="无标题"
           classNames={{

@@ -1,6 +1,6 @@
 'use client'
 
-import Upload, { type UploadProps } from 'rc-upload'
+import RcUpload, { type UploadProps } from 'rc-upload'
 
 export type UploadButtonProps = {
   startContent?: React.ReactNode
@@ -53,10 +53,10 @@ export const Upload = (props: UploadButtonProps) => {
   }
 
   return (
-    <Upload {...uploadProps}>
+    <RcUpload {...uploadProps}>
       {props.startContent}
       {props.children}
-    </Upload>
+    </RcUpload>
   )
 }
 

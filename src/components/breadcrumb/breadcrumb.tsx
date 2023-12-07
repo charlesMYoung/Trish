@@ -1,5 +1,5 @@
 'use client'
-import { useBreadcrumb } from '@/hooks/useBreadcrumbs'
+import { useBreadcrumb } from '@/hooks'
 import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/react'
 import { RiDashboard2Fill } from 'react-icons/ri'
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { useToggle } from '@/hooks'
 import {
   Button,
   ButtonGroup,
@@ -7,7 +8,6 @@ import {
   Image,
   useDisclosure,
 } from '@nextui-org/react'
-import { useState } from 'react'
 import { FaTrash } from 'react-icons/fa'
 import { TbArrowsExchange } from 'react-icons/tb'
 import { CoverCloseParam, CoverModal } from './modal-cover'
@@ -22,15 +22,8 @@ export const Cover = ({
   onRemoveCover,
   onCoverChange,
 }: CoverProps) => {
-  const [isShowTool, setShowTool] = useState<boolean>(false)
+  const toolToggle = useToggle(false)
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-
-  const onMouseOverHandle = () => {
-    setShowTool(true)
-  }
-  const onMouseLeaveHandle = () => {
-    setShowTool(false)
-  }
 
   const onRemoveCoverHandle = () => {
     if (onRemoveCover) onRemoveCover()
@@ -51,8 +44,8 @@ export const Cover = ({
       />
       <Card
         className="relative h-60 sm:h-80 md:h-80 lg:h-80 "
-        onMouseOver={onMouseOverHandle}
-        onMouseLeave={onMouseLeaveHandle}
+        onMouseOver={toolToggle.open}
+        onMouseLeave={toolToggle.close}
       >
         <Image
           src={coverUrl}
@@ -60,7 +53,7 @@ export const Cover = ({
           className="z-0 h-full w-full object-cover"
           alt="cover_image"
         />
-        {isShowTool ? (
+        {toolToggle.isToggle ? (
           <div className="absolute right-3 top-3 z-20 flex space-x-2">
             <ButtonGroup>
               <Button

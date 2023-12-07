@@ -1,10 +1,15 @@
 'use client'
-import { TipTapEditor } from '@/components'
+import { OnUpdateParam, TipTapEditor } from '@/components'
 
 export default function Write() {
+  const onUpdateDebounce = (value: OnUpdateParam) => {
+    console.log('value', value)
+  }
+
   return (
-    <div>
-      <TipTapEditor></TipTapEditor>
-    </div>
+    <TipTapEditor
+      onUpdateDebounce={onUpdateDebounce}
+      defaultContent=""
+    ></TipTapEditor>
   )
 }
