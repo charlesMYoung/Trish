@@ -1,3 +1,5 @@
+'use client'
+
 import { GalleryList } from '@/config/appConfig'
 import { Card } from '@nextui-org/react'
 import Image from 'next/image'

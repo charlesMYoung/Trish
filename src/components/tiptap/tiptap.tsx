@@ -21,15 +21,12 @@ export const TipTapEditor = ({
   defaultContent = '',
   onUpdateDebounce,
 }: TipTapEditorProps) => {
-  const { start } = useDebounce<string>((content) => {
-    console.log('content', content)
-    onUpdateDebounce && onUpdateDebounce(content)
-  }, 200)
-
   const [coverUrl, setCoverUrl] = useState<string>('')
-
   const [isShowLongPress, setShowlongpress] = useState<boolean>(false)
   const [isShowCover, setShowCover] = useState<boolean>(false)
+  const { start } = useDebounce<string>((content) => {
+    onUpdateDebounce && onUpdateDebounce(content)
+  }, 200)
 
   const editor = useEditor({
     extensions: [
@@ -64,10 +61,6 @@ export const TipTapEditor = ({
     }
   }
 
-  const showCoverHandel = () => {
-    setShowCover(true)
-  }
-
   const ToolButtonGroup = () => {
     return (
       <div className="flex space-x-2">
@@ -78,18 +71,21 @@ export const TipTapEditor = ({
     )
   }
 
+  const showCoverHandel = () => {
+    setShowCover(true)
+  }
+
   const onMouseOverHandle = () => {
-    console.log('onMouseOverHandle>>>>>>>')
     setShowlongpress(true)
   }
 
   const onMouseLeaveHandle = () => {
-    console.log('onMouseLeaveHandle>>>>>>>')
     setShowlongpress(false)
   }
 
   const onRemoveCover = () => {
     setShowCover(false)
+    setCoverUrl('')
   }
   return (
     <>

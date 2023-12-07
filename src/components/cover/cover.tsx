@@ -1,5 +1,12 @@
 'use client'
-import { Button, Card, Image, useDisclosure } from '@nextui-org/react'
+
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Image,
+  useDisclosure,
+} from '@nextui-org/react'
 import { useState } from 'react'
 import { FaTrash } from 'react-icons/fa'
 import { TbArrowsExchange } from 'react-icons/tb'
@@ -16,7 +23,7 @@ export const Cover = ({
   onCoverChange,
 }: CoverProps) => {
   const [isShowTool, setShowTool] = useState<boolean>(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   const onMouseOverHandle = () => {
     setShowTool(true)
@@ -29,19 +36,19 @@ export const Cover = ({
     if (onRemoveCover) onRemoveCover()
   }
 
-  const onCloseChangeHandle = ({ key, data }: CoverCloseParam) => {
-    console.log('data', data)
-    if (!onCoverChange) return
-    if (key === 'photos' && data) {
-      onCoverChange(data.url as string)
-    }
-
+  const onCloseChangeHandle = ({ coverUrl }: CoverCloseParam) => {
+    if (!onCoverChange || !coverUrl) return
+    onCoverChange(coverUrl)
     onClose()
   }
 
   return (
     <>
-      <CoverModal isOpen={isOpen} onCloseChange={onCloseChangeHandle} />
+      <CoverModal
+        isOpen={isOpen}
+        onCloseChange={onCloseChangeHandle}
+        onOpenChange={onOpenChange}
+      />
       <Card
         className="relative h-60 sm:h-80 md:h-80 lg:h-80 "
         onMouseOver={onMouseOverHandle}
@@ -55,12 +62,24 @@ export const Cover = ({
         />
         {isShowTool ? (
           <div className="absolute right-3 top-3 z-20 flex space-x-2">
-            <Button isIconOnly variant="ghost" onPress={onOpen}>
-              <TbArrowsExchange />
-            </Button>
-            <Button isIconOnly variant="ghost" onPress={onRemoveCoverHandle}>
-              <FaTrash />
-            </Button>
+            <ButtonGroup>
+              <Button
+                isIconOnly
+                variant="ghost"
+                onPress={onOpen}
+                color="primary"
+              >
+                <TbArrowsExchange />
+              </Button>
+              <Button
+                isIconOnly
+                variant="ghost"
+                color="primary"
+                onPress={onRemoveCoverHandle}
+              >
+                <FaTrash />
+              </Button>
+            </ButtonGroup>
           </div>
         ) : (
           []
