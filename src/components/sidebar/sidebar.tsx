@@ -1,6 +1,6 @@
 'use client'
 import { SideBarConfig } from '@/config/appConfig'
-import { Accordion, AccordionItem } from '@nextui-org/react'
+import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import { SidebarItem } from './sidebar-item'
 import { SidebarMenu } from './sidebar-menu'
@@ -8,7 +8,7 @@ import { SidebarTop } from './sidebar-top'
 export function SideBar() {
   const pathName = usePathname()
   return (
-    <div className="sticky left-0 top-0 box-border flex h-full w-72 flex-col space-y-2 border-r-1 border-default-100 px-4">
+    <ScrollShadow className="sticky left-0 top-0 box-border flex h-full w-72 flex-col space-y-2 border-r-1 border-default-100 px-4">
       <SidebarTop />
       {SideBarConfig.map((sidebar) => {
         return sidebar.path ? (
@@ -57,6 +57,6 @@ export function SideBar() {
           <SidebarMenu key={sidebar.name}>{sidebar.name}</SidebarMenu>
         )
       })}
-    </div>
+    </ScrollShadow>
   )
 }
