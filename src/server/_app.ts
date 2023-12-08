@@ -1,23 +1,11 @@
 import { db } from '@/db'
 import { queryCoverByArticleId } from '@/db/prepared'
-import { article, image } from '@/db/schema'
+import { article, category, image } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { publicProcedure, router } from './trpc'
 
 export const appRouter = router({
-  getArticleById: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      })
-    )
-    .query(async ({ input }) => {
-      return await db.query.article.findFirst({
-        where: (articles, { eq }) => eq(articles.id, input.id),
-      })
-    }),
-
   upsetArticle: publicProcedure
     .input(
       z.object({
@@ -28,7 +16,7 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input: { id, title, content, coverUrl } }) => {
-      db.transaction(async (tx) => {
+      return db.transaction(async (tx) => {
         const articleResult = await db
           .insert(article)
           .values({
@@ -50,7 +38,7 @@ export const appRouter = router({
             id: article.id,
           })
           .catch(async (error) => {
-            console.trace('upsetAritcle error', error)
+            console.trace('upsetArticle error', error)
             await tx.rollback()
           })
 
@@ -76,6 +64,33 @@ export const appRouter = router({
         }
         return articleResult
       })
+    }),
+
+  getAllCategory: publicProcedure.query(() => {
+    return db.query.category.findMany()
+  }),
+
+  upsertCategory: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(({ input: { name } }) => {
+      return db
+        .insert(category)
+        .values({
+          name,
+        })
+        .onConflictDoUpdate({
+          target: category.name,
+          set: {
+            name,
+          },
+        })
+        .returning({
+          id: category.id,
+        })
     }),
 })
 

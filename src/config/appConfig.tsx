@@ -1,9 +1,6 @@
-import { AiOutlineMenu } from 'react-icons/ai'
-import { FaImages } from 'react-icons/fa6'
 import { MdOutlineTipsAndUpdates } from 'react-icons/md'
 import { PiArticleMediumBold, PiReadCvLogoThin } from 'react-icons/pi'
 import { RiDashboard2Fill } from 'react-icons/ri'
-import { SiAboutdotme } from 'react-icons/si'
 
 export const SideBarConfig = [
   {
@@ -15,7 +12,7 @@ export const SideBarConfig = [
     path: '/dashboard',
   },
   {
-    name: '通用',
+    name: '文章',
   },
   {
     name: '文章',
@@ -36,22 +33,7 @@ export const SideBarConfig = [
       },
     ],
   },
-  {
-    name: '图片管理',
-    icon: <FaImages />,
-    path: '/dashboard/images',
-  },
 
-  {
-    name: '菜单',
-    icon: <AiOutlineMenu />,
-    path: '/dashboard/menus',
-  },
-  {
-    name: '关于',
-    icon: <SiAboutdotme />,
-    path: '/dashboard/about',
-  },
   {
     name: '系统',
   },

@@ -1,23 +1,12 @@
 'use client'
 
 import { InfoCard } from '@/components'
-import { ClientTRPC } from '@/trpc/client'
 import { FaFileAlt, FaTag } from 'react-icons/fa'
 import { FaCommentDots, FaImage } from 'react-icons/fa6'
 
 export default function Dashboard() {
-  const getTodos = ClientTRPC.getArticleById.useQuery(
-    {
-      id: '1',
-    },
-    {
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-    }
-  )
   return (
     <div className="mb-4">
-      {JSON.stringify(getTodos.data)}
       <div className="mb-4 text-large text-default-500">快速预览</div>
       <div className="flex space-x-4">
         <InfoCard
