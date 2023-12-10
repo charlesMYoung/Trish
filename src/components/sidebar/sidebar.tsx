@@ -1,16 +1,56 @@
 'use client'
-import { SideBarConfig } from '@/config/appConfig'
-import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
+import { useOnChange, useSidebarStore } from '@/hooks'
+import { ClientTRPC } from '@/trpc/client'
+import {
+  Accordion,
+  AccordionItem,
+  Input,
+  ScrollShadow,
+} from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 import { SidebarItem } from './sidebar-item'
 import { SidebarMenu } from './sidebar-menu'
 import { SidebarTop } from './sidebar-top'
+
 export function SideBar() {
   const pathName = usePathname()
+  const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery()
+  const { value, onChange } = useOnChange({})
+
+  // const { data: articles, mutate } = ClientTRPC.getArticleByCateId.useMutation()
+
+  const { mutate: upsertCategoryMutate } =
+    ClientTRPC.upsertCategory.useMutation({
+      onSuccess: () => {
+        ClientTRPC.getAllCategory.useQuery().refetch()
+      },
+    })
+
+  const sidebars = useSidebarStore((state) => state.sidebars)
+  const initMenus = useSidebarStore((state) => state.initMenus)
+  // const insertMenu = useSidebarStore((state) => state.insertMenu)
+
+  useEffect(() => {
+    if (categoriesFromServer) {
+      initMenus(categoriesFromServer)
+    }
+  }, [])
+
+  const onMenus = (cateName: string) => {
+    upsertCategoryMutate({
+      name: cateName,
+    })
+  }
+
   return (
-    <ScrollShadow className="sticky left-0 top-0 box-border flex h-full w-72 flex-col space-y-2 border-r-1 border-default-100 px-4">
+    <ScrollShadow
+      className="sticky left-0 top-0 box-border 
+    flex h-full w-72 flex-col space-y-2
+     border-r-1 border-default-100 px-4"
+    >
       <SidebarTop />
-      {SideBarConfig.map((sidebar) => {
+      {sidebars.map((sidebar) => {
         return sidebar.path ? (
           <SidebarItem
             isActive={pathName === sidebar.path}
@@ -40,12 +80,35 @@ export function SideBar() {
               key={sidebar.name}
               aria-label={sidebar.name}
               hideIndicator={sidebar.children ? false : true}
-              title={sidebar.name}
+              title={
+                <Input
+                  value={value}
+                  onChange={onChange}
+                  tabIndex={1}
+                  placeholder="无标题"
+                  classNames={{
+                    input: [
+                      'bg-transparent',
+                      'hover:bg-transparent',
+                      'text-md',
+                    ],
+                    innerWrapper: ['bg-transparent', 'hover:bg-transparent'],
+                    inputWrapper: [
+                      'h-45',
+                      'bg-transparent',
+                      'border-none',
+                      'hover:bg-transparent',
+                      'data-[hover=true]:bg-transparent',
+                      'group-data-[focus=true]:bg-transparent',
+                    ],
+                  }}
+                />
+              }
             >
               {sidebar.children
                 ? sidebar.children.map((child) => {
                     return (
-                      <SidebarItem key={child.name} href={child.path}>
+                      <SidebarItem key={child.name} href={child.path || ''}>
                         {child.name}
                       </SidebarItem>
                     )
@@ -54,7 +117,9 @@ export function SideBar() {
             </AccordionItem>
           </Accordion>
         ) : (
-          <SidebarMenu key={sidebar.name}>{sidebar.name}</SidebarMenu>
+          <SidebarMenu key={sidebar.name} onMenus={onMenus}>
+            {sidebar.name}
+          </SidebarMenu>
         )
       })}
     </ScrollShadow>

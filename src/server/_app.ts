@@ -67,8 +67,25 @@ export const appRouter = router({
     }),
 
   getAllCategory: publicProcedure.query(() => {
-    return db.query.category.findMany()
+    return db.query.category.findMany({
+      columns: {
+        id: true,
+        name: true,
+      },
+    })
   }),
+
+  getArticleByCateId: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ input: { id } }) => {
+      return db.query.article.findMany({
+        where: (article, { eq }) => eq(article.category_id, id),
+      })
+    }),
 
   upsertCategory: publicProcedure
     .input(
@@ -90,6 +107,7 @@ export const appRouter = router({
         })
         .returning({
           id: category.id,
+          name: category.name,
         })
     }),
 })

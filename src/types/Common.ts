@@ -15,3 +15,15 @@ export type Menu = {
   path?: string | undefined
   children?: SubMenu[] | undefined
 } & SubMenu
+
+export type Article = {
+  id: string
+  title: string
+  description: string
+  is_release: boolean
+  content: string
+  release_date: Date
+  created_at: Date
+  modified_at: Date
+  category_id: string
+}

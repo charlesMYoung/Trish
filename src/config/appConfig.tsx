@@ -5,14 +5,17 @@ import { RiDashboard2Fill } from 'react-icons/ri'
 export const SideBarConfig = [
   {
     name: '主菜单',
+    key: 'main',
   },
   {
     name: '仪表盘',
+    key: 'dashboard',
     icon: <RiDashboard2Fill />,
     path: '/dashboard',
   },
   {
     name: '文章',
+    key: 'article',
   },
   {
     name: '文章',
@@ -33,17 +36,19 @@ export const SideBarConfig = [
       },
     ],
   },
-
   {
     name: '系统',
+    key: 'system',
   },
   {
     name: '操作日志',
+    key: 'operation',
     icon: <PiReadCvLogoThin />,
     path: '/dashboard/operation',
   },
   {
     name: '系统更新',
+    key: 'update',
     icon: <MdOutlineTipsAndUpdates />,
     path: '/dashboard/update',
   },
