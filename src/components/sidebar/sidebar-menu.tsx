@@ -4,23 +4,18 @@ import { ReactNode } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 export function SidebarMenu({
   children,
-  onMenus,
+  onAdd,
+  id,
 }: {
   children: ReactNode
-  onMenus: (cateName: string) => void
+  id: string
+  onAdd: () => void
 }) {
   return (
     <div className="flex items-center justify-between text-sm">
       {children}
-      {children === '文章' && (
-        <Button
-          isIconOnly
-          size="sm"
-          variant="flat"
-          onPress={() => {
-            onMenus(children as string)
-          }}
-        >
+      {id === 'category' && (
+        <Button isIconOnly size="sm" variant="flat" onPress={onAdd}>
           <FaPlus></FaPlus>
         </Button>
       )}

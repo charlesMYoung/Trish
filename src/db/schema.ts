@@ -29,6 +29,8 @@ export const article = pgTable('t_blog_article', {
   category_id: varchar('category_id'),
 })
 
+export type Article = typeof article.$inferSelect
+
 export const articleRelation = relations(article, ({ one, many }) => ({
   category: one(category, {
     fields: [article.category_id],
@@ -58,6 +60,8 @@ export const image = pgTable('t_blog_image', {
   article_id: varchar('article_id'),
 })
 
+export type Image = typeof image.$inferSelect
+
 export const imageRelation = relations(image, ({ one }) => ({
   article: one(article, {
     fields: [image.article_id],
@@ -76,6 +80,8 @@ export const category = pgTable('t_blog_category', {
   modified_at: timestamp('modified_at').defaultNow(),
 })
 
+export type Category = typeof category.$inferSelect
+
 export const categoryRelation = relations(category, ({ many }) => ({
   articles: many(article),
 }))
@@ -86,10 +92,12 @@ export const tag = pgTable('t_blog_tag', {
     .primaryKey(),
   name: varchar('name', {
     length: 100,
-  }),
+  }).unique(),
   created_at: timestamp('created_at').defaultNow(),
   modified_at: timestamp('modified_at').defaultNow(),
 })
+
+export type Tag = typeof tag.$inferSelect
 
 export const tagRelation = relations(tag, ({ many }) => ({
   articles: many(articleToTag),

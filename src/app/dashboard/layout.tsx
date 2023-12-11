@@ -1,4 +1,4 @@
-import { AppNavbar, Breadcrumb, SideBar } from '@/components'
+import { AppNavbar, SideBar } from '@/components'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
 
 export default function DashboardLayout({
@@ -12,7 +12,6 @@ export default function DashboardLayout({
       <ScrollShadow className="container">
         <AppNavbar />
         <div className="box-border p-4">
-          <Breadcrumb />
           <main className="mt-4">{children}</main>
         </div>
       </ScrollShadow>

@@ -1,45 +1,58 @@
 'use client'
+import { Category } from '@/db/schema'
 import { useOnChange, useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
-import {
-  Accordion,
-  AccordionItem,
-  Input,
-  ScrollShadow,
-} from '@nextui-org/react'
+import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { ChangeEvent, useEffect } from 'react'
+import { NoStyleInput } from '..'
 import { SidebarItem } from './sidebar-item'
 import { SidebarMenu } from './sidebar-menu'
 import { SidebarTop } from './sidebar-top'
 
 export function SideBar() {
   const pathName = usePathname()
-  const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery()
-  const { value, onChange } = useOnChange({})
+  const trpcUtils = ClientTRPC.useUtils()
+  const { data: categoriesFromServer } =
+    ClientTRPC.getAllCategory.useQuery<Category[]>()
 
-  // const { data: articles, mutate } = ClientTRPC.getArticleByCateId.useMutation()
+  const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
+    onSuccess() {
+      trpcUtils.getAllCategory.refetch()
+    },
+  })
+  const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
+    onSuccess() {
+      trpcUtils.getAllCategory.refetch()
+    },
+  })
 
-  const { mutate: upsertCategoryMutate } =
-    ClientTRPC.upsertCategory.useMutation({
-      onSuccess: () => {
-        ClientTRPC.getAllCategory.useQuery().refetch()
-      },
-    })
+  const { value, onChange } = useOnChange<{
+    event: ChangeEvent<HTMLInputElement>
+    id: string
+  }>({
+    onChangeDebounceFN: ({ event, id }) => {
+      const name = event.target.value
+      console.log('name>>>>', name)
+      updateCategory({
+        name,
+        id,
+      })
+    },
+  })
 
   const sidebars = useSidebarStore((state) => state.sidebars)
   const initMenus = useSidebarStore((state) => state.initMenus)
-  // const insertMenu = useSidebarStore((state) => state.insertMenu)
 
   useEffect(() => {
     if (categoriesFromServer) {
       initMenus(categoriesFromServer)
     }
-  }, [])
+  }, [categoriesFromServer])
 
-  const onMenus = (cateName: string) => {
-    upsertCategoryMutate({
-      name: cateName,
+  const onAddHandle = () => {
+    insertCategory({
+      name: '未命名',
     })
   }
 
@@ -51,19 +64,19 @@ export function SideBar() {
     >
       <SidebarTop />
       {sidebars.map((sidebar) => {
-        return sidebar.path ? (
+        return sidebar.href ? (
           <SidebarItem
-            isActive={pathName === sidebar.path}
-            key={sidebar.name}
-            href={sidebar.path}
+            isActive={pathName === sidebar.href}
+            key={sidebar.id}
+            href={sidebar.href}
             icon={sidebar.icon}
           >
             {sidebar.name}
           </SidebarItem>
-        ) : sidebar.children && sidebar.children.length > 0 ? (
+        ) : Array.isArray(sidebar.children) ? (
           <Accordion
-            title={sidebar.name}
-            key={sidebar.name}
+            title={sidebar.name as string}
+            key={sidebar.id}
             className="p-0"
             itemClasses={{
               base: 'py-0 w-full',
@@ -76,39 +89,29 @@ export function SideBar() {
           >
             <AccordionItem
               startContent={sidebar.icon}
-              itemID={sidebar.name}
-              key={sidebar.name}
-              aria-label={sidebar.name}
-              hideIndicator={sidebar.children ? false : true}
+              itemID={sidebar.id}
+              aria-label={sidebar.id}
+              hideIndicator={!sidebar.children.length}
               title={
-                <Input
-                  value={value}
-                  onChange={onChange}
-                  tabIndex={1}
-                  placeholder="无标题"
-                  classNames={{
-                    input: [
-                      'bg-transparent',
-                      'hover:bg-transparent',
-                      'text-md',
-                    ],
-                    innerWrapper: ['bg-transparent', 'hover:bg-transparent'],
-                    inputWrapper: [
-                      'h-45',
-                      'bg-transparent',
-                      'border-none',
-                      'hover:bg-transparent',
-                      'data-[hover=true]:bg-transparent',
-                      'group-data-[focus=true]:bg-transparent',
-                    ],
+                <NoStyleInput
+                  key={sidebar.id}
+                  defaultValue={
+                    value?.event.target.value || (sidebar.name as string)
+                  }
+                  onChange={(event) => {
+                    onChange({
+                      event,
+                      id: sidebar.id,
+                    })
                   }}
-                />
+                  value={sidebar.name as string}
+                ></NoStyleInput>
               }
             >
-              {sidebar.children
+              {Array.isArray(sidebar.children)
                 ? sidebar.children.map((child) => {
                     return (
-                      <SidebarItem key={child.name} href={child.path || ''}>
+                      <SidebarItem key={child.id} href={child.href || ''}>
                         {child.name}
                       </SidebarItem>
                     )
@@ -117,7 +120,7 @@ export function SideBar() {
             </AccordionItem>
           </Accordion>
         ) : (
-          <SidebarMenu key={sidebar.name} onMenus={onMenus}>
+          <SidebarMenu key={sidebar.id} onAdd={onAddHandle} id={sidebar.id}>
             {sidebar.name}
           </SidebarMenu>
         )

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-function useDebounce<T>(fn: (t: T) => void, delay: number) {
+function useDebounce<T>(fn: (t: T) => void, delay = 2000) {
   const timeId = useRef<NodeJS.Timeout>()
 
   const start = (paras: T) => {

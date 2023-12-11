@@ -1,56 +1,38 @@
+import { Sidebar } from '@/types/sidebar'
 import { MdOutlineTipsAndUpdates } from 'react-icons/md'
-import { PiArticleMediumBold, PiReadCvLogoThin } from 'react-icons/pi'
+import { PiReadCvLogoThin } from 'react-icons/pi'
 import { RiDashboard2Fill } from 'react-icons/ri'
 
-export const SideBarConfig = [
+export const SideBarConfig: Sidebar[] = [
   {
     name: '主菜单',
-    key: 'main',
+    id: 'main',
   },
   {
     name: '仪表盘',
-    key: 'dashboard',
+    id: 'dashboard',
     icon: <RiDashboard2Fill />,
-    path: '/dashboard',
+    href: '/dashboard',
   },
   {
-    name: '文章',
-    key: 'article',
-  },
-  {
-    name: '文章',
-    icon: <PiArticleMediumBold />,
-    children: [
-      {
-        host: true,
-        name: '列表',
-        path: '/dashboard/article',
-      },
-      {
-        name: '分类',
-        path: '/dashboard/article/category',
-      },
-      {
-        name: '标签',
-        path: '/dashboard/article/tags',
-      },
-    ],
+    name: '分类',
+    id: 'category',
   },
   {
     name: '系统',
-    key: 'system',
+    id: 'system',
   },
   {
     name: '操作日志',
-    key: 'operation',
+    id: 'operation',
     icon: <PiReadCvLogoThin />,
-    path: '/dashboard/operation',
+    href: '/dashboard/operation',
   },
   {
     name: '系统更新',
-    key: 'update',
+    id: 'update',
     icon: <MdOutlineTipsAndUpdates />,
-    path: '/dashboard/update',
+    href: '/dashboard/update',
   },
 ]
 

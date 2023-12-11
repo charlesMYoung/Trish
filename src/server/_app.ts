@@ -72,6 +72,9 @@ export const appRouter = router({
         id: true,
         name: true,
       },
+      orderBy(fields, operators) {
+        return operators.asc(fields.created_at)
+      },
     })
   }),
 
@@ -87,7 +90,27 @@ export const appRouter = router({
       })
     }),
 
-  upsertCategory: publicProcedure
+  updateCategory: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    )
+    .mutation(({ input: { id, name } }) => {
+      return db
+        .update(category)
+        .set({
+          name,
+        })
+        .where(eq(category.id, id))
+        .returning({
+          id: category.id,
+          name: category.id,
+        })
+    }),
+
+  insertCategory: publicProcedure
     .input(
       z.object({
         name: z.string(),
@@ -98,12 +121,6 @@ export const appRouter = router({
         .insert(category)
         .values({
           name,
-        })
-        .onConflictDoUpdate({
-          target: category.name,
-          set: {
-            name,
-          },
         })
         .returning({
           id: category.id,
