@@ -110,6 +110,19 @@ export const appRouter = router({
         })
     }),
 
+  deleteCategoryById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ input: { id } }) => {
+      return db.delete(category).where(eq(category.id, id)).returning({
+        id: category.id,
+        name: category.name,
+      })
+    }),
+
   insertCategory: publicProcedure
     .input(
       z.object({

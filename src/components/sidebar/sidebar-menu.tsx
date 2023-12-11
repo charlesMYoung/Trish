@@ -2,7 +2,7 @@
 import { Button } from '@nextui-org/react'
 import { ReactNode } from 'react'
 import { FaPlus } from 'react-icons/fa6'
-export function SidebarMenu({
+export function MenuTitle({
   children,
   onAdd,
   id,

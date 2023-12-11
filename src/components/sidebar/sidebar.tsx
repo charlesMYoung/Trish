@@ -2,12 +2,18 @@
 import { Category } from '@/db/schema'
 import { useOnChange, useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
-import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  ScrollShadow,
+} from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import { ChangeEvent, useEffect } from 'react'
-import { NoStyleInput } from '..'
+import { FaRegTrashAlt } from 'react-icons/fa'
+import { NoStyleInput } from '../transparent-input/transparent-input'
 import { SidebarItem } from './sidebar-item'
-import { SidebarMenu } from './sidebar-menu'
+import { MenuTitle } from './sidebar-menu'
 import { SidebarTop } from './sidebar-top'
 
 export function SideBar() {
@@ -26,6 +32,13 @@ export function SideBar() {
       trpcUtils.getAllCategory.refetch()
     },
   })
+
+  const { mutate: deleteCategoryById } =
+    ClientTRPC.deleteCategoryById.useMutation({
+      onSuccess() {
+        trpcUtils.getAllCategory.refetch()
+      },
+    })
 
   const { value, onChange } = useOnChange<{
     event: ChangeEvent<HTMLInputElement>
@@ -64,65 +77,95 @@ export function SideBar() {
     >
       <SidebarTop />
       {sidebars.map((sidebar) => {
-        return sidebar.href ? (
-          <SidebarItem
-            isActive={pathName === sidebar.href}
-            key={sidebar.id}
-            href={sidebar.href}
-            icon={sidebar.icon}
-          >
-            {sidebar.name}
-          </SidebarItem>
-        ) : Array.isArray(sidebar.children) ? (
-          <Accordion
-            title={sidebar.name as string}
-            key={sidebar.id}
-            className="p-0"
-            itemClasses={{
-              base: 'py-0 w-full',
-              title: 'font-normal text-medium',
-              trigger:
-                'py-0 px-3 data-[hover=true]:bg-primary-100 rounded-lg flex items-center h-11',
-              indicator: 'text-medium px-2',
-              content: 'text-small px-2 ',
-            }}
-          >
-            <AccordionItem
-              startContent={sidebar.icon}
-              itemID={sidebar.id}
-              aria-label={sidebar.id}
-              hideIndicator={!sidebar.children.length}
-              title={
-                <NoStyleInput
-                  key={sidebar.id}
-                  defaultValue={
-                    value?.event.target.value || (sidebar.name as string)
-                  }
-                  onChange={(event) => {
-                    onChange({
-                      event,
-                      id: sidebar.id,
-                    })
-                  }}
-                  value={sidebar.name as string}
-                ></NoStyleInput>
-              }
-            >
-              {Array.isArray(sidebar.children)
-                ? sidebar.children.map((child) => {
-                    return (
-                      <SidebarItem key={child.id} href={child.href || ''}>
-                        {child.name}
-                      </SidebarItem>
-                    )
-                  })
-                : null}
-            </AccordionItem>
-          </Accordion>
-        ) : (
-          <SidebarMenu key={sidebar.id} onAdd={onAddHandle} id={sidebar.id}>
-            {sidebar.name}
-          </SidebarMenu>
+        return (
+          <>
+            <MenuTitle key={sidebar.id} onAdd={onAddHandle} id={sidebar.id}>
+              {sidebar.name}
+            </MenuTitle>
+            {Array.isArray(sidebar.children) &&
+              sidebar.children.map((subSidebar) => {
+                if (Array.isArray(subSidebar.children)) {
+                  console.log(
+                    'subSidebar.children>>>>>>>>',
+                    subSidebar.children
+                  )
+                  return (
+                    <Accordion
+                      title={subSidebar.name as string}
+                      key={subSidebar.id}
+                      className="p-0"
+                      itemClasses={{
+                        base: 'py-0 w-full',
+                        title: 'font-normal text-medium',
+                        trigger:
+                          'py-0 px-3 data-[hover=true]:bg-primary-100 rounded-lg flex items-center h-11',
+                        indicator: 'text-medium px-2',
+                        content: 'text-small px-2 ',
+                      }}
+                    >
+                      <AccordionItem
+                        startContent={subSidebar.icon}
+                        itemID={subSidebar.id}
+                        aria-label={subSidebar.id}
+                        hideIndicator={!subSidebar.children.length}
+                        title={
+                          <div className="flex items-center justify-between">
+                            <NoStyleInput
+                              key={subSidebar.id}
+                              defaultValue={
+                                value?.event.target.value ||
+                                (subSidebar.name as string)
+                              }
+                              onChange={(event) => {
+                                onChange({
+                                  event,
+                                  id: subSidebar.id,
+                                })
+                              }}
+                              value={subSidebar.name as string}
+                            ></NoStyleInput>
+                            <Button
+                              isIconOnly
+                              size="sm"
+                              onPress={() => {
+                                deleteCategoryById({
+                                  id: subSidebar.id,
+                                })
+                              }}
+                            >
+                              <FaRegTrashAlt className="text-red-500"></FaRegTrashAlt>
+                            </Button>
+                          </div>
+                        }
+                      >
+                        {Array.isArray(subSidebar.children)
+                          ? subSidebar.children.map((child) => {
+                              return (
+                                <SidebarItem
+                                  key={child.id}
+                                  href={child.href || ''}
+                                >
+                                  {child.name}
+                                </SidebarItem>
+                              )
+                            })
+                          : null}
+                      </AccordionItem>
+                    </Accordion>
+                  )
+                }
+                return (
+                  <SidebarItem
+                    isActive={pathName === subSidebar.href}
+                    key={subSidebar.id}
+                    href={subSidebar.href || ''}
+                    icon={subSidebar.icon}
+                  >
+                    {subSidebar.name}
+                  </SidebarItem>
+                )
+              })}
+          </>
         )
       })}
     </ScrollShadow>

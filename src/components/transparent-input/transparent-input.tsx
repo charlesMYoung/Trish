@@ -8,14 +8,9 @@ export type NoStyleInputProps = {
   defaultValue?: string
 }
 
-export function NoStyleInput({
-  value,
-  onChange,
-  defaultValue,
-}: NoStyleInputProps) {
+export function NoStyleInput({ onChange, defaultValue }: NoStyleInputProps) {
   return (
     <Input
-      value={value}
       onChange={(e) => {
         onChange && onChange(e)
       }}

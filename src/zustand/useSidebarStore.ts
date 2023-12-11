@@ -15,29 +15,21 @@ export const useSidebarStore = create<SidebarState>()((set, get) => ({
   sidebars: SideBarConfig,
   initMenus: (categories: Category[]) =>
     set(() => {
-      let sidebars = get().sidebars
-      const categoryIndex = sidebars.findIndex((side) => side.id === 'category')
-      sidebars = sidebars.filter((item) => {
-        return !categories.find((cate) => cate.id === item.id)
-      })
-
-      categories
-        .map((category) => ({
-          id: category.id,
-          name: category.name,
-          path: '',
-          icon: '',
-          children: [],
-        }))
-        .forEach((side, index) => {
-          const afterSet = categoryIndex + 1
-          const startSet = afterSet + index
-          //指定
-          sidebars.splice(startSet, 0, side)
-        })
+      const sidebars = get().sidebars
 
       return {
-        sidebars,
+        sidebars: sidebars.map((item) => {
+          if (item.id === 'category') {
+            item.children = categories.map((category) => ({
+              id: category.id,
+              name: category.name,
+              path: '',
+              icon: '',
+              children: [],
+            }))
+          }
+          return item
+        }),
       }
     }),
 

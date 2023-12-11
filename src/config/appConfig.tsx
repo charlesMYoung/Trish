@@ -7,12 +7,14 @@ export const SideBarConfig: Sidebar[] = [
   {
     name: '主菜单',
     id: 'main',
-  },
-  {
-    name: '仪表盘',
-    id: 'dashboard',
-    icon: <RiDashboard2Fill />,
-    href: '/dashboard',
+    children: [
+      {
+        name: '仪表盘',
+        id: 'dashboard',
+        icon: <RiDashboard2Fill />,
+        href: '/dashboard',
+      },
+    ],
   },
   {
     name: '分类',
@@ -21,19 +23,22 @@ export const SideBarConfig: Sidebar[] = [
   {
     name: '系统',
     id: 'system',
+    children:[
+      {
+        name: '操作日志',
+        id: 'operation',
+        icon: <PiReadCvLogoThin />,
+        href: '/dashboard/operation',
+      },
+      {
+        name: '系统更新',
+        id: 'update',
+        icon: <MdOutlineTipsAndUpdates />,
+        href: '/dashboard/update',
+      },
+    ]
   },
-  {
-    name: '操作日志',
-    id: 'operation',
-    icon: <PiReadCvLogoThin />,
-    href: '/dashboard/operation',
-  },
-  {
-    name: '系统更新',
-    id: 'update',
-    icon: <MdOutlineTipsAndUpdates />,
-    href: '/dashboard/update',
-  },
+  
 ]
 
 export const GalleryList = [
