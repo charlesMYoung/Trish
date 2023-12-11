@@ -2,22 +2,18 @@
 import { Category } from '@/db/schema'
 import { useOnChange, useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
-import {
-  Accordion,
-  AccordionItem,
-  Button,
-  ScrollShadow,
-} from '@nextui-org/react'
+import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
-import { ChangeEvent, useEffect } from 'react'
-import { FaRegTrashAlt } from 'react-icons/fa'
-import { NoStyleInput } from '../transparent-input/transparent-input'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { DropDownMenu } from './dropdown-menu'
+import { PopoverInput } from './popover-input'
 import { SidebarItem } from './sidebar-item'
 import { MenuTitle } from './sidebar-menu'
 import { SidebarTop } from './sidebar-top'
 
 export function SideBar() {
   const pathName = usePathname()
+  const [activeId, setActiveId] = useState<string>('')
   const trpcUtils = ClientTRPC.useUtils()
   const { data: categoriesFromServer } =
     ClientTRPC.getAllCategory.useQuery<Category[]>()
@@ -40,13 +36,12 @@ export function SideBar() {
       },
     })
 
-  const { value, onChange } = useOnChange<{
+  const { onChange } = useOnChange<{
     event: ChangeEvent<HTMLInputElement>
     id: string
   }>({
     onChangeDebounceFN: ({ event, id }) => {
       const name = event.target.value
-      console.log('name>>>>', name)
       updateCategory({
         name,
         id,
@@ -55,6 +50,7 @@ export function SideBar() {
   })
 
   const sidebars = useSidebarStore((state) => state.sidebars)
+  //初始化菜单
   const initMenus = useSidebarStore((state) => state.initMenus)
 
   useEffect(() => {
@@ -67,6 +63,16 @@ export function SideBar() {
     insertCategory({
       name: '未命名',
     })
+  }
+
+  const onDropdownHandle = (key: string, id: string) => {
+    if (key === 'delete') {
+      deleteCategoryById({
+        id,
+      })
+    } else if (key === 'edit') {
+      setActiveId(id)
+    }
   }
 
   return (
@@ -85,10 +91,6 @@ export function SideBar() {
             {Array.isArray(sidebar.children) &&
               sidebar.children.map((subSidebar) => {
                 if (Array.isArray(subSidebar.children)) {
-                  console.log(
-                    'subSidebar.children>>>>>>>>',
-                    subSidebar.children
-                  )
                   return (
                     <Accordion
                       title={subSidebar.name as string}
@@ -110,31 +112,19 @@ export function SideBar() {
                         hideIndicator={!subSidebar.children.length}
                         title={
                           <div className="flex items-center justify-between">
-                            <NoStyleInput
-                              key={subSidebar.id}
-                              defaultValue={
-                                value?.event.target.value ||
-                                (subSidebar.name as string)
-                              }
-                              onChange={(event) => {
-                                onChange({
-                                  event,
-                                  id: subSidebar.id,
-                                })
+                            <PopoverInput
+                              onChange={(e) => {
+                                onChange({ event: e, id: subSidebar.id })
                               }}
-                              value={subSidebar.name as string}
-                            ></NoStyleInput>
-                            <Button
-                              isIconOnly
-                              size="sm"
-                              onPress={() => {
-                                deleteCategoryById({
-                                  id: subSidebar.id,
-                                })
-                              }}
-                            >
-                              <FaRegTrashAlt className="text-red-500"></FaRegTrashAlt>
-                            </Button>
+                              onClose={() => setActiveId('')}
+                              id={subSidebar.id}
+                              name={subSidebar.name as string}
+                              activeId={activeId}
+                            ></PopoverInput>
+                            <DropDownMenu
+                              id={subSidebar.id}
+                              onAction={onDropdownHandle}
+                            ></DropDownMenu>
                           </div>
                         }
                       >
