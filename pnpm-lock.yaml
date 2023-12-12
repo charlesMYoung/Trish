@@ -98,11 +98,17 @@ dependencies:
   zod:
     specifier: ^3.22.4
     version: 3.22.4
+  zukeeper:
+    specifier: ^1.0.2
+    version: 1.0.2
   zustand:
     specifier: ^4.4.7
     version: 4.4.7(@types/react@18.2.38)(react@18.2.0)
 
 devDependencies:
+  '@redux-devtools/extension':
+    specifier: ^3.3.0
+    version: 3.3.0(redux@5.0.0)
   '@tailwindcss/typography':
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.3.5)
@@ -3329,6 +3335,16 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@redux-devtools/extension@3.3.0(redux@5.0.0):
+    resolution: {integrity: sha512-X34S/rC8S/M1BIrkYD1mJ5f8vlH0BDqxXrs96cvxSBo4FhMdbhU+GUGsmNYov1xjSyLMHgo8NYrUG8bNX7525g==}
+    peerDependencies:
+      redux: ^3.1.0 || ^4.0.0 || ^5.0.0
+    dependencies:
+      '@babel/runtime': 7.23.4
+      immutable: 4.3.4
+      redux: 5.0.0
+    dev: true
+
   /@remirror/core-constants@2.0.2:
     resolution: {integrity: sha512-dyHY+sMF0ihPus3O27ODd4+agdHMEmuRdyiZJ2CCWjPV5UFmn17ZbElvk6WOGVE4rdCJKZQCrPV2BcikOMLUGQ==}
     dev: false
@@ -5448,6 +5464,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immutable@4.3.4:
+    resolution: {integrity: sha512-fsXeu4J4i6WNWSikpI88v/PcVflZz+6kMhUfIwc5SY+poQRPnaf5V7qds6SUyUN3cVxEzuCab7QIoLOQ+DQ1wA==}
+    dev: true
+
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -6871,6 +6891,10 @@ packages:
     dependencies:
       picomatch: 2.3.1
 
+  /redux@5.0.0:
+    resolution: {integrity: sha512-blLIYmYetpZMET6Q6uCY7Jtl/Im5OBldy+vNPauA8vvsdqyt66oep4EUpAMWNHauTC6xa9JuRPhRB72rY82QGA==}
+    dev: true
+
   /reflect.getprototypeof@1.0.4:
     resolution: {integrity: sha512-ECkTw8TmJwW60lOTR+ZkODISW6RQ8+2CL3COqtiJKLd6MmB45hN51HprHFziKLGkAuTGQhBb91V8cy+KHlaCjw==}
     engines: {node: '>= 0.4'}
@@ -7687,6 +7711,10 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+
+  /zukeeper@1.0.2:
+    resolution: {integrity: sha512-mffz8JpzC96B3Gpoixklfl2/wY4KsYxZvgPRLFMIqAvEQeMPTjLYG8oUWXm9eoItU/nQ5Lt0G2b0GcZRDGzVgA==}
+    dev: false
 
   /zustand@4.4.7(@types/react@18.2.38)(react@18.2.0):
     resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}

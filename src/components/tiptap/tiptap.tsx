@@ -20,11 +20,13 @@ export type OnUpdateParam = {
 
 export type TipTapEditorProps = {
   defaultContent?: string
+  defaultTitle?: string
   onUpdateDebounce?: (param: OnUpdateParam) => void
 }
 
 export const TipTapEditor = ({
   defaultContent = '',
+  defaultTitle = '',
   onUpdateDebounce,
 }: TipTapEditorProps) => {
   const [coverUrl, setCoverUrl] = useState<string>('')
@@ -136,6 +138,7 @@ export const TipTapEditor = ({
         </div>
         <Input
           value={title}
+          defaultValue={defaultTitle}
           onChange={onChangeTitle}
           tabIndex={1}
           placeholder="无标题"

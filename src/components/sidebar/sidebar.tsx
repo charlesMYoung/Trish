@@ -2,9 +2,16 @@
 import { Category } from '@/db/schema'
 import { useOnChange, useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
-import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
-import { usePathname } from 'next/navigation'
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  ScrollShadow,
+} from '@nextui-org/react'
+import { createId } from '@paralleldrive/cuid2'
+import { usePathname, useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { FaPlus } from 'react-icons/fa'
 import { DropDownMenu } from './dropdown-menu'
 import { PopoverInput } from './popover-input'
 import { SidebarItem } from './sidebar-item'
@@ -13,10 +20,13 @@ import { SidebarTop } from './sidebar-top'
 
 export function SideBar() {
   const pathName = usePathname()
+  const route = useRouter()
   const [activeId, setActiveId] = useState<string>('')
   const trpcUtils = ClientTRPC.useUtils()
   const { data: categoriesFromServer } =
     ClientTRPC.getAllCategory.useQuery<Category[]>()
+
+  const articleMutation = ClientTRPC.upsetArticle.useMutation()
 
   const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
     onSuccess() {
@@ -53,6 +63,10 @@ export function SideBar() {
   //初始化菜单
   const initMenus = useSidebarStore((state) => state.initMenus)
 
+  const insertArticleToCategory = useSidebarStore(
+    (state) => state.insertArticleToCategory
+  )
+
   useEffect(() => {
     if (categoriesFromServer) {
       initMenus(categoriesFromServer)
@@ -73,6 +87,19 @@ export function SideBar() {
     } else if (key === 'edit') {
       setActiveId(id)
     }
+  }
+
+  const onAddArticle = (categoryId: string) => {
+    const cuid = createId()
+    route.push(`/dashboard/article/${cuid}`)
+    insertArticleToCategory(cuid, categoryId)
+    articleMutation.mutate({
+      id: cuid,
+      title: '未命名',
+      content: '',
+      coverUrl: '',
+      categoryId,
+    })
   }
 
   return (
@@ -96,6 +123,9 @@ export function SideBar() {
                       title={subSidebar.name as string}
                       key={subSidebar.id}
                       className="p-0"
+                      onSelectionChange={(e) => {
+                        console.log('e++++++++++++++++', e.toString())
+                      }}
                       itemClasses={{
                         base: 'py-0 w-full',
                         title: 'font-normal text-medium',
@@ -109,6 +139,7 @@ export function SideBar() {
                         startContent={subSidebar.icon}
                         itemID={subSidebar.id}
                         aria-label={subSidebar.id}
+                        key={subSidebar.id}
                         hideIndicator={!subSidebar.children.length}
                         title={
                           <div className="flex items-center justify-between">
@@ -121,10 +152,22 @@ export function SideBar() {
                               name={subSidebar.name as string}
                               activeId={activeId}
                             ></PopoverInput>
-                            <DropDownMenu
-                              id={subSidebar.id}
-                              onAction={onDropdownHandle}
-                            ></DropDownMenu>
+                            <div>
+                              <DropDownMenu
+                                id={subSidebar.id}
+                                onAction={onDropdownHandle}
+                              ></DropDownMenu>
+                              <Button
+                                onPress={() => {
+                                  onAddArticle(subSidebar.id)
+                                }}
+                                size="sm"
+                                variant="flat"
+                                isIconOnly
+                              >
+                                <FaPlus className="text-default-500"></FaPlus>
+                              </Button>
+                            </div>
                           </div>
                         }
                       >

@@ -47,6 +47,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@redux-devtools/extension": "^3.3.0",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/pg": "^8.10.9",
