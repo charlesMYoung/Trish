@@ -2,10 +2,12 @@
 import { Category } from '@/db/schema'
 import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
+import { MenuType } from '@/types/Common'
 import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { shallow } from 'zustand/shallow'
 import { AddArticle } from './add-article-action'
 import { DropDownMenu } from './dropdown-menu'
 import { PopoverInput } from './popover-input'
@@ -15,7 +17,6 @@ import { SidebarTop } from './sidebar-top'
 
 export function SideBar() {
   const pathName = usePathname()
-  const route = useRouter()
   const [activeId, setActiveId] = useState<string>('')
   const { data: categoriesFromServer } =
     ClientTRPC.getAllCategory.useQuery<Category[]>()
@@ -26,6 +27,7 @@ export function SideBar() {
     deleteMenu,
     editMenu,
     insertArticleToCategory,
+    deleteArticleTitleById,
   } = useSidebarStore()
   const sidebars = useSidebarStore.use.sidebars()
 
@@ -56,6 +58,18 @@ export function SideBar() {
     }
   }, [categoriesFromServer])
 
+  useEffect(() => {
+    return useSidebarStore.subscribe(
+      (state) => state.sidebars,
+      (sidebar, preSidebar) => {
+        console.log('sidebar', sidebar, 'preSidebar', preSidebar)
+      },
+      {
+        equalityFn: shallow,
+      }
+    )
+  }, [])
+
   const onAddHandle = () => {
     insertMenu({
       id: createId(),
@@ -72,7 +86,6 @@ export function SideBar() {
   }
 
   const onAddArticle = (articleId: string, categoryId: string) => {
-    route.push(`/dashboard/article/${articleId}`)
     insertArticleToCategory(articleId, categoryId)
   }
 
@@ -98,12 +111,9 @@ export function SideBar() {
                 if (Array.isArray(subSidebar.children)) {
                   return (
                     <Accordion
-                      title={(subSidebar.name + subSidebar.id) as string}
+                      title={subSidebar.name as string}
                       key={subSidebar.id}
                       className="p-0"
-                      onSelectionChange={(e) => {
-                        console.log('e++++++++++++++++', e.toString())
-                      }}
                       itemClasses={{
                         base: 'py-0 w-full',
                         title: 'font-normal text-medium',
@@ -144,6 +154,15 @@ export function SideBar() {
                           ? subSidebar.children.map((child) => {
                               return (
                                 <SidebarItem
+                                  isShowDelBtn={
+                                    sidebar.id === MenuType.CATEGORY
+                                  }
+                                  onSidebarDel={() =>
+                                    deleteArticleTitleById(
+                                      subSidebar.id,
+                                      child.id
+                                    )
+                                  }
                                   key={child.id}
                                   href={child.href || ''}
                                 >
@@ -163,7 +182,7 @@ export function SideBar() {
                     href={subSidebar.href || ''}
                     icon={subSidebar.icon}
                   >
-                    {subSidebar.id}
+                    {subSidebar.name}
                   </SidebarItem>
                 )
               })}

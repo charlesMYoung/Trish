@@ -1,7 +1,6 @@
 'use client'
 import { Cover } from '@/components'
-import { useToggle } from '@/hooks'
-import { useDebounce } from '@/hooks/useDebounce'
+import { useOnChange, useToggle } from '@/hooks'
 import { Button, Input } from '@nextui-org/react'
 import Blockquote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
@@ -9,41 +8,40 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { ChangeEventHandler, KeyboardEvent, useEffect, useState } from 'react'
+import { KeyboardEvent } from 'react'
 import { FaImages } from 'react-icons/fa6'
-
-export type OnUpdateParam = {
-  content?: string
-  title: string
-  coverUrl: string
-}
 
 export type TipTapEditorProps = {
   defaultContent?: string
   defaultTitle?: string
-  onUpdateDebounce?: (param: OnUpdateParam) => void
+  onTitle: (title: string) => void
+  onCover: (coverUrl: string) => void
+  onContent: (content: string) => void
 }
 
 export const TipTapEditor = ({
   defaultContent = '',
   defaultTitle = '',
-  onUpdateDebounce,
+  onTitle,
+  onCover,
+  onContent,
 }: TipTapEditorProps) => {
-  const [coverUrl, setCoverUrl] = useState<string>('')
-  const [articleContent, setArticleContent] = useState<string>('')
   const inputButtonToggle = useToggle(false)
   const coverButtonToggle = useToggle(false)
-  const [title, setTitle] = useState<string>('')
-  const { start } = useDebounce<OnUpdateParam>(
-    ({ title, coverUrl, content }) => {
-      onTipTapEditorUpdate({
-        title,
-        coverUrl,
-        content,
-      })
+
+  const articleTitleHook = useOnChange<string>({
+    onChangeFn(e) {
+      console.log('articleTitleHook', e)
+      onTitle(e)
     },
-    2000
-  )
+  })
+
+  const coverChangeHook = useOnChange<string>({
+    onChangeFn(e) {
+      onCover(e)
+      console.log('coverChangeHook', e)
+    },
+  })
 
   const editor = useEditor({
     extensions: [
@@ -68,36 +66,15 @@ export const TipTapEditor = ({
     content: defaultContent,
     onUpdate: ({ editor }) => {
       const content = editor.getHTML()
-      setArticleContent(content)
+      onContent(content)
     },
   })
-
-  /**
-   * 监听三个状态变化
-   */
-  useEffect(
-    () =>
-      start({
-        content: articleContent,
-        title,
-        coverUrl,
-      }),
-    [title, coverUrl, articleContent]
-  )
 
   const onKeyUpHandle = ({ key }: KeyboardEvent) => {
     if (key === 'Enter' && editor && !editor.isFocused) {
       editor.commands.focus('start')
     }
   }
-
-  const onChangeTitle: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const value = event.target.value || ''
-    setTitle(value)
-  }
-
-  const onTipTapEditorUpdate = (param: OnUpdateParam) =>
-    onUpdateDebounce && onUpdateDebounce(param)
 
   const ToolButtonGroup = () => {
     return (
@@ -111,15 +88,15 @@ export const TipTapEditor = ({
 
   const onRemoveCover = () => {
     coverButtonToggle.close()
-    setCoverUrl('')
+    coverChangeHook.onChange('')
   }
   return (
     <>
       {coverButtonToggle.isToggle ? (
         <Cover
           onRemoveCover={onRemoveCover}
-          onCoverChange={setCoverUrl}
-          coverUrl={coverUrl}
+          onCoverChange={coverChangeHook.onChange}
+          coverUrl={coverChangeHook.value}
         />
       ) : (
         []
@@ -137,9 +114,9 @@ export const TipTapEditor = ({
           ) : null}
         </div>
         <Input
-          value={title}
+          value={articleTitleHook.value}
           defaultValue={defaultTitle}
-          onChange={onChangeTitle}
+          onChange={(event) => articleTitleHook.onChange(event.target.value)}
           tabIndex={1}
           placeholder="无标题"
           classNames={{

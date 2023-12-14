@@ -14,6 +14,20 @@ export const appRouter = router({
       })
     }),
 
+  getArticleByCateIdAndId: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        cateId: z.string(),
+      })
+    )
+    .query(({ input: { id, cateId } }) => {
+      return db.query.article.findFirst({
+        where: (article, { eq, and }) => {
+          return and(eq(article.category_id, cateId), eq(article.id, id))
+        },
+      })
+    }),
   upsetArticle: publicProcedure
     .input(
       z.object({

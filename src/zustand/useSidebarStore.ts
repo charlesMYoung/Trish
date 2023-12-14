@@ -13,7 +13,11 @@ export interface SidebarState {
   initMenus: (menus: Category[]) => void
   insertMenu: (menu: Pick<Category, 'id' | 'name'>) => void
   insertArticleToCategory: (articleId: string, categoryId: string) => void
-  updateArticleTitleById: (articleId: string, title: string) => void
+  updateArticleTitleById: (
+    title: string,
+    ids: { articleId: string; cateId: string }
+  ) => void
+  deleteArticleTitleById: (cateId: string, articleId: string) => void
   deleteMenu: (menuId: string) => void
   editMenu: (name: string, menuId: string) => void
 }
@@ -87,7 +91,7 @@ const sidebarState: StateCreator<
       })
     }),
   insertArticleToCategory: (articleId, categoryId) => {
-    set((state) => {
+    return set((state) => {
       state.sidebars.forEach((item) => {
         if (item.id === MenuType.CATEGORY) {
           item.children?.forEach((category) => {
@@ -95,7 +99,7 @@ const sidebarState: StateCreator<
               category.children?.push({
                 id: articleId,
                 name: 'no title',
-                href: '/dashboard/article/' + articleId,
+                href: `/dashboard/article/${categoryId}/${articleId}`,
                 icon: '',
                 children: [],
               })
@@ -107,22 +111,39 @@ const sidebarState: StateCreator<
     })
   },
 
-  updateArticleTitleById: (articleId, title) => {
-    set((state) => {
+  updateArticleTitleById: (title, { articleId, cateId }) => {
+    return set((state) => {
       state.sidebars.forEach((item) => {
         if (item.id === 'category') {
           item.children?.forEach((category) => {
-            category.children?.forEach((article) => {
-              if (article.id === articleId) {
-                article.name = title
-              }
-              return
-            })
+            if (category.id === cateId) {
+              category.children?.forEach((article) => {
+                if (article.id === articleId) {
+                  article.name = title
+                }
+                return
+              })
+            }
           })
         }
       })
     })
   },
+
+  deleteArticleTitleById: (cateId: string, articleId: string) =>
+    set((state) => {
+      state.sidebars.forEach((item) => {
+        if (item.id === 'category') {
+          item.children?.forEach((category) => {
+            if (category.id === cateId) {
+              category.children = category.children?.filter(
+                (article) => article.id !== articleId
+              )
+            }
+          })
+        }
+      })
+    }),
 })
 
 /**
