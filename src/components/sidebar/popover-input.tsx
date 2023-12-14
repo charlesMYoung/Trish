@@ -1,5 +1,6 @@
 'use client'
 
+import { useOnChange } from '@/hooks'
 import {
   Input,
   Popover,
@@ -7,12 +8,17 @@ import {
   PopoverTrigger,
 } from '@nextui-org/react'
 
+export type onPopoverInputChangeParam = {
+  id: string
+  value: string
+}
+
 export type PopoverInputProps = {
   activeId: string
   name: string
   id: string
   onClose: () => void
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onPopoverInputChange: (name: string, id: string) => void
 }
 
 export const PopoverInput = ({
@@ -20,14 +26,26 @@ export const PopoverInput = ({
   name,
   id,
   onClose,
-  onChange,
+  onPopoverInputChange,
 }: PopoverInputProps) => {
+  const inputHook = useOnChange<string>({
+    onChangeFn: (value) => {
+      onPopoverInputChange(value, id)
+    },
+  })
+
   return (
     <Popover isOpen={id === activeId} onClose={onClose} placement="bottom">
       <PopoverTrigger>{name}</PopoverTrigger>
       <PopoverContent>
         <div className="px-1 py-2">
-          <Input size="sm" onChange={onChange} />
+          <Input
+            value={inputHook.value}
+            size="sm"
+            onChange={(event) => {
+              inputHook.onChange(event.target.value)
+            }}
+          />
         </div>
       </PopoverContent>
     </Popover>

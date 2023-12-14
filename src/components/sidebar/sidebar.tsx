@@ -1,17 +1,12 @@
 'use client'
 import { Category } from '@/db/schema'
-import { useOnChange, useSidebarStore } from '@/hooks'
+import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
-import {
-  Accordion,
-  AccordionItem,
-  Button,
-  ScrollShadow,
-} from '@nextui-org/react'
+import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
 import { usePathname, useRouter } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import { AddArticle } from './add-article-action'
 import { DropDownMenu } from './dropdown-menu'
 import { PopoverInput } from './popover-input'
 import { SidebarItem } from './sidebar-item'
@@ -22,84 +17,63 @@ export function SideBar() {
   const pathName = usePathname()
   const route = useRouter()
   const [activeId, setActiveId] = useState<string>('')
-  const trpcUtils = ClientTRPC.useUtils()
   const { data: categoriesFromServer } =
     ClientTRPC.getAllCategory.useQuery<Category[]>()
 
-  const articleMutation = ClientTRPC.upsetArticle.useMutation()
+  const {
+    initMenus,
+    insertMenu,
+    deleteMenu,
+    editMenu,
+    insertArticleToCategory,
+  } = useSidebarStore()
+  const sidebars = useSidebarStore.use.sidebars()
 
-  const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
-    onSuccess() {
-      trpcUtils.getAllCategory.refetch()
-    },
-  })
-  const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
-    onSuccess() {
-      trpcUtils.getAllCategory.refetch()
-    },
-  })
+  // const articleMutation = ClientTRPC.upsetArticle.useMutation()
 
-  const { mutate: deleteCategoryById } =
-    ClientTRPC.deleteCategoryById.useMutation({
-      onSuccess() {
-        trpcUtils.getAllCategory.refetch()
-      },
-    })
+  // const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
+  //   onSuccess() {
+  //     trpcUtils.getAllCategory.refetch()
+  //   },
+  // })
+  // const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
+  //   onSuccess() {
+  //     trpcUtils.getAllCategory.refetch()
+  //   },
+  // })
 
-  const { onChange } = useOnChange<{
-    event: ChangeEvent<HTMLInputElement>
-    id: string
-  }>({
-    onChangeDebounceFN: ({ event, id }) => {
-      const name = event.target.value
-      updateCategory({
-        name,
-        id,
-      })
-    },
-  })
-
-  const sidebars = useSidebarStore((state) => state.sidebars)
-  //初始化菜单
-  const initMenus = useSidebarStore((state) => state.initMenus)
-
-  const insertArticleToCategory = useSidebarStore(
-    (state) => state.insertArticleToCategory
-  )
+  // const { mutate: deleteCategoryById } =
+  //   ClientTRPC.deleteCategoryById.useMutation({
+  //     onSuccess() {
+  //       trpcUtils.getAllCategory.refetch()
+  //     },
+  //   })
 
   useEffect(() => {
     if (categoriesFromServer) {
+      console.log('sidebars>>>>', sidebars)
       initMenus(categoriesFromServer)
     }
   }, [categoriesFromServer])
 
   const onAddHandle = () => {
-    insertCategory({
+    insertMenu({
+      id: createId(),
       name: '未命名',
     })
   }
 
   const onDropdownHandle = (key: string, id: string) => {
     if (key === 'delete') {
-      deleteCategoryById({
-        id,
-      })
+      deleteMenu(id)
     } else if (key === 'edit') {
       setActiveId(id)
     }
   }
 
-  const onAddArticle = (categoryId: string) => {
-    const cuid = createId()
-    route.push(`/dashboard/article/${cuid}`)
-    insertArticleToCategory(cuid, categoryId)
-    articleMutation.mutate({
-      id: cuid,
-      title: '未命名',
-      content: '',
-      coverUrl: '',
-      categoryId,
-    })
+  const onAddArticle = (articleId: string, categoryId: string) => {
+    route.push(`/dashboard/article/${articleId}`)
+    insertArticleToCategory(articleId, categoryId)
   }
 
   return (
@@ -112,7 +86,11 @@ export function SideBar() {
       {sidebars.map((sidebar) => {
         return (
           <>
-            <MenuTitle key={sidebar.id} onAdd={onAddHandle} id={sidebar.id}>
+            <MenuTitle
+              key={sidebar.name as string}
+              onAdd={onAddHandle}
+              id={sidebar.id}
+            >
               {sidebar.name}
             </MenuTitle>
             {Array.isArray(sidebar.children) &&
@@ -120,7 +98,7 @@ export function SideBar() {
                 if (Array.isArray(subSidebar.children)) {
                   return (
                     <Accordion
-                      title={subSidebar.name as string}
+                      title={(subSidebar.name + subSidebar.id) as string}
                       key={subSidebar.id}
                       className="p-0"
                       onSelectionChange={(e) => {
@@ -138,15 +116,12 @@ export function SideBar() {
                       <AccordionItem
                         startContent={subSidebar.icon}
                         itemID={subSidebar.id}
-                        aria-label={subSidebar.id}
                         key={subSidebar.id}
                         hideIndicator={!subSidebar.children.length}
                         title={
                           <div className="flex items-center justify-between">
                             <PopoverInput
-                              onChange={(e) => {
-                                onChange({ event: e, id: subSidebar.id })
-                              }}
+                              onPopoverInputChange={editMenu}
                               onClose={() => setActiveId('')}
                               id={subSidebar.id}
                               name={subSidebar.name as string}
@@ -157,16 +132,10 @@ export function SideBar() {
                                 id={subSidebar.id}
                                 onAction={onDropdownHandle}
                               ></DropDownMenu>
-                              <Button
-                                onPress={() => {
-                                  onAddArticle(subSidebar.id)
-                                }}
-                                size="sm"
-                                variant="flat"
-                                isIconOnly
-                              >
-                                <FaPlus className="text-default-500"></FaPlus>
-                              </Button>
+                              <AddArticle
+                                categoryId={subSidebar.id}
+                                onAddArticle={onAddArticle}
+                              />
                             </div>
                           </div>
                         }
@@ -194,7 +163,7 @@ export function SideBar() {
                     href={subSidebar.href || ''}
                     icon={subSidebar.icon}
                   >
-                    {subSidebar.name}
+                    {subSidebar.id}
                   </SidebarItem>
                 )
               })}

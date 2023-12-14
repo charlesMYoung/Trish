@@ -9,3 +9,7 @@ export type Article = {
   modified_at: Date
   category_id: string
 }
+
+export enum MenuType {
+  CATEGORY = 'category',
+}

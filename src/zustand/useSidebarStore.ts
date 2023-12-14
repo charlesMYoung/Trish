@@ -14,6 +14,8 @@ export interface SidebarState {
   insertMenu: (menu: Pick<Category, 'id' | 'name'>) => void
   insertArticleToCategory: (articleId: string, categoryId: string) => void
   updateArticleTitleById: (articleId: string, title: string) => void
+  deleteMenu: (menuId: string) => void
+  editMenu: (name: string, menuId: string) => void
 }
 
 const sidebarState: StateCreator<
@@ -23,7 +25,7 @@ const sidebarState: StateCreator<
     ['zustand/devtools', unknown],
     ['zustand/subscribeWithSelector', unknown],
   ]
-> = (set, get) => ({
+> = (set) => ({
   sidebars: SideBarConfig,
   initMenus: (categories: Category[]) =>
     set((state) => {
@@ -45,6 +47,19 @@ const sidebarState: StateCreator<
         return item
       })
     }),
+  editMenu: (name: string, menuId: string) =>
+    set((state) => {
+      state.sidebars.forEach((item) => {
+        if (item.id === MenuType.CATEGORY) {
+          item.children?.forEach((subItem) => {
+            if (subItem.id === menuId) {
+              subItem.name = name
+              return
+            }
+          })
+        }
+      })
+    }),
   insertMenu: (menu) =>
     set((state) => {
       state.sidebars = state.sidebars.map((item) => {
@@ -60,11 +75,22 @@ const sidebarState: StateCreator<
         return item
       })
     }),
-  insertArticleToCategory: (articleId, categoryId) => {
+  deleteMenu: (menuId: string) =>
     set((state) => {
       state.sidebars = state.sidebars.map((item) => {
         if (item.id === MenuType.CATEGORY) {
-          item.children = item.children?.map((category) => {
+          item.children = item.children?.filter(
+            (category) => category.id !== menuId
+          )
+        }
+        return item
+      })
+    }),
+  insertArticleToCategory: (articleId, categoryId) => {
+    set((state) => {
+      state.sidebars.forEach((item) => {
+        if (item.id === MenuType.CATEGORY) {
+          item.children?.forEach((category) => {
             if (category.id === categoryId) {
               category.children?.push({
                 id: articleId,
@@ -73,33 +99,28 @@ const sidebarState: StateCreator<
                 icon: '',
                 children: [],
               })
+              return
             }
-            return category
           })
         }
-        return item
       })
     })
   },
+
   updateArticleTitleById: (articleId, title) => {
-    const sidebars = get().sidebars
-    set(() => {
-      return {
-        sidebars: sidebars.map((item) => {
-          if (item.id === 'category') {
-            item.children = item.children?.map((category) => {
-              category.children?.map((article) => {
-                if (article.id === articleId) {
-                  article.name = title
-                }
-                return article
-              })
-              return category
+    set((state) => {
+      state.sidebars.forEach((item) => {
+        if (item.id === 'category') {
+          item.children?.forEach((category) => {
+            category.children?.forEach((article) => {
+              if (article.id === articleId) {
+                article.name = title
+              }
+              return
             })
-          }
-          return item
-        }),
-      }
+          })
+        }
+      })
     })
   },
 })

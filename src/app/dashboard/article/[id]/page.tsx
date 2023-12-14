@@ -10,7 +10,7 @@ export default function Write() {
   const { id } = useParams<{ id: string }>()
   const [articleContent, setArticleContent] = useState<string>('')
   const [title, setTitle] = useState<string>('')
-  const articleMutation = ClientTRPC.upsetArticle.useMutation()
+  const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
 
   const currentArticle = ClientTRPC.getArticleById.useQuery({
     id,
@@ -28,21 +28,15 @@ export default function Write() {
     }
   }, [])
 
-  const updateArticleTitleById = useSidebarStore(
-    (state) => state.updateArticleTitleById
-  )
-
   const onUpdateDebounce = (value: OnUpdateParam) => {
     if (id && isCuid(id)) {
       updateArticleTitleById(id, value.title)
-      articleMutation.mutate({
-        ...value,
-        id,
-      })
     }
   }
 
-  return (
+  return currentArticle.isLoading ? (
+    <>loading</>
+  ) : (
     <TipTapEditor
       onUpdateDebounce={onUpdateDebounce}
       defaultTitle={title}
