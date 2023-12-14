@@ -42,9 +42,6 @@ export function SideBar() {
     deleteArticleTitleById,
   } = useSidebarStore()
   const sidebars = useSidebarStore.use.sidebars()
-
-  // const articleMutation = ClientTRPC.upsetArticle.useMutation()
-
   const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
     onSuccess() {
       console.log('onSuccess insertCategory>>>>')
@@ -65,7 +62,6 @@ export function SideBar() {
 
   useEffect(() => {
     if (categoriesFromServer) {
-      console.log('sidebars>>>>', sidebars)
       initMenus(categoriesFromServer)
     }
   }, [categoriesFromServer])
