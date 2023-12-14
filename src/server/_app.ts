@@ -153,6 +153,7 @@ export const appRouter = router({
     .input(
       z.object({
         name: z.string(),
+        id: z.string(),
       })
     )
     .mutation(({ input: { name } }) => {

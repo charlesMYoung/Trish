@@ -3,6 +3,7 @@ import { Category } from '@/db/schema'
 import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
 import { MenuType } from '@/types/Common'
+import { Sidebar } from '@/types/sidebar'
 import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
 import { usePathname } from 'next/navigation'
@@ -15,11 +16,22 @@ import { SidebarItem } from './sidebar-item'
 import { MenuTitle } from './sidebar-menu'
 import { SidebarTop } from './sidebar-top'
 
+type MenuParam = Pick<Category, 'id' | 'name'>
+
+type DiffResult = {
+  add: MenuParam[]
+  modi: MenuParam[]
+  del: MenuParam[]
+}
+
 export function SideBar() {
   const pathName = usePathname()
   const [activeId, setActiveId] = useState<string>('')
-  const { data: categoriesFromServer } =
-    ClientTRPC.getAllCategory.useQuery<Category[]>()
+  const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery<
+    Category[]
+  >(void 0, {
+    refetchOnWindowFocus: false,
+  })
 
   const {
     initMenus,
@@ -33,23 +45,23 @@ export function SideBar() {
 
   // const articleMutation = ClientTRPC.upsetArticle.useMutation()
 
-  // const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
-  //   onSuccess() {
-  //     trpcUtils.getAllCategory.refetch()
-  //   },
-  // })
-  // const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
-  //   onSuccess() {
-  //     trpcUtils.getAllCategory.refetch()
-  //   },
-  // })
+  const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
+    onSuccess() {
+      console.log('onSuccess insertCategory>>>>')
+    },
+  })
+  const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
+    onSuccess() {
+      console.log('onSuccess updateCategory>>>>')
+    },
+  })
 
-  // const { mutate: deleteCategoryById } =
-  //   ClientTRPC.deleteCategoryById.useMutation({
-  //     onSuccess() {
-  //       trpcUtils.getAllCategory.refetch()
-  //     },
-  //   })
+  const { mutate: deleteCategoryById } =
+    ClientTRPC.deleteCategoryById.useMutation({
+      onSuccess() {
+        console.log('onSuccess deleteCategoryById>>>>')
+      },
+    })
 
   useEffect(() => {
     if (categoriesFromServer) {
@@ -61,14 +73,80 @@ export function SideBar() {
   useEffect(() => {
     return useSidebarStore.subscribe(
       (state) => state.sidebars,
-      (sidebar, preSidebar) => {
-        console.log('sidebar', sidebar, 'preSidebar', preSidebar)
+      (curSidebars, preSidebars) => {
+        const { children: curChildren = [] } =
+          curSidebars.find((cur) => cur.id === MenuType.CATEGORY) || {}
+        const { children: preChildren = [] } =
+          preSidebars.find((cur) => cur.id === MenuType.CATEGORY) || {}
+        const { add, del, modi } = diffChildren(curChildren, preChildren)
+
+        console.log('add ', add, 'del', del, 'modi', modi)
+
+        if (add.length > 0) {
+          const [{ id, name = '' }] = add
+          insertCategory({
+            name: name || '',
+            id,
+          })
+        }
+        if (modi.length > 0) {
+          const [{ id, name = '' }] = modi
+          updateCategory({
+            name: name || '',
+            id,
+          })
+        }
+        if (del.length > 0) {
+          del.forEach((item) => {
+            deleteCategoryById({
+              id: item.id,
+            })
+          })
+        }
       },
       {
         equalityFn: shallow,
+        fireImmediately: false,
       }
     )
   }, [])
+
+  const diffChildren = (curChildren: Sidebar[], preChildren: Sidebar[]) => {
+    const diff: DiffResult = {
+      add: [],
+      del: [],
+      modi: [],
+    }
+    const preArray = Array.from(preChildren)
+    curChildren.forEach((cur) => {
+      const findPre = preArray.find((pre) => {
+        return cur.id === pre.id
+      })
+      const curOnPreIndex = preArray.findIndex((pre) => {
+        return cur.id === pre.id
+      })
+      if (curOnPreIndex !== -1) {
+        preArray.splice(curOnPreIndex, 1)
+      }
+      if (!findPre) {
+        console.log('cur children add')
+        diff.add.push({
+          name: cur.name as string,
+          id: cur.id,
+        })
+      } else {
+        if (findPre.name !== cur.name) {
+          console.log('cur children update')
+          diff.modi.push({
+            name: cur.name as string,
+            id: cur.id,
+          })
+        }
+      }
+    })
+    diff.del = preArray as MenuParam[]
+    return diff
+  }
 
   const onAddHandle = () => {
     insertMenu({
