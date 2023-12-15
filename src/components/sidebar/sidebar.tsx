@@ -29,7 +29,7 @@ export function SideBar() {
   const pathName = usePathname()
   const { slugs } = useParams<{ slugs: string[] }>()
 
-  const [, articleId] = slugs
+  const [, articleId] = slugs || []
 
   const [activeId, setActiveId] = useState<string>('')
   const [hoverId, setHoverId] = useState<string>('')

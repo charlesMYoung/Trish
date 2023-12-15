@@ -3,24 +3,15 @@ import { TipTapEditor } from '@/components'
 import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
 import { Skeleton } from '@nextui-org/react'
-import { useParams } from 'next/navigation'
+import { useDebounceFn } from 'ahooks'
 import { useEffect } from 'react'
 
-export default function ArticlePage() {
-  const { slugs } = useParams<{ slugs: string[] }>()
-
-  const [cateId, articleId] = slugs
-
-  useEffect(() => {
-    getArticleByCateIdAndId({
-      id: articleId,
-      cateId,
-    })
-  }, [])
-
-  if (slugs.length > 2) {
-    return <>route param is error</>
-  }
+export default function ArticlePage({
+  params,
+}: {
+  params: { slugs: string[] }
+}) {
+  const [cateId, articleId] = params.slugs || []
 
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
 
@@ -36,13 +27,27 @@ export default function ArticlePage() {
   const { mutate: updateArticleContent } =
     ClientTRPC.updateArticleContent.useMutation({})
 
+  const { run: updateArticleTitleByTitleDebounce } = useDebounceFn(
+    updateArticleTitleByTitle
+  )
+
+  const { run: updateArticleContentDebounce } =
+    useDebounceFn(updateArticleContent)
+
+  useEffect(() => {
+    getArticleByCateIdAndId({
+      id: articleId,
+      cateId,
+    })
+  }, [])
+
   const onTitleHandle = (title: string) => {
     console.log('title', title)
     updateArticleTitleById(title, {
       articleId,
       cateId,
     })
-    updateArticleTitleByTitle({
+    updateArticleTitleByTitleDebounce({
       title,
       id: articleId,
     })
@@ -50,7 +55,7 @@ export default function ArticlePage() {
 
   const onContentHandle = (content: string) => {
     console.log('content', content)
-    updateArticleContent({
+    updateArticleContentDebounce({
       content,
       id: articleId,
     })
