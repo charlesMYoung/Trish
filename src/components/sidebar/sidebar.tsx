@@ -29,6 +29,7 @@ export function SideBar() {
   const pathName = usePathname()
   const [activeId, setActiveId] = useState<string>('')
   const [hoverId, setHoverId] = useState<string>('')
+  const [showDropdownId, setShowDropdownId] = useState<string>('')
   const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery<
     Category[]
   >(void 0, {
@@ -40,6 +41,7 @@ export function SideBar() {
     insertMenu,
     deleteMenu,
     editMenu,
+    insertArticleToCategoryFromServe,
     insertArticleToCategory,
     deleteArticleTitleById,
   } = useSidebarStore()
@@ -58,6 +60,16 @@ export function SideBar() {
       initMenus(categoriesFromServer)
     }
   }, [categoriesFromServer])
+
+  useEffect(() => {
+    const [article] = articles || []
+    if (article) {
+      insertArticleToCategoryFromServe(
+        articles || [],
+        article.category_id || ''
+      )
+    }
+  }, [articles])
 
   useEffect(() => {
     return useSidebarStore.subscribe(
@@ -181,7 +193,7 @@ export function SideBar() {
                   return (
                     <Collapse
                       id={subSidebar.id}
-                      items={articles?.map((child) => {
+                      items={subSidebar.children?.map((child) => {
                         return (
                           <SidebarItem
                             isShowDelBtn={sidebar.id === MenuType.CATEGORY}
@@ -189,9 +201,9 @@ export function SideBar() {
                               deleteArticleTitleById(subSidebar.id, child.id)
                             }
                             key={child.id}
-                            href={`/dashboard/article/${child.category_id}/${child.id}`}
+                            href={child.href || ''}
                           >
-                            {child.title}
+                            {child.name}
                           </SidebarItem>
                         )
                       })}
@@ -209,9 +221,11 @@ export function SideBar() {
                             activeId={activeId}
                           ></PopoverInput>
 
-                          {hoverId === subSidebar.id ? (
+                          {hoverId === subSidebar.id ||
+                          showDropdownId === subSidebar.id ? (
                             <div>
                               <DropDownMenu
+                                onOpenChange={setShowDropdownId}
                                 id={subSidebar.id}
                                 onAction={onDropdownHandle}
                               ></DropDownMenu>

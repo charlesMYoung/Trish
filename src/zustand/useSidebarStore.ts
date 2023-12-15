@@ -1,5 +1,5 @@
 import { SideBarConfig } from '@/config/appConfig'
-import { Category } from '@/db/schema'
+import { Article, Category } from '@/db/schema'
 import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
 import type {} from '@redux-devtools/extension' // required for devtools typing
@@ -20,6 +20,10 @@ export interface SidebarState {
   deleteArticleTitleById: (cateId: string, articleId: string) => void
   deleteMenu: (menuId: string) => void
   editMenu: (name: string, menuId: string) => void
+  insertArticleToCategoryFromServe(
+    articles: Pick<Article, 'id' | 'title' | 'category_id'>[],
+    categoryId: string
+  ): void
 }
 
 const sidebarState: StateCreator<
@@ -102,6 +106,29 @@ const sidebarState: StateCreator<
                 href: `/dashboard/article/${categoryId}/${articleId}`,
                 icon: '',
                 children: [],
+              })
+              return
+            }
+          })
+        }
+      })
+    })
+  },
+
+  insertArticleToCategoryFromServe(articles, cateId) {
+    return set((state) => {
+      state.sidebars.forEach((item) => {
+        if (item.id === MenuType.CATEGORY) {
+          item.children?.forEach((category) => {
+            if (category.id === cateId) {
+              category.children = articles?.map((article) => {
+                return {
+                  id: article.id,
+                  name: article.title,
+                  href: `/dashboard/article/${article.category_id}/${article.id}`,
+                  icon: '',
+                  children: [],
+                }
               })
               return
             }

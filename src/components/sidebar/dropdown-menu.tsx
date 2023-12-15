@@ -14,13 +14,18 @@ import { NotButtonEl } from './custom-button'
 export type DropDownMenuProps = {
   onAction: (key: string, id: string) => void
   id: string
+  onOpenChange: (value: string) => void
 }
 
-export const DropDownMenu = ({ id, onAction }: DropDownMenuProps) => {
+export const DropDownMenu = ({
+  id,
+  onAction,
+  onOpenChange,
+}: DropDownMenuProps) => {
   return (
     <Dropdown
       onOpenChange={(value) => {
-        console.log('value', value)
+        value ? onOpenChange(id) : onOpenChange('')
       }}
     >
       <DropdownTrigger>

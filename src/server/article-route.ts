@@ -146,6 +146,11 @@ export const ArticleRoute = router({
     )
     .mutation(({ input: { id } }) => {
       return db.query.article.findMany({
+        columns: {
+          category_id: true,
+          title: true,
+          id: true,
+        },
         where: (article, { eq }) => eq(article.category_id, id),
       })
     }),
