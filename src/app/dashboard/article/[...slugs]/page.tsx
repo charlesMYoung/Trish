@@ -4,11 +4,19 @@ import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
 import { Skeleton } from '@nextui-org/react'
 import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function ArticlePage() {
   const { slugs } = useParams<{ slugs: string[] }>()
 
   const [cateId, articleId] = slugs
+
+  useEffect(() => {
+    getArticleByCateIdAndId({
+      id: articleId,
+      cateId,
+    })
+  }, [])
 
   if (slugs.length > 2) {
     return <>route param is error</>
@@ -16,11 +24,11 @@ export default function ArticlePage() {
 
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
 
-  const { data: currentArticle, isLoading } =
-    ClientTRPC.getArticleByCateIdAndId.useQuery({
-      cateId,
-      id: articleId,
-    })
+  const {
+    data: currentArticle,
+    mutate: getArticleByCateIdAndId,
+    isLoading,
+  } = ClientTRPC.getArticleByCateIdAndId.useMutation()
 
   const { mutate: updateArticleTitleByTitle } =
     ClientTRPC.updateArticleTitleByTitle.useMutation({})

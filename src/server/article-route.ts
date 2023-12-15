@@ -21,7 +21,7 @@ export const ArticleRoute = router({
         cateId: z.string(),
       })
     )
-    .query(({ input: { id, cateId } }) => {
+    .mutation(({ input: { id, cateId } }) => {
       return db.query.article.findFirst({
         where: (article, { eq, and }) => {
           return and(eq(article.category_id, cateId), eq(article.id, id))

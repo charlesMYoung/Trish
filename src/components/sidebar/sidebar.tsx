@@ -4,11 +4,12 @@ import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
 import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
-import { Accordion, AccordionItem, ScrollShadow } from '@nextui-org/react'
+import { ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
+import { Collapse } from '../collapse/collapse'
 import { AddArticle } from './add-article-action'
 import { DropDownMenu } from './dropdown-menu'
 import { PopoverInput } from './popover-input'
@@ -27,6 +28,7 @@ type DiffResult = {
 export function SideBar() {
   const pathName = usePathname()
   const [activeId, setActiveId] = useState<string>('')
+  const [hoverId, setHoverId] = useState<string>('')
   const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery<
     Category[]
   >(void 0, {
@@ -42,25 +44,14 @@ export function SideBar() {
     deleteArticleTitleById,
   } = useSidebarStore()
   const sidebars = useSidebarStore.use.sidebars()
-  const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation({
-    onSuccess() {
-      console.log('onSuccess insertCategory>>>>')
-    },
-  })
 
+  const { data: articles, mutate: getArticleByCateId } =
+    ClientTRPC.getArticleByCateId.useMutation()
+  const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation()
   const { mutate: insertArticle } = ClientTRPC.insertArticle.useMutation()
-  const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
-    onSuccess() {
-      console.log('onSuccess updateCategory>>>>')
-    },
-  })
-
+  const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation()
   const { mutate: deleteCategoryById } =
-    ClientTRPC.deleteCategoryById.useMutation({
-      onSuccess() {
-        console.log('onSuccess deleteCategoryById>>>>')
-      },
-    })
+    ClientTRPC.deleteCategoryById.useMutation()
 
   useEffect(() => {
     if (categoriesFromServer) {
@@ -101,7 +92,6 @@ export function SideBar() {
       },
       {
         equalityFn: shallow,
-        fireImmediately: false,
       }
     )
   }, [])
@@ -166,6 +156,12 @@ export function SideBar() {
     })
   }
 
+  const onCollapseChange = (id: string) => {
+    getArticleByCateId({
+      id,
+    })
+  }
+
   return (
     <ScrollShadow
       className="sticky left-0 top-0 box-border  
@@ -183,32 +179,37 @@ export function SideBar() {
               sidebar.children.map((subSidebar) => {
                 if (Array.isArray(subSidebar.children)) {
                   return (
-                    <Accordion
-                      title={subSidebar.name as string}
+                    <Collapse
+                      id={subSidebar.id}
+                      items={articles?.map((child) => {
+                        return (
+                          <SidebarItem
+                            isShowDelBtn={sidebar.id === MenuType.CATEGORY}
+                            onSidebarDel={() =>
+                              deleteArticleTitleById(subSidebar.id, child.id)
+                            }
+                            key={child.id}
+                            href={`/dashboard/article/${child.category_id}/${child.id}`}
+                          >
+                            {child.title}
+                          </SidebarItem>
+                        )
+                      })}
+                      startContent={subSidebar.icon || ''}
                       key={subSidebar.id}
-                      className="p-0"
-                      itemClasses={{
-                        base: 'py-0 w-full',
-                        title: 'font-normal text-medium',
-                        trigger:
-                          'py-0 px-3 data-[hover=true]:bg-primary-100 rounded-lg flex items-center h-11',
-                        indicator: 'text-medium px-2',
-                        content: 'text-small px-2 ',
-                      }}
-                    >
-                      <AccordionItem
-                        startContent={subSidebar.icon}
-                        key={subSidebar.id}
-                        hideIndicator={!subSidebar.children.length}
-                        title={
-                          <div className="flex items-center justify-between">
-                            <PopoverInput
-                              onPopoverInputChange={editMenu}
-                              onClose={() => setActiveId('')}
-                              id={subSidebar.id}
-                              name={subSidebar.name as string}
-                              activeId={activeId}
-                            ></PopoverInput>
+                      onCollapseChange={onCollapseChange}
+                      onHover={setHoverId}
+                      title={
+                        <div className="flex w-full items-center justify-between">
+                          <PopoverInput
+                            onPopoverInputChange={editMenu}
+                            onClose={() => setActiveId('')}
+                            id={subSidebar.id}
+                            name={subSidebar.name as string}
+                            activeId={activeId}
+                          ></PopoverInput>
+
+                          {hoverId === subSidebar.id ? (
                             <div>
                               <DropDownMenu
                                 id={subSidebar.id}
@@ -219,32 +220,10 @@ export function SideBar() {
                                 onAddArticle={onAddArticle}
                               />
                             </div>
-                          </div>
-                        }
-                      >
-                        {Array.isArray(subSidebar.children)
-                          ? subSidebar.children.map((child) => {
-                              return (
-                                <SidebarItem
-                                  isShowDelBtn={
-                                    sidebar.id === MenuType.CATEGORY
-                                  }
-                                  onSidebarDel={() =>
-                                    deleteArticleTitleById(
-                                      subSidebar.id,
-                                      child.id
-                                    )
-                                  }
-                                  key={child.id}
-                                  href={child.href || ''}
-                                >
-                                  {child.name}
-                                </SidebarItem>
-                              )
-                            })
-                          : null}
-                      </AccordionItem>
-                    </Accordion>
+                          ) : null}
+                        </div>
+                      }
+                    ></Collapse>
                   )
                 }
                 return (

@@ -1,3 +1,4 @@
+export * from './collapse/collapse'
 export * from './cover/cover'
 export * from './info-card/info-card'
 export * from './navbar/navbar'

@@ -18,7 +18,11 @@ export type DropDownMenuProps = {
 
 export const DropDownMenu = ({ id, onAction }: DropDownMenuProps) => {
   return (
-    <Dropdown>
+    <Dropdown
+      onOpenChange={(value) => {
+        console.log('value', value)
+      }}
+    >
       <DropdownTrigger>
         <Button isIconOnly variant="flat" size="sm" as={NotButtonEl}>
           <HiOutlineDotsHorizontal className="text-default-500" />
