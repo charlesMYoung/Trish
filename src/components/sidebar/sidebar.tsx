@@ -6,6 +6,7 @@ import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
 import { ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
+import { useDebounceFn } from 'ahooks'
 import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
@@ -61,6 +62,8 @@ export function SideBar() {
   const { mutate: deleteCategoryById } =
     ClientTRPC.deleteCategoryById.useMutation()
 
+  const { run: updateCategoryDebounce } = useDebounceFn(updateCategory)
+
   useEffect(() => {
     if (categoriesFromServer) {
       initMenus(categoriesFromServer)
@@ -95,7 +98,7 @@ export function SideBar() {
         }
         if (modi.length > 0) {
           const [{ id, name = '' }] = modi
-          updateCategory({
+          updateCategoryDebounce({
             name: name || '',
             id,
           })

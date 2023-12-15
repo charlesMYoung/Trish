@@ -35,7 +35,10 @@ export function ArticleTitle({
         href={href}
         className="flex w-full max-w-full justify-between text-default-900 active:bg-none"
       >
-        <div className="flex h-full w-full cursor-pointer items-center gap-2 text-default-900">
+        <div
+          className="flex h-full w-full max-w-[100px] cursor-pointer items-center gap-2 truncate text-default-900"
+          title={children as string}
+        >
           {children}
         </div>
       </Link>

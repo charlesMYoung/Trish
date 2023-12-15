@@ -58,7 +58,7 @@ export const TipTapEditor = ({
     editorProps: {
       attributes: {
         class:
-          'prose dark:prose-invert prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none',
+          'prose dark:prose-invert prose-sm sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl mx-auto focus:outline-none',
       },
     },
     editable: true,
@@ -103,7 +103,7 @@ export const TipTapEditor = ({
       )}
 
       <div
-        className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-2xl"
+        className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl"
         onKeyUp={onKeyUpHandle}
         onMouseOver={inputButtonToggle.open}
         onMouseLeave={inputButtonToggle.close}
@@ -120,12 +120,7 @@ export const TipTapEditor = ({
           tabIndex={1}
           placeholder="无标题"
           classNames={{
-            input: [
-              'bg-transparent',
-              'hover:bg-transparent',
-              'text-7xl',
-              'h-45',
-            ],
+            input: ['bg-transparent', 'hover:bg-transparent', 'text-6xl'],
             innerWrapper: ['bg-transparent', 'hover:bg-transparent'],
             inputWrapper: [
               'h-45',
