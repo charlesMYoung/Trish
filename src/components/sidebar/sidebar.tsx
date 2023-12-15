@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
 import { Collapse } from '../collapse/collapse'
 import { AddArticle } from './add-article-action'
+import { ArticleTitle } from './article-title'
 import { DropDownMenu } from './dropdown-menu'
 import { PopoverInput } from './popover-input'
 import { SidebarItem } from './sidebar-item'
@@ -29,7 +30,7 @@ export function SideBar() {
   const pathName = usePathname()
   const { slugs } = useParams<{ slugs: string[] }>()
 
-  const [, articleId] = slugs || []
+  const [cateId, articleId] = slugs || []
 
   const [activeId, setActiveId] = useState<string>('')
   const [hoverId, setHoverId] = useState<string>('')
@@ -56,6 +57,7 @@ export function SideBar() {
   const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation()
   const { mutate: insertArticle } = ClientTRPC.insertArticle.useMutation()
   const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation()
+  const { mutate: delArticleById } = ClientTRPC.delArticleById.useMutation()
   const { mutate: deleteCategoryById } =
     ClientTRPC.deleteCategoryById.useMutation()
 
@@ -199,19 +201,22 @@ export function SideBar() {
                       id={subSidebar.id}
                       items={subSidebar.children?.map((child) => {
                         return (
-                          <SidebarItem
-                            isShowDelBtn={sidebar.id === MenuType.CATEGORY}
-                            onSidebarDel={() =>
+                          <ArticleTitle
+                            onSidebarDel={() => {
                               deleteArticleTitleById(subSidebar.id, child.id)
-                            }
+                              delArticleById({
+                                id: child.id,
+                              })
+                            }}
                             isActive={child.id === articleId}
                             key={child.id}
                             href={child.href || ''}
                           >
-                            {child.name}
-                          </SidebarItem>
+                            {child.name || 'no title'}
+                          </ArticleTitle>
                         )
                       })}
+                      isActived={cateId === subSidebar.id}
                       startContent={subSidebar.icon || ''}
                       key={subSidebar.id}
                       onCollapseChange={onCollapseChange}

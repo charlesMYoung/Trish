@@ -154,4 +154,10 @@ export const ArticleRoute = router({
         where: (article, { eq }) => eq(article.category_id, id),
       })
     }),
+
+  delArticleById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ input: { id } }) => {
+      return db.delete(article).where(eq(article.id, id))
+    }),
 })

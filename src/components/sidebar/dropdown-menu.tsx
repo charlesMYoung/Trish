@@ -9,7 +9,6 @@ import {
 import { BiEditAlt } from 'react-icons/bi'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { IoMdTrash } from 'react-icons/io'
-import { NotButtonEl } from './custom-button'
 
 export type DropDownMenuProps = {
   onAction: (key: string, id: string) => void
@@ -29,7 +28,7 @@ export const DropDownMenu = ({
       }}
     >
       <DropdownTrigger>
-        <Button isIconOnly variant="flat" size="sm" as={NotButtonEl}>
+        <Button isIconOnly variant="flat" size="sm">
           <HiOutlineDotsHorizontal className="text-default-500" />
         </Button>
       </DropdownTrigger>

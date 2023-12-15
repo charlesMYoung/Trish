@@ -4,6 +4,8 @@ import { Button } from '@nextui-org/react'
 import { useHover } from 'ahooks'
 import { ReactNode, useRef, useState } from 'react'
 import { useCollapse } from 'react-collapsed'
+import { IoIosArrowBack } from 'react-icons/io'
+import { twMerge } from 'tailwind-merge'
 
 type CollapseProps = {
   title: string | ReactNode
@@ -11,6 +13,7 @@ type CollapseProps = {
   onCollapseChange?: (key: string) => void
   id: string
   startContent?: ReactNode
+  isActived?: boolean
   onHover?: (id: string) => void
 }
 
@@ -21,6 +24,7 @@ export const Collapse = ({
   startContent,
   id,
   onHover,
+  isActived,
 }: CollapseProps) => {
   const [isExpanded, setExpanded] = useState(false)
   const collapseRef = useRef<HTMLDivElement>(null)
@@ -37,8 +41,11 @@ export const Collapse = ({
   return (
     <div className="relative w-full" ref={collapseRef}>
       <Button
-        className="!hover:bg-primary-100 flex h-11 w-full
-              items-center justify-between rounded-lg border-none bg-transparent px-3 py-0 text-lg data-[hover=true]:bg-primary-100"
+        className={twMerge(
+          `!hover:bg-primary-100 flex h-11 w-full items-center
+          justify-between rounded-lg border-none bg-transparent px-3 py-0 pr-0 text-lg data-[hover=true]:bg-primary-100`,
+          isActived && `bg-primary-50 data-[hover=true]:bg-primary-100`
+        )}
         startContent={startContent}
         {...getToggleProps({
           onClick: () => {
@@ -59,26 +66,19 @@ export const Collapse = ({
                   text-default-400 transition-transform
                 data-[open=true]:-rotate-90 rtl:-rotate-180 rtl:data-[open=true]:-rotate-90"
         >
-          <svg
-            aria-hidden="true"
-            fill="none"
-            focusable="false"
-            height="1em"
-            role="presentation"
-            viewBox="0 0 24 24"
-            width="1em"
-          >
-            <path
-              d="M15.5 19l-7-7 7-7"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-            ></path>
-          </svg>
+          <IoIosArrowBack></IoIosArrowBack>
         </span>
       </Button>
-      <section {...getCollapseProps()}>{items}</section>
+      {Array.isArray(items) && items.length > 0 ? (
+        <section
+          {...getCollapseProps()}
+          className="my-4 flex flex-col space-y-1"
+        >
+          {items}
+        </section>
+      ) : (
+        []
+      )}
     </div>
   )
 }

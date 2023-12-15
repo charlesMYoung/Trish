@@ -86,9 +86,6 @@ dependencies:
   pg:
     specifier: ^8.11.3
     version: 8.11.3
-  rc-collapse:
-    specifier: ^3.7.2
-    version: 3.7.2(react-dom@18.2.0)(react@18.2.0)
   rc-upload:
     specifier: ^4.4.0
     version: 4.4.0(react-dom@18.2.0)(react@18.2.0)
@@ -6807,33 +6804,6 @@ packages:
 
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
-
-  /rc-collapse@3.7.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-ZRw6ipDyOnfLFySxAiCMdbHtb5ePAsB9mT17PA6y1mRD/W6KHRaZeb5qK/X9xDV1CqgyxMpzw0VdS74PCcUk4A==}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': 7.23.4
-      classnames: 2.3.2
-      rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
-      rc-util: 5.38.1(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /rc-motion@2.9.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-XIU2+xLkdIr1/h6ohPZXyPBMvOmuyFZQ/T0xnawz+Rh+gh4FINcnZmMT5UTIj6hgI0VLDjTaPeRd+smJeSPqiQ==}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-    dependencies:
-      '@babel/runtime': 7.23.4
-      classnames: 2.3.2
-      rc-util: 5.38.1(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
 
   /rc-upload@4.4.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-IRlGRh7UWXEwbPfal3g8PeaWt3qmu8T0C1VV3fjjE+ehP9/GZNrxyXnRNdEWAwLyzcQthl4PudwZexNN9yvYKg==}
