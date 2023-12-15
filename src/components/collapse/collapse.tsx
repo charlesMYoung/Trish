@@ -37,8 +37,8 @@ export const Collapse = ({
   return (
     <div className="relative w-full" ref={collapseRef}>
       <Button
-        className="!hover:bg-primary-100 flex h-11
-              w-full items-center justify-between rounded-lg border-none bg-transparent px-3 py-0 data-[hover=true]:bg-primary-100"
+        className="!hover:bg-primary-100 flex h-11 w-full
+              items-center justify-between rounded-lg border-none bg-transparent px-3 py-0 text-lg data-[hover=true]:bg-primary-100"
         startContent={startContent}
         {...getToggleProps({
           onClick: () => {

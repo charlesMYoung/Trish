@@ -6,7 +6,7 @@ import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
 import { ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
 import { Collapse } from '../collapse/collapse'
@@ -27,6 +27,10 @@ type DiffResult = {
 
 export function SideBar() {
   const pathName = usePathname()
+  const { slugs } = useParams<{ slugs: string[] }>()
+
+  const [, articleId] = slugs
+
   const [activeId, setActiveId] = useState<string>('')
   const [hoverId, setHoverId] = useState<string>('')
   const [showDropdownId, setShowDropdownId] = useState<string>('')
@@ -200,6 +204,7 @@ export function SideBar() {
                             onSidebarDel={() =>
                               deleteArticleTitleById(subSidebar.id, child.id)
                             }
+                            isActive={child.id === articleId}
                             key={child.id}
                             href={child.href || ''}
                           >
