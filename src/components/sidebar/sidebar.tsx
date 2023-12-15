@@ -47,6 +47,8 @@ export function SideBar() {
       console.log('onSuccess insertCategory>>>>')
     },
   })
+
+  const { mutate: insertArticle } = ClientTRPC.insertArticle.useMutation()
   const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation({
     onSuccess() {
       console.log('onSuccess updateCategory>>>>')
@@ -75,10 +77,7 @@ export function SideBar() {
         const { children: preChildren = [] } =
           preSidebars.find((cur) => cur.id === MenuType.CATEGORY) || {}
         const { add, del, modi } = diffChildren(curChildren, preChildren)
-
-        console.log('add ', add, 'del', del, 'modi', modi)
-
-        if (add.length > 0) {
+        if (add.length > 0 && add.length === 1) {
           const [{ id, name = '' }] = add
           insertCategory({
             name: name || '',
@@ -161,11 +160,15 @@ export function SideBar() {
 
   const onAddArticle = (articleId: string, categoryId: string) => {
     insertArticleToCategory(articleId, categoryId)
+    insertArticle({
+      id: articleId,
+      cateId: categoryId,
+    })
   }
 
   return (
     <ScrollShadow
-      className="sticky left-0 top-0 box-border 
+      className="sticky left-0 top-0 box-border  
     flex h-full w-72 flex-col space-y-2
      border-r-1 border-default-100 px-4"
     >
@@ -173,11 +176,7 @@ export function SideBar() {
       {sidebars.map((sidebar) => {
         return (
           <>
-            <MenuTitle
-              key={sidebar.name as string}
-              onAdd={onAddHandle}
-              id={sidebar.id}
-            >
+            <MenuTitle key={sidebar.id} onAdd={onAddHandle} id={sidebar.id}>
               {sidebar.name}
             </MenuTitle>
             {Array.isArray(sidebar.children) &&
@@ -199,7 +198,6 @@ export function SideBar() {
                     >
                       <AccordionItem
                         startContent={subSidebar.icon}
-                        itemID={subSidebar.id}
                         key={subSidebar.id}
                         hideIndicator={!subSidebar.children.length}
                         title={
