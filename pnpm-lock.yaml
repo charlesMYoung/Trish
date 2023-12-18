@@ -20,6 +20,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^4.0.0
     version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
+  '@tiptap/core':
+    specifier: ^2.1.13
+    version: 2.1.13(@tiptap/pm@2.1.13)
   '@tiptap/extension-blockquote':
     specifier: ^2.1.13
     version: 2.1.13(@tiptap/core@2.1.13)
@@ -71,6 +74,9 @@ dependencies:
   '@tiptap/starter-kit':
     specifier: ^2.1.13
     version: 2.1.13(@tiptap/pm@2.1.13)
+  '@tiptap/suggestion':
+    specifier: ^2.1.13
+    version: 2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13)
   '@trpc/client':
     specifier: ^10.44.1
     version: 10.44.1(@trpc/server@10.44.1)
@@ -3778,6 +3784,16 @@ packages:
       '@tiptap/extension-text': 2.1.13(@tiptap/core@2.1.13)
     transitivePeerDependencies:
       - '@tiptap/pm'
+    dev: false
+
+  /@tiptap/suggestion@2.1.13(@tiptap/core@2.1.13)(@tiptap/pm@2.1.13):
+    resolution: {integrity: sha512-Y05TsiXTFAJ5SrfoV+21MAxig5UNbY0AVa03lQlh/yicTRPpIc6hgZzblB0uxDSYoj6+kaHE4MIZvPvhUD8BJQ==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.1.13(@tiptap/pm@2.1.13)
+      '@tiptap/pm': 2.1.13
     dev: false
 
   /@trpc/client@10.44.1(@trpc/server@10.44.1):

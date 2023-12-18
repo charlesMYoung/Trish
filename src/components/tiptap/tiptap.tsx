@@ -2,22 +2,13 @@
 import { Cover } from '@/components'
 import { useOnChange, useToggle } from '@/hooks'
 import { Button, Input } from '@nextui-org/react'
-import Blockquote from '@tiptap/extension-blockquote'
-import Bold from '@tiptap/extension-bold'
-import Document from '@tiptap/extension-document'
-import Image from '@tiptap/extension-image'
-import Paragraph from '@tiptap/extension-paragraph'
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
-import TaskItem from '@tiptap/extension-task-item'
-import TaskList from '@tiptap/extension-task-list'
-import Text from '@tiptap/extension-text'
 import { EditorContent, useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { KeyboardEvent } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 import { FaImages } from 'react-icons/fa6'
+import Commons from './slash-menu/command'
+import { Commands, SlashMenu } from './slash-menu/slash-menu'
+import suggestion from './slash-menu/suggestion'
+import { TipTapExtends } from './tiptap-extensions'
 
 export type TipTapEditorProps = {
   defaultContent?: string
@@ -36,6 +27,10 @@ export const TipTapEditor = ({
 }: TipTapEditorProps) => {
   const inputButtonToggle = useToggle(false)
   const coverButtonToggle = useToggle(false)
+  const slashToggle = useToggle(false)
+  const [slashMenuRec, setSlashMenuRec] = useState<DOMRect>(null)
+  const [slashCommands, setSlashCommands] = useState<Commands>()
+  const [selectedIndex, setSelectIndex] = useState<number>(0)
 
   const articleTitleHook = useOnChange<string>({
     onChangeFn(e) {
@@ -51,28 +46,68 @@ export const TipTapEditor = ({
     },
   })
 
+  const onStart = (startProps) => {
+    const currentClientRect = startProps.clientRect()
+    console.log('showSlashMenu', currentClientRect)
+    setSlashMenuRec(currentClientRect)
+    setSlashCommands(startProps.items)
+    slashToggle.open()
+  }
+
+  const onExit = () => {
+    slashToggle.close()
+  }
+
+  const onUpdate = () => {}
+
+  const onKeyDown = ({ event, view, range }) => {
+    if (event.key === 'ArrowUp') {
+      upHandler()
+      return true
+    }
+
+    if (event.key === 'ArrowDown') {
+      downHandler()
+      return true
+    }
+
+    if (event.key === 'Enter') {
+      // enterHandler()
+      const items = slashCommands[selectedIndex]
+      if (items) {
+        items.command({
+          editor: view,
+          range,
+        })
+      }
+    }
+
+    return false
+  }
+
+  const upHandler = () => {
+    setSelectIndex((preIndex) => {
+      return (preIndex + 4 - 1) % 4
+    })
+  }
+
+  const downHandler = () => {
+    setSelectIndex((preIndex) => {
+      return (preIndex + 1) % 4
+    })
+  }
+
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [2, 3, 4, 5, 6],
-        },
+      ...TipTapExtends,
+      Commons.configure({
+        suggestion: suggestion({
+          onStart,
+          onExit,
+          onKeyDown,
+          onUpdate,
+        }),
       }),
-      Document,
-      Paragraph,
-      Image.configure({
-        allowBase64: true,
-        inline: true,
-      }),
-      Blockquote,
-      Bold,
-      Text,
-      TableRow,
-      TableHeader,
-      TableCell,
-      Table,
-      TaskItem,
-      TaskList,
     ],
     editorProps: {
       attributes: {
@@ -88,6 +123,13 @@ export const TipTapEditor = ({
       onContent(content)
     },
   })
+
+  useEffect(
+    () => () => {
+      editor?.destroy()
+    },
+    []
+  )
 
   const onKeyUpHandle = ({ key }: KeyboardEvent) => {
     if (key === 'Enter' && editor && !editor.isFocused) {
@@ -113,6 +155,7 @@ export const TipTapEditor = ({
   if (!editor) {
     return null
   }
+
   return (
     <>
       {coverButtonToggle.isToggle ? (
@@ -157,6 +200,12 @@ export const TipTapEditor = ({
         />
       </div>
       <EditorContent editor={editor} tabIndex={2} />
+      <SlashMenu
+        isOpen={slashToggle.isToggle}
+        rect={slashMenuRec}
+        commands={slashCommands}
+        selectedIndex={selectedIndex}
+      ></SlashMenu>
     </>
   )
 }

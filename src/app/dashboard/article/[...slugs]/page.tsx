@@ -54,7 +54,6 @@ export default function ArticlePage({
   }
 
   const onContentHandle = (content: string) => {
-    console.log('content', content)
     updateArticleContentDebounce({
       content,
       id: articleId,
