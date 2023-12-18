@@ -5,7 +5,15 @@ import { Button, Input } from '@nextui-org/react'
 import Blockquote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
 import Document from '@tiptap/extension-document'
+import Image from '@tiptap/extension-image'
 import Paragraph from '@tiptap/extension-paragraph'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
+import Text from '@tiptap/extension-text'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { KeyboardEvent } from 'react'
@@ -52,8 +60,19 @@ export const TipTapEditor = ({
       }),
       Document,
       Paragraph,
+      Image.configure({
+        allowBase64: true,
+        inline: true,
+      }),
       Blockquote,
       Bold,
+      Text,
+      TableRow,
+      TableHeader,
+      TableCell,
+      Table,
+      TaskItem,
+      TaskList,
     ],
     editorProps: {
       attributes: {
@@ -89,6 +108,10 @@ export const TipTapEditor = ({
   const onRemoveCover = () => {
     coverButtonToggle.close()
     coverChangeHook.onChange('')
+  }
+
+  if (!editor) {
+    return null
   }
   return (
     <>
