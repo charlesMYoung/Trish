@@ -15,7 +15,7 @@ export const useSlashMenu = ({
   const [selectedIndex, setSelectIndex] = useState<number>(0)
   const [isToggle, { setLeft, setRight }] = useToggle(false)
 
-  const onStart = ({ clientRect,range }: SuggestionProps) => {
+  const onStart = ({ clientRect, range }: SuggestionProps) => {
     if (clientRect) {
       const currentClientRect = clientRect()
       if (currentClientRect) {

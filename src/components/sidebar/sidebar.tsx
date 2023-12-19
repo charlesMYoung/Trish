@@ -192,8 +192,8 @@ export function SideBar() {
       <SidebarTop />
       {sidebars.map((sidebar) => {
         return (
-          <>
-            <MenuTitle key={sidebar.id} onAdd={onAddHandle} id={sidebar.id}>
+          <div key={sidebar.id}>
+            <MenuTitle onAdd={onAddHandle} id={sidebar.id}>
               {sidebar.name}
             </MenuTitle>
             {Array.isArray(sidebar.children) &&
@@ -266,7 +266,7 @@ export function SideBar() {
                   </SidebarItem>
                 )
               })}
-          </>
+          </div>
         )
       })}
     </ScrollShadow>
