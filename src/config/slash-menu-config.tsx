@@ -68,11 +68,11 @@ export const SlashMenusConfig: SlashMenuCommand[] = [
     },
   },
   {
-    icon: <PiTable></PiTable>,
+    icon: <PiTable />,
     title: 'table',
     description: 'this is text 3',
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setMark('italic').run()
+      editor.commands.insertTable({ rows: 3, cols: 3, withHeaderRow: true })
     },
   },
 ]

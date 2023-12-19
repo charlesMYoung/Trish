@@ -60,8 +60,8 @@ export const useSlashMenu = ({
 
   const enterHandler = (range: Range) => {
     const item = SlashMenusConfig[selectedIndex]
-    if (item && item.command) {
-      onKeyDownCallback && onKeyDownCallback(item, range)
+    if (item?.command) {
+      onKeyDownCallback?.(item, range)
     }
   }
 

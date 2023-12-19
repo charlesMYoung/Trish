@@ -176,7 +176,7 @@ export const TipTapEditor = ({
         selectedIndex={selectedIndex}
         editor={editor}
         range={slashMenuRef.current}
-      ></SlashMenu>
+      />
     </>
   )
 }

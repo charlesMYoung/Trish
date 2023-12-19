@@ -5,6 +5,24 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@editorjs/checklist':
+    specifier: ^1.6.0
+    version: 1.6.0
+  '@editorjs/editorjs':
+    specifier: ^2.28.2
+    version: 2.28.2
+  '@editorjs/header':
+    specifier: ^2.8.1
+    version: 2.8.1
+  '@editorjs/image':
+    specifier: ^2.9.0
+    version: 2.9.0
+  '@editorjs/link':
+    specifier: ^2.6.2
+    version: 2.6.2
+  '@editorjs/list':
+    specifier: ^1.9.0
+    version: 1.9.0
   '@nextui-org/navbar':
     specifier: ^2.0.27
     version: 2.0.27(@nextui-org/system@2.0.15)(@nextui-org/theme@2.1.17)(@types/react@18.2.38)(framer-motion@10.16.5)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.1.18)
@@ -166,9 +184,6 @@ devDependencies:
   drizzle-kit:
     specifier: ^0.20.6
     version: 0.20.6
-  eslint:
-    specifier: ^8
-    version: 8.54.0
   eslint-config-next:
     specifier: 14.0.3
     version: 14.0.3(eslint@8.54.0)(typescript@5.3.2)
@@ -265,11 +280,62 @@ packages:
     dev: true
     optional: true
 
+  /@codexteam/icons@0.0.4:
+    resolution: {integrity: sha512-V8N/TY2TGyas4wLrPIFq7bcow68b3gu8DfDt1+rrHPtXxcexadKauRJL6eQgfG7Z0LCrN4boLRawR4S9gjIh/Q==}
+    dev: false
+
+  /@codexteam/icons@0.0.5:
+    resolution: {integrity: sha512-s6H2KXhLz2rgbMZSkRm8dsMJvyUNZsEjxobBEg9ztdrb1B2H3pEzY6iTwI4XUPJWJ3c3qRKwV4TrO3J5jUdoQA==}
+    dev: false
+
+  /@codexteam/icons@0.0.6:
+    resolution: {integrity: sha512-L7Q5PET8PjKcBT5wp7VR+FCjwCi5PUp7rd/XjsgQ0CI5FJz0DphyHGRILMuDUdCW2MQT9NHbVr4QP31vwAkS/A==}
+    dev: false
+
+  /@codexteam/icons@0.3.0:
+    resolution: {integrity: sha512-fJE9dfFdgq8xU+sbsxjH0Kt8Yeatw9xHBJWb77DhRkEXz3OCoIS6hrRC1ewHEryxzIjxD8IyQrRq2f+Gz3BcmA==}
+    dev: false
+
   /@drizzle-team/studio@0.0.35:
     resolution: {integrity: sha512-t5LTNOVf+L7Bb/wdssOIPx0ueNvhyaIXdrvKgoHR4wK0GD7SRmILcCTzn6N6Ltr1VnFzQZG/bzn6HMagn17Jtw==}
     dependencies:
       superjson: 2.2.1
     dev: true
+
+  /@editorjs/checklist@1.6.0:
+    resolution: {integrity: sha512-hRNP36DInr73mSK3noHBQeoQb7DA12ANfqTXufEkTgQzx+k4mRJ0HdeGukTIR4JbwjHJ9ecUBnnQqIEGnxCFEg==}
+    dependencies:
+      '@codexteam/icons': 0.3.0
+    dev: false
+
+  /@editorjs/editorjs@2.28.2:
+    resolution: {integrity: sha512-g6V0Nd3W9IIWMpvxDNTssQ6e4kxBp1Y0W4GIf8cXRlmcBp3TUjrgCYJQmNy3l2a6ZzhyBAoVSe8krJEq4g7PQw==}
+    dev: false
+
+  /@editorjs/header@2.8.1:
+    resolution: {integrity: sha512-y0HVXRP7m2W617CWo3fsb5HhXmSLaRpb9GzFx0Vkp/HEm9Dz5YO1s8tC7R8JD3MskwoYh7V0hRFQt39io/r6hA==}
+    dependencies:
+      '@codexteam/icons': 0.0.5
+    dev: false
+
+  /@editorjs/image@2.9.0:
+    resolution: {integrity: sha512-xItihKJFiWJ06SMtLWQZvzHv4LRPNAFZYaHAXesBFzXvWwUrtVaVMcNSf0eNnw3InrPO3Po1vZRRgpsT+Ya3Bg==}
+    dependencies:
+      '@codexteam/icons': 0.0.6
+    dev: false
+
+  /@editorjs/link@2.6.2:
+    resolution: {integrity: sha512-3cPx6M4ZvwDDvsi0E0fvMR3rvveAV/C0GRo1JLeZJ9cG9QgyoNolj4eu5Eqx3/r1XTC/he54qYEIZ/Dc4Lr4Ow==}
+    dependencies:
+      '@babel/runtime': 7.23.4
+      '@codexteam/icons': 0.0.4
+    dev: false
+
+  /@editorjs/list@1.9.0:
+    resolution: {integrity: sha512-BQEvZW4vi0O0dBvGNljiKxiE89vMSHoM2Tu2OzKUndoj7pY9AxqpgCh1qvwIVsJAlG4Lbt/vBFQilnoStMmI6A==}
+    dependencies:
+      '@codexteam/icons': 0.0.4
+    dev: false
 
   /@emotion/is-prop-valid@0.8.8:
     resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==}
