@@ -61,7 +61,6 @@ export const TipTapEditor = ({
       onContent(content)
     },
   })
-
   editorRef.current = editor
 
   const [

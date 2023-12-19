@@ -1,4 +1,11 @@
 import { Editor, Range } from '@tiptap/core'
+import {
+  PiTable,
+  PiTextB,
+  PiTextHOne,
+  PiTextHThree,
+  PiTextHTwo,
+} from 'react-icons/pi'
 
 export type SlashCommand = (params: { editor: Editor; range: Range }) => void
 
@@ -11,7 +18,7 @@ export type SlashMenuCommand = {
 
 export const SlashMenusConfig: SlashMenuCommand[] = [
   {
-    icon: 'icon',
+    icon: <PiTextHOne></PiTextHOne>,
     title: 'H1',
     description: 'this is h1 text',
     command: ({ editor, range }) => {
@@ -21,12 +28,13 @@ export const SlashMenusConfig: SlashMenuCommand[] = [
           .chain()
           .focus()
           .deleteRange(range)
-          .setNode('heading', { level: 1 })
+          .setNode('heading', { level: 2 })
           .run()
       }
     },
   },
   {
+    icon: <PiTextHTwo></PiTextHTwo>,
     title: 'H2',
     description: 'this is h2 text',
     command: ({ editor, range }) => {
@@ -34,11 +42,25 @@ export const SlashMenusConfig: SlashMenuCommand[] = [
         .chain()
         .focus()
         .deleteRange(range)
-        .setNode('heading', { level: 2 })
+        .setNode('heading', { level: 3 })
         .run()
     },
   },
   {
+    icon: <PiTextHThree></PiTextHThree>,
+    title: 'H3',
+    description: 'this is h2 text',
+    command: ({ editor, range }) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .setNode('heading', { level: 4 })
+        .run()
+    },
+  },
+  {
+    icon: <PiTextB></PiTextB>,
     title: 'bold',
     description: 'this is text 3',
     command: ({ editor, range }) => {
@@ -46,7 +68,8 @@ export const SlashMenusConfig: SlashMenuCommand[] = [
     },
   },
   {
-    title: 'italic',
+    icon: <PiTable></PiTable>,
+    title: 'table',
     description: 'this is text 3',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setMark('italic').run()
