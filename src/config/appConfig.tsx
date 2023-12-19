@@ -23,7 +23,7 @@ export const SideBarConfig: Sidebar[] = [
   {
     name: '系统',
     id: 'system',
-    children:[
+    children: [
       {
         name: '操作日志',
         id: 'operation',
@@ -36,9 +36,8 @@ export const SideBarConfig: Sidebar[] = [
         icon: <MdOutlineTipsAndUpdates />,
         href: '/dashboard/update',
       },
-    ]
+    ],
   },
-  
 ]
 
 export const GalleryList = [

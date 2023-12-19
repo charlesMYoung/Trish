@@ -1,13 +1,14 @@
 'use client'
+
 import { Cover } from '@/components'
-import { useOnChange, useToggle } from '@/hooks'
+import { useOnChange, useSlashMenu, useToggle } from '@/hooks'
 import { Button, Input } from '@nextui-org/react'
+import { Editor, Range } from '@tiptap/core'
 import { EditorContent, useEditor } from '@tiptap/react'
-import { KeyboardEvent, useEffect, useState } from 'react'
+import { KeyboardEvent, useEffect, useRef } from 'react'
 import { FaImages } from 'react-icons/fa6'
 import Commons from './slash-menu/command'
-import { Commands, SlashMenu } from './slash-menu/slash-menu'
-import suggestion from './slash-menu/suggestion'
+import { SlashMenu } from './slash-menu/slash-menu'
 import { TipTapExtends } from './tiptap-extensions'
 
 export type TipTapEditorProps = {
@@ -27,86 +28,23 @@ export const TipTapEditor = ({
 }: TipTapEditorProps) => {
   const inputButtonToggle = useToggle(false)
   const coverButtonToggle = useToggle(false)
-  const slashToggle = useToggle(false)
-  const [slashMenuRec, setSlashMenuRec] = useState<DOMRect>(null)
-  const [slashCommands, setSlashCommands] = useState<Commands>()
-  const [selectedIndex, setSelectIndex] = useState<number>(0)
-
-  const articleTitleHook = useOnChange<string>({
-    onChangeFn(e) {
-      console.log('articleTitleHook', e)
-      onTitle(e)
-    },
-  })
-
-  const coverChangeHook = useOnChange<string>({
-    onChangeFn(e) {
-      onCover(e)
-      console.log('coverChangeHook', e)
-    },
-  })
-
-  const onStart = (startProps) => {
-    const currentClientRect = startProps.clientRect()
-    console.log('showSlashMenu', currentClientRect)
-    setSlashMenuRec(currentClientRect)
-    setSlashCommands(startProps.items)
-    slashToggle.open()
-  }
-
-  const onExit = () => {
-    slashToggle.close()
-  }
-
-  const onUpdate = () => {}
-
-  const onKeyDown = ({ event, view, range }) => {
-    if (event.key === 'ArrowUp') {
-      upHandler()
-      return true
-    }
-
-    if (event.key === 'ArrowDown') {
-      downHandler()
-      return true
-    }
-
-    if (event.key === 'Enter') {
-      // enterHandler()
-      const items = slashCommands[selectedIndex]
-      if (items) {
-        items.command({
-          editor: view,
-          range,
-        })
-      }
-    }
-
-    return false
-  }
-
-  const upHandler = () => {
-    setSelectIndex((preIndex) => {
-      return (preIndex + 4 - 1) % 4
-    })
-  }
-
-  const downHandler = () => {
-    setSelectIndex((preIndex) => {
-      return (preIndex + 1) % 4
-    })
-  }
+  const editorRef = useRef<Editor | null>(null)
+  const slashMenuRef = useRef<Range | null>(null)
 
   const editor = useEditor({
     extensions: [
       ...TipTapExtends,
       Commons.configure({
-        suggestion: suggestion({
-          onStart,
-          onExit,
-          onKeyDown,
-          onUpdate,
-        }),
+        suggestion: {
+          render: () => {
+            return {
+              onStart,
+              onUpdate,
+              onKeyDown,
+              onExit,
+            }
+          },
+        },
       }),
     ],
     editorProps: {
@@ -121,6 +59,39 @@ export const TipTapEditor = ({
     onUpdate: ({ editor }) => {
       const content = editor.getHTML()
       onContent(content)
+    },
+  })
+
+  editorRef.current = editor
+
+  const [
+    { slashMenuRec, selectedIndex, slashMenus, isOpen },
+    { onExit, onKeyDown, onStart, onUpdate },
+  ] = useSlashMenu({
+    onKeyDownCallback: (item, range) => {
+      if (item.command) {
+        item.command({
+          editor: editorRef.current as Editor,
+          range,
+        })
+      }
+    },
+    onRange: (range) => {
+      slashMenuRef.current = range
+    },
+  })
+
+  const articleTitleHook = useOnChange<string>({
+    onChangeFn(e) {
+      console.log('articleTitleHook', e)
+      onTitle(e)
+    },
+  })
+
+  const coverChangeHook = useOnChange<string>({
+    onChangeFn(e) {
+      onCover(e)
+      console.log('coverChangeHook', e)
     },
   })
 
@@ -167,7 +138,6 @@ export const TipTapEditor = ({
       ) : (
         []
       )}
-
       <div
         className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl"
         onKeyUp={onKeyUpHandle}
@@ -201,10 +171,12 @@ export const TipTapEditor = ({
       </div>
       <EditorContent editor={editor} tabIndex={2} />
       <SlashMenu
-        isOpen={slashToggle.isToggle}
+        slashMenuCommands={slashMenus}
+        isOpen={isOpen}
         rect={slashMenuRec}
-        commands={slashCommands}
         selectedIndex={selectedIndex}
+        editor={editor}
+        range={slashMenuRef.current}
       ></SlashMenu>
     </>
   )

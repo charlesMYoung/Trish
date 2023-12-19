@@ -1,9 +1,9 @@
-import { Editor, Extension, Range } from '@tiptap/core'
-import Suggestion from '@tiptap/suggestion'
+import { SlashMenuCommand } from '@/config'
+import { Extension } from '@tiptap/core'
+import Suggestion, { SuggestionProps } from '@tiptap/suggestion'
 
 export default Extension.create({
   name: 'commands',
-
   addOptions() {
     return {
       suggestion: {
@@ -12,13 +12,10 @@ export default Extension.create({
           editor,
           range,
           props,
-        }: {
-          editor: Editor
-          range: Range
-          props: unknown
-        }) => {
-          console.log('editor Extension.create', editor, range, props)
-          props.command({ editor, range })
+        }: SuggestionProps & { props: SlashMenuCommand }) => {
+          if (props) {
+            props.command && props.command({ editor, range })
+          }
         },
       },
     }
@@ -27,8 +24,8 @@ export default Extension.create({
   addProseMirrorPlugins() {
     return [
       Suggestion({
-        editor: this.editor,
         ...this.options.suggestion,
+        editor: this.editor,
       }),
     ]
   },

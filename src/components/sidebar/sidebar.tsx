@@ -230,6 +230,7 @@ export function SideBar() {
                             onPopoverInputChange={editMenu}
                             onClose={() => setActiveId('')}
                             id={subSidebar.id}
+                            key={subSidebar.id + 'PopoverInput'}
                             name={subSidebar.name as string}
                             activeId={activeId}
                           ></PopoverInput>
@@ -238,6 +239,7 @@ export function SideBar() {
                           showDropdownId === subSidebar.id ? (
                             <div>
                               <DropDownMenu
+                                key={subSidebar.id + 'DropDownMenu'}
                                 onOpenChange={setShowDropdownId}
                                 id={subSidebar.id}
                                 onAction={onDropdownHandle}

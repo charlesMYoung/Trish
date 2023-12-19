@@ -1,39 +1,46 @@
 'use client'
 
+import { SlashMenuCommand } from '@/config'
 import { Editor, Range } from '@tiptap/core'
 import { twMerge } from 'tailwind-merge'
 
-export type Commands = {
-  title: string
-  command: (params: { editor: Editor; range: Range }) => void
-}
-
 export type SlashMenuProps = {
   isOpen?: boolean
-  rect: DOMRect
-  commands: Commands[]
-  selectedIndex: number
+  rect?: DOMRect
+  selectedIndex?: number
+  slashMenuCommands?: SlashMenuCommand[]
+  editor: Editor
+  range?: Range | null
 }
 
 export const SlashMenu = ({
   isOpen,
   rect,
-  commands,
   selectedIndex,
+  slashMenuCommands,
+  editor,
+  range,
 }: SlashMenuProps) => {
   return isOpen ? (
     <div
       style={{
-        top: `${rect.top}px`,
-        left: `${rect.left}px`,
+        top: `${rect ? rect.top : 0}px`,
+        left: `${rect ? rect.left : 0}px`,
       }}
-      className={twMerge('absolute')}
+      className={twMerge('absolute', 'z-50')}
     >
       <div className="px-1 py-2">
-        {Array.isArray(commands)
-          ? commands.map((item, index) => {
+        {Array.isArray(slashMenuCommands)
+          ? slashMenuCommands.map((item, index) => {
               return (
                 <div
+                  onClick={() => {
+                    console.log('command item>>>> befre')
+                    if (item && item.command && range) {
+                      item.command({ editor, range })
+                      console.log('command item>>>>', editor, range)
+                    }
+                  }}
                   key={item.title}
                   className={twMerge(
                     selectedIndex === index && 'bg-primary-100'
