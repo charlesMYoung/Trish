@@ -3,18 +3,23 @@
 import { Cover } from '@/components'
 import { useOnChange, useToggle } from '@/hooks'
 import Checklist from '@editorjs/checklist'
+import CodeTool from '@editorjs/code'
 import EditorJS, { OutputBlockData } from '@editorjs/editorjs'
 import Header from '@editorjs/header'
+import Image from '@editorjs/image'
+import InlineCode from '@editorjs/inline-code'
+import LinkTool from '@editorjs/link'
 import List from '@editorjs/list'
 import Table from '@editorjs/table'
 import { Button, Input } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
-import { KeyboardEvent, useEffect, useId, useRef } from 'react'
+import { KeyboardEvent, useEffect, useRef } from 'react'
 import { FaImages } from 'react-icons/fa6'
 
 export type TipTapEditorProps = {
   defaultContent?: string
   defaultTitle?: string
+  articleId: string
   onTitle: (title: string) => void
   onCover: (coverUrl: string) => void
   onContent: (content: string) => void
@@ -23,12 +28,13 @@ export type TipTapEditorProps = {
 export const Editor = ({
   defaultContent = '',
   defaultTitle = '',
+  articleId,
   onTitle,
   onCover,
   onContent,
 }: TipTapEditorProps) => {
-  const holder = useId()
   const editor = useRef<EditorJS | null>(null)
+  const editorRef = useRef<HTMLDivElement | null>(null)
   const inputButtonToggle = useToggle(false)
   const coverButtonToggle = useToggle(false)
 
@@ -74,8 +80,10 @@ export const Editor = ({
   const { run: onEditHandle } = useDebounceFn(async () => {
     const data = await editor?.current?.save()
     onContent(toJSON(data?.blocks || []))
-    console.log('editor data', JSON.stringify(data?.blocks))
+    console.log('editor data', data?.blocks)
   })
+
+  console.log('articleId>>>>', articleId)
 
   const jsonContent: (j: string) => OutputBlockData[] = (jsonStr) => {
     try {
@@ -90,7 +98,7 @@ export const Editor = ({
     if (!editor.current) {
       editor.current = new EditorJS({
         data: { blocks: jsonContent(defaultContent) },
-        holder,
+        holder: editorRef.current as HTMLDivElement,
         tools: {
           header: Header,
           list: List,
@@ -98,7 +106,23 @@ export const Editor = ({
             class: Checklist,
             inlineToolbar: true,
           },
+          linkTool: {
+            class: LinkTool,
+            config: {
+              endpoint: 'http://localhost:3000/api/hyperLink', // Your backend endpoint for url data fetching,
+            },
+          },
+          inlineCode: InlineCode,
+          code: CodeTool,
           table: Table,
+          image: {
+            class: Image,
+            config: {
+              endpoints: {
+                byFile: `http://localhost:3000/api/image?type=CONTENT&id=${articleId}`, // Your backend file uploader endpoint
+              },
+            },
+          },
         },
         placeholder: '请输入...',
         onReady: () => {
@@ -160,7 +184,7 @@ export const Editor = ({
       </div>
       <div
         tabIndex={2}
-        id={holder}
+        ref={editorRef}
         className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
       ></div>
     </>

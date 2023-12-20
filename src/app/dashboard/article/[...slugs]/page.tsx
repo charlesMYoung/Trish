@@ -69,6 +69,7 @@ export default function ArticlePage({
     </div>
   ) : (
     <Editor
+      articleId={articleId}
       onTitle={onTitleHandle}
       onContent={onContentHandle}
       onCover={() => {}}
