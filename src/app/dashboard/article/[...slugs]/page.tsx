@@ -1,5 +1,6 @@
 'use client'
-import { TipTapEditor } from '@/components'
+
+import { Editor } from '@/components'
 import { useSidebarStore } from '@/hooks'
 import { ClientTRPC } from '@/trpc/client'
 import { Skeleton } from '@nextui-org/react'
@@ -67,12 +68,12 @@ export default function ArticlePage({
       <Skeleton className=" flex h-screen w-full rounded-lg" />
     </div>
   ) : (
-    <TipTapEditor
+    <Editor
       onTitle={onTitleHandle}
       onContent={onContentHandle}
       onCover={() => {}}
       defaultTitle={currentArticle?.title || ''}
       defaultContent={currentArticle?.content || ''}
-    ></TipTapEditor>
+    ></Editor>
   )
 }
