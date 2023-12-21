@@ -1,5 +1,5 @@
-import '@/styles/globals.css'
-
+import '@/styles/_globals.css'
+import '@/styles/editor.scss'
 import TRPCProvider from '@/trpc/Provider'
 import type { Metadata } from 'next'
 import { Providers } from './providers'

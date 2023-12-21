@@ -1,0 +1,23 @@
+.ce-block {
+  .ce-block__content {
+    .cdx-block {
+      .tc-wrap {
+        @apply relative rounded-large bg-content1;
+        .tc-table {
+          @apply h-auto w-full min-w-full table-auto;
+          .tc-row {
+            @apply outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus;
+            .tc-cell {
+              @apply relative whitespace-normal border-r-0 px-3 py-2 align-middle text-small font-normal outline-none before:absolute before:inset-0 before:z-0 before:bg-default/40 before:opacity-0 before:content-[''] first:before:rounded-l-lg last:before:rounded-r-lg data-[focus-visible=true]:z-10 data-[selected=true]:text-default-foreground data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus data-[selected=true]:before:opacity-100 group-data-[disabled=true]:text-foreground-300 [&>*]:relative;
+            }
+          }
+        }
+      }
+      .link-tool {
+        .link-tool__content--rendered {
+          @apply  bg-content1;
+        }
+      }
+    }
+  }
+}
