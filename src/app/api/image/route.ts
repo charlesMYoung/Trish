@@ -1,5 +1,6 @@
+import { mkdirIfNotPath } from '@/utils/file-common'
 import { createId } from '@paralleldrive/cuid2'
-import { mkdir, readdir, writeFile } from 'fs/promises'
+import { writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
@@ -50,14 +51,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  mkdirIfNotPath(imageSavePath)
+
   const bytes = await file.arrayBuffer()
   const buffer = Buffer.from(bytes)
-
-  try {
-    await readdir(imageSavePath)
-  } catch (err) {
-    await mkdir(imageSavePath, { recursive: true })
-  }
 
   const fileName = `/${createId()}_${file.name}`
 

@@ -109,7 +109,10 @@ export const Editor = ({
           linkTool: {
             class: LinkTool,
             config: {
-              endpoint: 'http://localhost:3000/api/hyperLink', // Your backend endpoint for url data fetching,
+              headers: {
+                'X-ARTICLE-ID': articleId,
+              },
+              endpoint: `http://localhost:3000/api/hyperLink`, // Your backend endpoint for url data fetching,
             },
           },
           inlineCode: InlineCode,
