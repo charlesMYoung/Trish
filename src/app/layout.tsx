@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+
 import TRPCProvider from '@/trpc/Provider'
 import type { Metadata } from 'next'
 import { Providers } from './providers'

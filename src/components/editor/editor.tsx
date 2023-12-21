@@ -185,7 +185,7 @@ export const Editor = ({
       <div
         tabIndex={2}
         ref={editorRef}
-        className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
+        className="dark-mode prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
       ></div>
     </>
   )
