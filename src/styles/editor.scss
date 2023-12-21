@@ -1,21 +1,97 @@
+.ce-block--selected {
+  .ce-block__content {
+    @apply bg-foreground-500;
+  }
+}
+.ce-toolbar {
+  .ce-toolbar__content {
+    .ce-toolbar__actions {
+      .ce-settings {
+        .ce-popover--opened {
+          @apply border-none;
+        }
+        .ce-popover {
+          @apply z-10 rounded-large bg-content1 px-2.5 py-1 text-default-500 shadow-medium;
+          .ce-popover__item {
+            .ce-popover__item-icon {
+              @apply border-none bg-default-100;
+            }
+            .ce-popover__item-label {
+              @apply border-none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .ce-block {
   .ce-block__content {
     .cdx-block {
       .tc-wrap {
-        @apply relative rounded-large bg-content1;
-        .tc-table {
-          @apply h-auto w-full min-w-full table-auto;
-          .tc-row {
+        @apply relative z-0 rounded-large bg-content1 p-4;
+        .tc-table--heading {
+          & > .tc-row {
             @apply outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus;
+            .tc-cell--selected {
+              @apply rounded-md bg-default-200;
+            }
+            .tc-cell[heading='Heading'] {
+              @apply h-10 whitespace-nowrap bg-default-100 px-3 text-left align-middle text-base font-semibold text-foreground-500 outline-none first:rounded-l-lg last:rounded-r-lg data-[focus-visible=true]:z-10 data-[sortable=true]:cursor-pointer data-[hover=true]:text-foreground-400 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus data-[sortable=true]:transition-colors;
+            }
+          }
+        }
+        .tc-toolbox {
+          .tc-popover {
+            @apply z-10 box-border rounded-large border-none bg-content1 px-2.5 py-1 text-small subpixel-antialiased shadow-medium outline-none;
+            .tc-popover__item {
+              .tc-popover__item-icon {
+                @apply border-none bg-default-100;
+              }
+              .tc-popover__item-label {
+                @apply border-none;
+              }
+            }
+          }
+        }
+        .tc-table {
+          @apply h-auto w-full min-w-full table-auto border-none;
+          .tc-row--selected {
+            @apply rounded-md bg-default-200;
+            &:after {
+              @apply bg-content1;
+            }
+          }
+          .tc-row {
+            @apply border-none outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus;
             .tc-cell {
               @apply relative whitespace-normal border-r-0 px-3 py-2 align-middle text-small font-normal outline-none before:absolute before:inset-0 before:z-0 before:bg-default/40 before:opacity-0 before:content-[''] first:before:rounded-l-lg last:before:rounded-r-lg data-[focus-visible=true]:z-10 data-[selected=true]:text-default-foreground data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-offset-2 data-[focus-visible=true]:outline-focus data-[selected=true]:before:opacity-100 group-data-[disabled=true]:text-foreground-300 [&>*]:relative;
             }
+            &::after {
+              @apply border-none;
+            }
+          }
+        }
+        .tc-add-column {
+          @apply flex items-center rounded-md border-none;
+          &:hover {
+            @apply bg-default-200;
+          }
+        }
+        .tc-add-row {
+          @apply flex justify-center rounded-md;
+          &:hover {
+            @apply bg-default;
+          }
+          &::before {
+            @apply bg-content1;
           }
         }
       }
       .link-tool {
         .link-tool__content--rendered {
-          @apply  bg-content1;
+          @apply bg-content1;
         }
       }
     }
