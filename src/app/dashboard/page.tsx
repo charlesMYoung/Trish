@@ -1,10 +1,12 @@
 'use client'
 
 import { InfoCard } from '@/components'
+import { ClientTRPC } from '@/trpc/client'
 import { FaFileAlt, FaTag } from 'react-icons/fa'
 import { FaCommentDots, FaImage } from 'react-icons/fa6'
 
 export default function Dashboard() {
+  const { data: articleCounts } = ClientTRPC.countArticle.useQuery()
   return (
     <div className="mb-4">
       <div className="mb-4 text-large text-default-500">快速预览</div>
@@ -12,7 +14,7 @@ export default function Dashboard() {
         <InfoCard
           title="文章"
           icon={<FaFileAlt />}
-          value={75}
+          value={articleCounts as number}
           bgImg="/images/postbg.jpg"
         ></InfoCard>
         <InfoCard

@@ -1,4 +1,4 @@
-import { AppNavbar, SideBar } from '@/components'
+import { SideBar, Toolbar } from '@/components'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
 
 export default function DashboardLayout({
@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <section className="flex h-screen">
       <SideBar />
       <ScrollShadow className="container">
-        <AppNavbar />
+        <Toolbar />
         <div className="box-border p-4">
           <main className="mt-4">{children}</main>
         </div>

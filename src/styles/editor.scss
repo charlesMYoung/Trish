@@ -11,8 +11,9 @@
           @apply border-none;
         }
         .ce-popover {
-          @apply z-10 rounded-large bg-content1 px-2.5 py-1 text-default-500 shadow-medium;
+          @apply z-10 rounded-large bg-content1 px-2.5 py-1 shadow-medium;
           .ce-popover__item {
+            @apply text-default-500;
             .ce-popover__item-icon {
               @apply border-none bg-default-100;
             }
@@ -94,6 +95,34 @@
           @apply bg-content1;
         }
       }
+    }
+    .image-tool {
+    }
+
+    .image-tool--filled {
+    }
+    .image-tool--withBackground {
+      & > .image-tool__image {
+        @apply bg-content1;
+      }
+    }
+    .image-tool--withBorder {
+      & > .image-tool__image {
+        @apply border-2 border-solid border-content1;
+      }
+    }
+
+    .image-tool__image {
+      @apply relative box-border flex flex-col overflow-hidden rounded-large border-none text-foreground shadow-medium outline-none transition-transform-background motion-reduce:transition-none;
+      .image-tool__image-preloader {
+        @apply bg-content1;
+      }
+      .image-tool__image-picture {
+        @apply relative rounded-large shadow-none shadow-black/5;
+      }
+    }
+    .image-tool__caption {
+      @apply absolute bottom-16 z-10 ml-1 flex h-auto w-[calc(100%_-_8px)] items-center justify-between overflow-hidden rounded-large border-1 border-white/20 bg-background/10 p-3 py-1 subpixel-antialiased shadow-small backdrop-blur backdrop-saturate-150 before:rounded-xl before:bg-white/10;
     }
   }
 }

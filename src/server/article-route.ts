@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { queryCoverByArticleId } from '@/db/prepared'
 import { article, image } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { count, eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { publicProcedure, router } from './trpc'
 
@@ -160,4 +160,11 @@ export const ArticleRoute = router({
     .mutation(({ input: { id } }) => {
       return db.delete(article).where(eq(article.id, id))
     }),
+
+  countArticle: publicProcedure.query(() => {
+    return db
+      .select({ value: count(article.id) })
+      .from(article)
+      .then((resp) => resp[0].value)
+  }),
 })
