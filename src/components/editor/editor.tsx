@@ -80,7 +80,7 @@ export const Editor = ({
   const { run: onEditHandle } = useDebounceFn(async () => {
     const data = await editor?.current?.save()
     onContent(toJSON(data?.blocks || []))
-    console.log('editor data', data?.blocks)
+    console.log('editor data23', data?.blocks)
   })
 
   console.log('articleId>>>>', articleId)
