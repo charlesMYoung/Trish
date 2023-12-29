@@ -150,6 +150,13 @@ export const ArticleRoute = router({
           category_id: true,
           title: true,
           id: true,
+          created_at: true,
+          modified_at: true,
+          is_release: true,
+          content: true,
+        },
+        with: {
+          images: true,
         },
         where: (article, { eq }) => eq(article.category_id, id),
       })
