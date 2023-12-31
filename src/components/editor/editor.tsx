@@ -1,7 +1,5 @@
 'use client'
 
-import { Cover } from '@/components'
-import { useOnChange, useToggle } from '@/hooks'
 import Checklist from '@editorjs/checklist'
 import CodeTool from '@editorjs/code'
 import EditorJS, { OutputBlockData } from '@editorjs/editorjs'
@@ -11,14 +9,14 @@ import InlineCode from '@editorjs/inline-code'
 import LinkTool from '@editorjs/link'
 import List from '@editorjs/list'
 import Table from '@editorjs/table'
-import { Button, Input } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
-import { KeyboardEvent, useEffect, useRef } from 'react'
-import { FaImages } from 'react-icons/fa6'
+import { useEffect, useRef } from 'react'
+import { EditorCover } from './editor-cover'
 
 export type TipTapEditorProps = {
   defaultContent?: string
-  defaultTitle?: string
+  title: string
+  coverUrl: string
   articleId: string
   onTitle: (title: string) => void
   onCover: (coverUrl: string) => void
@@ -27,7 +25,8 @@ export type TipTapEditorProps = {
 
 export const Editor = ({
   defaultContent = '',
-  defaultTitle = '',
+  title = '',
+  coverUrl = '',
   articleId,
   onTitle,
   onCover,
@@ -35,43 +34,6 @@ export const Editor = ({
 }: TipTapEditorProps) => {
   const editor = useRef<EditorJS | null>(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
-  const inputButtonToggle = useToggle(false)
-  const coverButtonToggle = useToggle(false)
-
-  const articleTitleHook = useOnChange<string>({
-    onChangeFn(e) {
-      console.log('articleTitleHook', e)
-      onTitle(e)
-    },
-  })
-
-  const coverChangeHook = useOnChange<string>({
-    onChangeFn(e) {
-      onCover(e)
-      console.log('coverChangeHook', e)
-    },
-  })
-
-  const onKeyUpHandle = ({ key }: KeyboardEvent) => {
-    if (key === 'Enter' && editor) {
-      editor.current?.focus()
-    }
-  }
-
-  const ToolButtonGroup = () => {
-    return (
-      <div className="flex space-x-2">
-        <Button isIconOnly onPress={coverButtonToggle.open}>
-          <FaImages />
-        </Button>
-      </div>
-    )
-  }
-
-  const onRemoveCover = () => {
-    coverButtonToggle.close()
-    coverChangeHook.onChange('')
-  }
 
   const toJSON = (object: OutputBlockData[]) => {
     return JSON.stringify(object)
@@ -82,8 +44,6 @@ export const Editor = ({
     onContent(toJSON(data?.blocks || []))
     console.log('editor data23', data?.blocks)
   })
-
-  console.log('articleId>>>>', articleId)
 
   const jsonContent: (j: string) => OutputBlockData[] = (jsonStr) => {
     try {
@@ -145,48 +105,14 @@ export const Editor = ({
 
   return (
     <>
-      {coverButtonToggle.isToggle ? (
-        <Cover
-          onRemoveCover={onRemoveCover}
-          onCoverChange={coverChangeHook.onChange}
-          coverUrl={coverChangeHook.value}
-        />
-      ) : (
-        []
-      )}
+      <EditorCover
+        titleValue={title}
+        coverValue={coverUrl}
+        onTitleChange={onTitle}
+        onCoverChange={onCover}
+      ></EditorCover>
       <div
-        className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl"
-        onKeyUp={onKeyUpHandle}
-        onMouseOver={inputButtonToggle.open}
-        onMouseLeave={inputButtonToggle.close}
-      >
-        <div className={'h-12'}>
-          {inputButtonToggle.isToggle && !coverButtonToggle.isToggle ? (
-            <ToolButtonGroup />
-          ) : null}
-        </div>
-        <Input
-          value={articleTitleHook.value}
-          defaultValue={defaultTitle}
-          onChange={(event) => articleTitleHook.onChange(event.target.value)}
-          tabIndex={1}
-          placeholder="无标题"
-          classNames={{
-            input: ['bg-transparent', 'hover:bg-transparent', 'text-6xl'],
-            innerWrapper: ['bg-transparent', 'hover:bg-transparent'],
-            inputWrapper: [
-              'h-45',
-              'bg-transparent',
-              'border-none',
-              'hover:bg-transparent',
-              'data-[hover=true]:bg-transparent',
-              'group-data-[focus=true]:bg-transparent',
-            ],
-          }}
-        />
-      </div>
-      <div
-        tabIndex={2}
+        tabIndex={0}
         ref={editorRef}
         className="dark-mode prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
       ></div>

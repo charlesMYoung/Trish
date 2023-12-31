@@ -15,7 +15,7 @@ export function NoStyleInput({ onChange, defaultValue }: NoStyleInputProps) {
         onChange && onChange(e)
       }}
       defaultValue={defaultValue}
-      tabIndex={1}
+      tabIndex={0}
       placeholder="无标题"
       classNames={{
         input: ['bg-transparent', 'hover:bg-transparent', 'text-md', 'z-10'],

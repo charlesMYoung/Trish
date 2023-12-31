@@ -73,7 +73,10 @@ export default function ArticlePage({
       onTitle={onTitleHandle}
       onContent={onContentHandle}
       onCover={() => {}}
-      defaultTitle={currentArticle?.title || ''}
+      coverUrl={
+        currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
+      }
+      title={currentArticle?.title || ''}
       defaultContent={currentArticle?.content || ''}
     ></Editor>
   )
