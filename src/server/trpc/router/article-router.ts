@@ -1,9 +1,9 @@
-import { db } from '@/db'
-import { queryCoverByArticleId } from '@/db/prepared'
-import { article, image } from '@/db/schema'
+import { db } from '@/server/db'
+import { queryCoverByArticleId } from '@/server/db/prepared'
+import { article, image } from '@/server/db/schema'
+import { publicProcedure, router } from '@/server/trpc'
 import { count, eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { publicProcedure, router } from './trpc'
 
 export const ArticleRoute = router({
   getArticleById: publicProcedure

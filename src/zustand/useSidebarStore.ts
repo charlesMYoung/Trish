@@ -1,5 +1,5 @@
 import { SideBarConfig } from '@/config/appConfig'
-import { Article, Category } from '@/db/schema'
+import { Article, Category } from '@/server/db/schema'
 import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
 import type {} from '@redux-devtools/extension' // required for devtools typing

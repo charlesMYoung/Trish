@@ -1,8 +1,8 @@
-import { db } from '@/db'
-import { category } from '@/db/schema'
+import { db } from '@/server/db'
+import { category } from '@/server/db/schema'
+import { publicProcedure, router } from '@/server/trpc'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { publicProcedure, router } from './trpc'
 
 export const CategoryRoute = router({
   getAllCategory: publicProcedure.query(() => {
