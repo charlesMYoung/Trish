@@ -2,11 +2,14 @@
 
 import { InfoCard } from '@/components'
 import { ClientTRPC } from '@/trpc/client'
+import { useSession } from 'next-auth/react'
 import { FaFileAlt, FaTag } from 'react-icons/fa'
 import { FaCommentDots, FaImage } from 'react-icons/fa6'
 
 export default function Dashboard() {
   const { data: articleCounts } = ClientTRPC.countArticle.useQuery()
+  const { data: session, status } = useSession()
+  console.log('session', session, status)
   return (
     <div className="mb-4">
       <div className="mb-4 text-large text-default-500">快速预览</div>

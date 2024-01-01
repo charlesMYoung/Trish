@@ -17,8 +17,6 @@ export default function Cate({
     data,
   } = ClientTRPC.getArticleByCateId.useMutation()
 
-  console.log('data--->', data, 'cate_id')
-
   useEffect(() => {
     getArticleByCateId({
       id: cate_id,
@@ -29,8 +27,8 @@ export default function Cate({
     <div className="container mx-auto grid grid-cols-2 gap-4 p-24 md:grid-cols-4">
       {isLoading ? (
         <CardSkeleton count={10}></CardSkeleton>
-      ) : (
-        data?.map((item) => {
+      ) : Array.isArray(data) && data.length > 0 ? (
+        data.map((item) => {
           return (
             <Card
               key={item.id}
@@ -52,11 +50,21 @@ export default function Cate({
                     width={'100%'}
                     className="h-full w-full"
                   ></Image>
-                ) : null}
+                ) : (
+                  <Image
+                    src={'/images/chat.jpg'}
+                    alt={item.title || ''}
+                    removeWrapper
+                    width={'100%'}
+                    className="h-full w-full"
+                  ></Image>
+                )}
               </CardBody>
             </Card>
           )
         })
+      ) : (
+        <div>没有数据</div>
       )}
     </div>
   )

@@ -6,9 +6,9 @@ export default function PostLayout({
   children: React.ReactNode
 }) {
   return (
-    <section>
+    <section className="flex h-screen flex-col">
       <AppNavbar />
-      {children}
+      <main className="flex-1">{children}</main>
       <Footer />
     </section>
   )
