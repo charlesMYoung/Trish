@@ -1,4 +1,5 @@
 'use client'
+
 import { Category } from '@/db/schema'
 import { ClientTRPC } from '@/trpc/client'
 import {
@@ -10,7 +11,10 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@nextui-org/navbar'
-import Link from 'next/link'
+import { Button, Link } from '@nextui-org/react'
+import { useTheme } from 'next-themes'
+import NextLink from 'next/link'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { MdLightMode, MdNightlight, MdRssFeed } from 'react-icons/md'
 
@@ -20,8 +24,17 @@ export function AppNavbar() {
   >(void 0, {
     refetchOnWindowFocus: false,
   })
+  const pathname = useParams<{ cate_id: string }>()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [switchLight, setSwitchLight] = useState(false)
+  const { theme, setTheme } = useTheme()
+
+  const handleSwitchLight = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
+
+  const handleRss = () => {
+    window.open('https://www.baidu.com')
+  }
   return (
     <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen} isBordered>
       <NavbarMenuToggle
@@ -34,24 +47,44 @@ export function AppNavbar() {
       <NavbarContent justify="center">
         {categoriesFromServer?.map((cate) => {
           return (
-            <NavbarItem className="hidden w-full lg:flex" key={cate.id}>
-              {cate.name}
+            <NavbarItem
+              className="hidden w-full lg:flex"
+              key={cate.id}
+              isActive={cate.id === pathname.cate_id}
+            >
+              <Link
+                as={NextLink}
+                href={`/${cate.id}`}
+                color={cate.id !== pathname.cate_id ? 'foreground' : undefined}
+              >
+                {cate.name}
+              </Link>
             </NavbarItem>
           )
         })}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden text-2xl text-default-400 lg:flex">
-          {switchLight ? <MdNightlight /> : <MdLightMode />}
+          <Button isIconOnly onPress={handleSwitchLight} variant="light">
+            {theme === 'light' ? <MdNightlight /> : <MdLightMode />}
+          </Button>
         </NavbarItem>
-        <NavbarItem>
-          <MdRssFeed></MdRssFeed>
+        <NavbarItem className="text-default-400 lg:flex">
+          <Button isIconOnly onPress={handleRss} variant="light">
+            <MdRssFeed></MdRssFeed>
+          </Button>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
-        {categoriesFromServer?.map((item, index) => (
+        {categoriesFromServer?.map((item) => (
           <NavbarMenuItem key={item.id}>
-            <Link className="w-full" href="#">
+            <Link
+              className="w-full"
+              as={NextLink}
+              key={item.id}
+              href={`/${item.id}`}
+              color={item.id !== pathname.cate_id ? 'foreground' : undefined}
+            >
               {item.name}
             </Link>
           </NavbarMenuItem>
