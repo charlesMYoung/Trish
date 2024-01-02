@@ -13,14 +13,15 @@ import { useDebounceFn } from 'ahooks'
 import { useEffect, useRef } from 'react'
 import { EditorCover } from './editor-cover'
 
-export type TipTapEditorProps = {
+export type EditorProps = {
   defaultContent?: string
   title: string
+  readOnly?: boolean
   coverUrl: string
   articleId: string
-  onTitle: (title: string) => void
-  onCover: (coverUrl: string) => void
-  onContent: (content: string) => void
+  onTitle?: (title: string) => void
+  onCover?: (coverUrl: string) => void
+  onContent?: (content: string) => void
 }
 
 export const Editor = ({
@@ -28,10 +29,11 @@ export const Editor = ({
   title = '',
   coverUrl = '',
   articleId,
+  readOnly = false,
   onTitle,
   onCover,
   onContent,
-}: TipTapEditorProps) => {
+}: EditorProps) => {
   const editor = useRef<EditorJS | null>(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
 
@@ -41,7 +43,7 @@ export const Editor = ({
 
   const { run: onEditHandle } = useDebounceFn(async () => {
     const data = await editor?.current?.save()
-    onContent(toJSON(data?.blocks || []))
+    onContent && onContent(toJSON(data?.blocks || []))
     console.log('editor data23', data?.blocks)
   })
 
@@ -59,6 +61,7 @@ export const Editor = ({
       editor.current = new EditorJS({
         data: { blocks: jsonContent(defaultContent) },
         holder: editorRef.current as HTMLDivElement,
+        readOnly,
         tools: {
           header: Header,
           list: List,

@@ -11,6 +11,10 @@ export const authOptions: NextAuthOptions = {
   ],
 }
 
-export const getServerAuthSession = () => {
-  return getServerSession(authOptions)
+export const getServerAuthSession = async () => {
+  const session = await getServerSession(authOptions).catch((resp) => {
+    console.error('session', resp)
+  })
+  console.log('session', session)
+  return session
 }

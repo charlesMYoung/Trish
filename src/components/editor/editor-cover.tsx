@@ -8,8 +8,8 @@ import { FaImages } from 'react-icons/fa6'
 export type EditorCoverProps = {
   titleValue?: string
   coverValue?: string
-  onTitleChange: (title: string) => void
-  onCoverChange: (coverUrl: string) => void
+  onTitleChange?: (title: string) => void
+  onCoverChange?: (coverUrl: string) => void
 }
 
 export const EditorCover = ({
