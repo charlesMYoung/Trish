@@ -2,7 +2,7 @@
 
 import { Editor } from '@/components'
 import { useSidebarStore } from '@/hooks'
-import { ClientTRPC } from '@/trpc/client'
+import { trpc } from '@/utils/trpc-client'
 import { Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
 import { useEffect } from 'react'
@@ -20,13 +20,13 @@ export default function ArticlePage({
     data: currentArticle,
     mutate: getArticleByCateIdAndId,
     isLoading,
-  } = ClientTRPC.getArticleByCateIdAndId.useMutation()
+  } = trpc.getArticleByCateIdAndId.useMutation()
 
   const { mutate: updateArticleTitleByTitle } =
-    ClientTRPC.updateArticleTitleByTitle.useMutation({})
+    trpc.updateArticleTitleByTitle.useMutation({})
 
   const { mutate: updateArticleContent } =
-    ClientTRPC.updateArticleContent.useMutation({})
+    trpc.updateArticleContent.useMutation({})
 
   const { run: updateArticleTitleByTitleDebounce } = useDebounceFn(
     updateArticleTitleByTitle

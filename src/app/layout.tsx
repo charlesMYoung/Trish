@@ -1,8 +1,8 @@
+import TRPCProvider from '@/server/trpc/trpc-provider'
 import '@/styles/_globals.css'
 import '@/styles/editor.scss'
-import TRPCProvider from '@/trpc/Provider'
 import type { Metadata } from 'next'
-import { Providers } from './providers'
+import { UIProviders } from './providers'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <TRPCProvider>
-          <Providers>{children}</Providers>
+          <UIProviders>{children}</UIProviders>
         </TRPCProvider>
       </body>
     </html>

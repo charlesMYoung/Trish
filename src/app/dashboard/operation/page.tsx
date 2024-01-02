@@ -4,7 +4,6 @@ import { Editor } from '@/components'
 export default function Operation() {
   return (
     <>
-      <Editor></Editor>
     </>
   )
 }

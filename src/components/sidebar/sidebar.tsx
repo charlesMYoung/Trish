@@ -1,9 +1,9 @@
 'use client'
-import { Category } from '@/db/schema'
+import { Category } from '@/server/db/schema'
 import { useSidebarStore } from '@/hooks'
-import { ClientTRPC } from '@/trpc/client'
 import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
+import { trpc } from '@/utils/trpc-client'
 import { ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
 import { useDebounceFn } from 'ahooks'
@@ -36,7 +36,7 @@ export function SideBar() {
   const [activeId, setActiveId] = useState<string>('')
   const [hoverId, setHoverId] = useState<string>('')
   const [showDropdownId, setShowDropdownId] = useState<string>('')
-  const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery<
+  const { data: categoriesFromServer } = trpc.getAllCategory.useQuery<
     Category[]
   >(void 0, {
     refetchOnWindowFocus: false,
@@ -54,13 +54,12 @@ export function SideBar() {
   const sidebars = useSidebarStore.use.sidebars()
 
   const { data: articles, mutate: getArticleByCateId } =
-    ClientTRPC.getArticleByCateId.useMutation()
-  const { mutate: insertCategory } = ClientTRPC.insertCategory.useMutation()
-  const { mutate: insertArticle } = ClientTRPC.insertArticle.useMutation()
-  const { mutate: updateCategory } = ClientTRPC.updateCategory.useMutation()
-  const { mutate: delArticleById } = ClientTRPC.delArticleById.useMutation()
-  const { mutate: deleteCategoryById } =
-    ClientTRPC.deleteCategoryById.useMutation()
+    trpc.getArticleByCateId.useMutation()
+  const { mutate: insertCategory } = trpc.insertCategory.useMutation()
+  const { mutate: insertArticle } = trpc.insertArticle.useMutation()
+  const { mutate: updateCategory } = trpc.updateCategory.useMutation()
+  const { mutate: delArticleById } = trpc.delArticleById.useMutation()
+  const { mutate: deleteCategoryById } = trpc.deleteCategoryById.useMutation()
 
   const { run: updateCategoryDebounce } = useDebounceFn(updateCategory)
 

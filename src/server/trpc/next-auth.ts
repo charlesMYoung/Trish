@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next'
 import { NextAuthOptions, getServerSession } from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
 
@@ -12,9 +11,6 @@ export const authOptions: NextAuthOptions = {
   ],
 }
 
-export const getServerAuthSession = (ctx: {
-  req: GetServerSidePropsContext['req']
-  res: GetServerSidePropsContext['res']
-}) => {
-  return getServerSession(ctx.req, ctx.res, authOptions)
+export const getServerAuthSession = () => {
+  return getServerSession(authOptions)
 }

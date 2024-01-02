@@ -1,7 +1,7 @@
 'use client'
 
 import { CardSkeleton } from '@/components'
-import { ClientTRPC } from '@/trpc/client'
+import { trpc } from '@/utils/trpc-client'
 import { Card, CardBody, CardHeader, Image } from '@nextui-org/react'
 import NextLink from 'next/link'
 import { useEffect } from 'react'
@@ -15,7 +15,7 @@ export default function Cate({
     mutate: getArticleByCateId,
     isLoading,
     data,
-  } = ClientTRPC.getArticleByCateId.useMutation()
+  } = trpc.getArticleByCateId.useMutation()
 
   useEffect(() => {
     getArticleByCateId({

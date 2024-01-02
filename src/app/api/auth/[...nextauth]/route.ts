@@ -1,4 +1,4 @@
-import { authOptions } from '@/server/trpc/auth'
+import { authOptions } from '@/server/trpc/next-auth'
 import NextAuth from 'next-auth'
 const handler = NextAuth(authOptions)
 
