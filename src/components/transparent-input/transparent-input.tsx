@@ -1,19 +1,30 @@
 'use client'
 
 import { Input } from '@nextui-org/react'
+import { useControllableValue } from 'ahooks'
 
 export type NoStyleInputProps = {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (value: string) => void
   value?: string
   defaultValue?: string
 }
 
-export function NoStyleInput({ onChange, defaultValue }: NoStyleInputProps) {
+export function NoStyleInput({
+  onChange,
+  value,
+  defaultValue,
+}: NoStyleInputProps) {
+  const [inputTitleState, setInputTitleState] = useControllableValue<string>({
+    onChange,
+    value,
+  })
+
   return (
     <Input
       onChange={(e) => {
-        onChange && onChange(e)
+        setInputTitleState(e.target.value)
       }}
+      value={inputTitleState}
       defaultValue={defaultValue}
       tabIndex={0}
       placeholder="无标题"

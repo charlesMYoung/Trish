@@ -1,5 +1,6 @@
 'use client'
 
+import { toJSON, toObject } from '@/utils/common'
 import Checklist from '@editorjs/checklist'
 import CodeTool from '@editorjs/code'
 import EditorJS, { OutputBlockData } from '@editorjs/editorjs'
@@ -15,7 +16,7 @@ import { EditorCover } from './editor-cover'
 
 export type EditorProps = {
   defaultContent?: string
-  title: string
+  title?: string
   readOnly?: boolean
   coverUrl: string
   articleId: string
@@ -24,7 +25,7 @@ export type EditorProps = {
   onContent?: (content: string) => void
 }
 
- const Editor = ({
+const Editor = ({
   defaultContent = '',
   title = '',
   coverUrl = '',
@@ -37,29 +38,16 @@ export type EditorProps = {
   const editor = useRef<EditorJS | null>(null)
   const editorRef = useRef<HTMLDivElement | null>(null)
 
-  const toJSON = (object: OutputBlockData[]) => {
-    return JSON.stringify(object)
-  }
-
   const { run: onEditHandle } = useDebounceFn(async () => {
     const data = await editor?.current?.save()
-    onContent && onContent(toJSON(data?.blocks || []))
+    onContent && onContent(toJSON<OutputBlockData[]>(data?.blocks || []))
     console.log('editor data23', data?.blocks)
   })
-
-  const jsonContent: (j: string) => OutputBlockData[] = (jsonStr) => {
-    try {
-      return JSON.parse(jsonStr)
-    } catch (e) {
-      console.trace('[jsonContent] error', jsonContent)
-      return [] as OutputBlockData[]
-    }
-  }
 
   useEffect(() => {
     if (!editor.current) {
       editor.current = new EditorJS({
-        data: { blocks: jsonContent(defaultContent) },
+        data: { blocks: toObject(defaultContent) },
         holder: editorRef.current as HTMLDivElement,
         readOnly,
         tools: {
@@ -109,6 +97,7 @@ export type EditorProps = {
   return (
     <>
       <EditorCover
+        readOnly={readOnly}
         titleValue={title}
         coverValue={coverUrl}
         onTitleChange={onTitle}

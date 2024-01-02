@@ -1,12 +1,15 @@
 'use client'
 
-import { Cover } from '@/components'
-import { Button, Input } from '@nextui-org/react'
-import { useControllableValue, useToggle } from 'ahooks'
+import { Cover, NoStyleInput } from '@/components'
+import { Button } from '@nextui-org/react'
+import { useHover, useToggle } from 'ahooks'
+import { motion } from 'framer-motion'
+import { useRef } from 'react'
 import { FaImages } from 'react-icons/fa6'
 
 export type EditorCoverProps = {
   titleValue?: string
+  readOnly?: boolean
   coverValue?: string
   onTitleChange?: (title: string) => void
   onCoverChange?: (coverUrl: string) => void
@@ -15,26 +18,17 @@ export type EditorCoverProps = {
 export const EditorCover = ({
   titleValue,
   coverValue,
+  readOnly = false,
   onTitleChange,
   onCoverChange,
 }: EditorCoverProps) => {
-  const [
-    inputButtonToggle,
-    { setLeft: inputButtonToggleClose, setRight: inputButtonToggleOpen },
-  ] = useToggle(false)
+  const inputTitleRef = useRef(null)
+  const isInputHovering = useHover(inputTitleRef)
+
   const [
     coverButtonToggle,
     { setLeft: coverButtonToggleClose, setRight: coverButtonToggleOpen },
   ] = useToggle(false)
-
-  const [coverState, setCoverState] = useControllableValue<string>({
-    value: coverValue,
-    onChange: onCoverChange,
-  })
-  const [inputTitleState, setInputTitleState] = useControllableValue<string>({
-    value: titleValue,
-    onChange: onTitleChange,
-  })
 
   const ToolButtonGroup = () => {
     return (
@@ -46,48 +40,39 @@ export const EditorCover = ({
     )
   }
 
-  const onRemoveCover = () => {
-    coverButtonToggleClose()
-    setCoverState('')
+  const onCoverChangeHandle = (coverUrl: string) => {
+    onCoverChange && onCoverChange(coverUrl)
+    if (!coverUrl) {
+      coverButtonToggleClose()
+    }
   }
 
   return (
     <>
       {coverButtonToggle ? (
-        <Cover
-          onRemoveCover={onRemoveCover}
-          onCoverChange={setCoverState}
-          coverUrl={coverState}
-        />
+        <Cover onChange={onCoverChangeHandle} value={coverValue} />
       ) : (
         []
       )}
       <div
         className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl"
-        onMouseOver={inputButtonToggleOpen}
-        onMouseLeave={inputButtonToggleClose}
+        ref={inputTitleRef}
       >
         <div className={'h-12'}>
-          {inputButtonToggle && !coverButtonToggle ? <ToolButtonGroup /> : null}
+          {!readOnly && isInputHovering && !coverButtonToggle ? (
+            <motion.div
+              animate={{
+                opacity: [0, 1],
+              }}
+            >
+              <ToolButtonGroup />
+            </motion.div>
+          ) : null}
         </div>
-        <Input
-          value={inputTitleState}
-          onChange={(event) => setInputTitleState(event.target.value)}
-          tabIndex={-1}
-          placeholder="无标题"
-          classNames={{
-            input: ['bg-transparent', 'hover:bg-transparent', 'text-6xl'],
-            innerWrapper: ['bg-transparent', 'hover:bg-transparent'],
-            inputWrapper: [
-              'h-45',
-              'bg-transparent',
-              'border-none',
-              'hover:bg-transparent',
-              'data-[hover=true]:bg-transparent',
-              'group-data-[focus=true]:bg-transparent',
-            ],
-          }}
-        />
+        <NoStyleInput
+          value={titleValue}
+          onChange={onTitleChange}
+        ></NoStyleInput>
       </div>
     </>
   )

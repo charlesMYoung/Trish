@@ -5,7 +5,7 @@ import { useSidebarStore } from '@/hooks'
 import { trpc } from '@/utils/trpc-client'
 import { Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function ArticlePage({
   params,
@@ -13,6 +13,8 @@ export default function ArticlePage({
   params: { slugs: string[] }
 }) {
   const [cateId, articleId] = params.slugs || []
+  const [title, setTitle] = useState<string>('')
+  const [coverUrl, setCoverUrl] = useState<string>('')
 
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
 
@@ -40,6 +42,12 @@ export default function ArticlePage({
       id: articleId,
       cateId,
     })
+    setTitle(currentArticle?.title || '')
+    const coverUrlFromServe =
+      currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
+    if (coverUrlFromServe) {
+      setCoverUrl(coverUrlFromServe)
+    }
   }, [])
 
   const onTitleHandle = (title: string) => {
@@ -48,6 +56,7 @@ export default function ArticlePage({
       articleId,
       cateId,
     })
+    setTitle(title)
     updateArticleTitleByTitleDebounce({
       title,
       id: articleId,
@@ -61,6 +70,11 @@ export default function ArticlePage({
     })
   }
 
+  const onCoverHandle = (coverUrl: string) => {
+    setCoverUrl(coverUrl)
+    console.log('coverUrl', coverUrl)
+  }
+
   return isLoading ? (
     <div className="flex flex-col space-y-2">
       <Skeleton className="flex h-64 w-full rounded-lg" />
@@ -72,11 +86,9 @@ export default function ArticlePage({
       articleId={articleId}
       onTitle={onTitleHandle}
       onContent={onContentHandle}
-      onCover={() => {}}
-      coverUrl={
-        currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
-      }
-      title={currentArticle?.title || ''}
+      onCover={onCoverHandle}
+      coverUrl={coverUrl}
+      title={title}
       defaultContent={currentArticle?.content || ''}
     ></Editor>
   )
