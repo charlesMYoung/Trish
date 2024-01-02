@@ -1,7 +1,7 @@
 import { db } from '@/server/db'
 import { queryCoverByArticleId } from '@/server/db/prepared'
 import { article, image } from '@/server/db/schema'
-import { publicProcedure, router } from '@/server/trpc'
+import { protectedProcedure, publicProcedure, router } from '@/server/trpc'
 import { count, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
@@ -14,7 +14,7 @@ export const ArticleRoute = router({
       })
     }),
 
-  getArticleByCateIdAndId: publicProcedure
+  getArticleByCateIdAndId: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -40,7 +40,7 @@ export const ArticleRoute = router({
       })
     }),
 
-  updateArticleTitleByTitle: publicProcedure
+  updateArticleTitleByTitle: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -56,7 +56,7 @@ export const ArticleRoute = router({
         .where(eq(article.id, id))
     }),
 
-  updateArticleContent: publicProcedure
+  updateArticleContent: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -72,7 +72,7 @@ export const ArticleRoute = router({
         .where(eq(article.id, id))
     }),
 
-  insertArticle: publicProcedure
+  insertArticle: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -85,7 +85,7 @@ export const ArticleRoute = router({
         category_id: cateId,
       })
     }),
-  upsetArticle: publicProcedure
+  upsetArticle: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -173,7 +173,7 @@ export const ArticleRoute = router({
       })
     }),
 
-  delArticleById: publicProcedure
+  delArticleById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ input: { id } }) => {
       return db.delete(article).where(eq(article.id, id))

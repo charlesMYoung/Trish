@@ -13,8 +13,9 @@ const handler = async (req: Request) => {
     req,
     router: appRouter,
     createContext: async ({ req, resHeaders }) => {
+      const session = await getServerAuthSession()
       return {
-        session: await getServerAuthSession(),
+        session,
       }
     },
     onError:

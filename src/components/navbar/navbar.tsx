@@ -1,7 +1,7 @@
 'use client'
 
-import { Category } from '@/db/schema'
-import { ClientTRPC } from '@/trpc/client'
+import { Category } from '@/server/db/schema'
+import { trpc } from '@/utils/trpc-client'
 import {
   Navbar,
   NavbarBrand,
@@ -19,7 +19,7 @@ import { useState } from 'react'
 import { MdLightMode, MdNightlight, MdRssFeed } from 'react-icons/md'
 
 export function AppNavbar() {
-  const { data: categoriesFromServer } = ClientTRPC.getAllCategory.useQuery<
+  const { data: categoriesFromServer } = trpc.getAllCategory.useQuery<
     Category[]
   >(void 0, {
     refetchOnWindowFocus: false,

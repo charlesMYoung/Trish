@@ -1,6 +1,6 @@
 import { db } from '@/server/db'
 import { category } from '@/server/db/schema'
-import { publicProcedure, router } from '@/server/trpc'
+import { protectedProcedure, publicProcedure, router } from '@/server/trpc'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 
@@ -17,7 +17,7 @@ export const CategoryRoute = router({
     })
   }),
 
-  updateCategory: publicProcedure
+  updateCategory: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -37,7 +37,7 @@ export const CategoryRoute = router({
         })
     }),
 
-  deleteCategoryById: publicProcedure
+  deleteCategoryById: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -50,7 +50,7 @@ export const CategoryRoute = router({
       })
     }),
 
-  insertCategory: publicProcedure
+  insertCategory: protectedProcedure
     .input(
       z.object({
         name: z.string(),
