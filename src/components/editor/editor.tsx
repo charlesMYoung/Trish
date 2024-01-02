@@ -24,7 +24,7 @@ export type EditorProps = {
   onContent?: (content: string) => void
 }
 
-export const Editor = ({
+ const Editor = ({
   defaultContent = '',
   title = '',
   coverUrl = '',
@@ -122,3 +122,4 @@ export const Editor = ({
     </>
   )
 }
+export default Editor

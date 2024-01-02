@@ -1,5 +1,6 @@
-import { Editor } from '@/components'
+import Editor from '@/components/editor/editor'
 import { trpc } from '@/utils/trpc-rsc'
+import { Metadata, ResolvingMetadata } from 'next'
 
 const getArticle = (id: string, cateId: string) => {
   return trpc.getArticleByCateIdAndId({
@@ -8,11 +9,23 @@ const getArticle = (id: string, cateId: string) => {
   })
 }
 
-export default async function Post({
-  params,
-}: {
+type Props = {
   params: { cate_id: string; post_id: string }
-}) {
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // fetch data
+  const product = await getArticle(params.post_id, params.cate_id)
+
+  return {
+    title: product?.title,
+  }
+}
+
+export default async function Post({ params }: Props) {
   const { cate_id, post_id } = params || []
   const currentArticle = await getArticle(post_id, cate_id)
 

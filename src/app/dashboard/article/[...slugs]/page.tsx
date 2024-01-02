@@ -1,6 +1,6 @@
 'use client'
 
-import { Editor } from '@/components'
+import Editor from '@/components/editor/editor'
 import { useSidebarStore } from '@/hooks'
 import { trpc } from '@/utils/trpc-client'
 import { Skeleton } from '@nextui-org/react'
