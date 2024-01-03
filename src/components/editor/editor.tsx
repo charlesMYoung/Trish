@@ -20,9 +20,9 @@ export type EditorProps = {
 
 const Editor = ({
   defaultContent = '',
-  title = '',
-  coverUrl = '',
   articleId,
+  coverUrl,
+  title,
   readOnly = false,
   onTitle,
   onCover,
@@ -56,14 +56,13 @@ const Editor = ({
       <TitleInput
         value={title}
         onChange={onTitle}
-        defaultValue={title}
         coverUrl={coverUrl}
         onAddCoverPress={onAddCoverPressHandle}
       />
       <div
         tabIndex={0}
         ref={editorRef}
-        className="dark-mode prose prose-sm mx-auto dark:prose-invert 
+        className="dark-mode prose prose-sm mx-auto dark:prose-invert
         sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
       ></div>
     </>

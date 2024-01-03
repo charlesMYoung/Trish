@@ -3,9 +3,11 @@
 import Editor from '@/components/editor/editor'
 import { useSidebarStore } from '@/hooks'
 import { trpc } from '@/utils/trpc-client'
+import { useEditorStore } from '@/zustand'
 import { Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
+import { shallow } from 'zustand/shallow'
 
 export default function ArticlePage({
   params,
@@ -13,35 +15,35 @@ export default function ArticlePage({
   params: { slugs: string[] }
 }) {
   const [cateId, articleId] = params.slugs || []
-  const [title, setTitle] = useState<string>('')
-  const [coverUrl, setCoverUrl] = useState<string>('')
-  const utils = trpc.useUtils()
-
+  const title = useEditorStore.use.title()
+  const cover = useEditorStore.use.cover()
+  const changeTitle = useEditorStore.use.changeEditorTitle()
+  const changeEditorCover = useEditorStore.use.changeEditorCover()
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
-
-  const { mutate: updateArticleCover } = trpc.updateArticleCover.useMutation({
-    onSuccess() {
-      utils.client.getArticleByCateIdAndId.mutate({
-        id: articleId,
-        cateId,
-      })
-    },
-  })
+  const initEditor = useEditorStore.use.initEditor()
+  const { mutate: updateArticleCover } = trpc.updateArticleCover.useMutation({})
 
   const {
     data: currentArticle,
     mutate: getArticleByCateIdAndId,
     isLoading,
-  } = trpc.getArticleByCateIdAndId.useMutation()
+  } = trpc.getArticleByCateIdAndId.useMutation({
+    onSuccess(data) {
+      initEditor({
+        title: data?.title || '',
+        cover: data?.images.find((item) => item.type === 'COVER')?.url || '',
+      })
+    },
+  })
 
-  const { mutate: updateArticleTitleByTitle } =
-    trpc.updateArticleTitleByTitle.useMutation({})
+  const { mutate: updateTitleByTitleMutate } =
+    trpc.updateArticleTitleByTitle.useMutation()
 
   const { mutate: updateArticleContent } =
     trpc.updateArticleContent.useMutation({})
 
   const { run: updateArticleTitleByTitleDebounce } = useDebounceFn(
-    updateArticleTitleByTitle
+    updateTitleByTitleMutate
   )
 
   const { run: updateArticleContentDebounce } =
@@ -54,23 +56,43 @@ export default function ArticlePage({
     })
   }, [])
 
-  const defaultCoverUrl = useMemo(() => {
-    return currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
-  }, [currentArticle])
+  useEffect(() => {
+    return useEditorStore.subscribe(
+      (state) => state.title,
+      (curSidebars, preSidebars) => {
+        if (curSidebars !== preSidebars) {
+          updateArticleTitleByTitleDebounce({
+            title: curSidebars,
+            id: articleId,
+          })
+          updateArticleTitleById(curSidebars, {
+            articleId,
+            cateId,
+          })
+        }
+      },
+      {
+        equalityFn: shallow,
+      }
+    )
+  }, [])
 
-  console.log('defaultCoverUrl', defaultCoverUrl)
-
-  const onTitleHandle = (title: string) => {
-    updateArticleTitleById(title, {
-      articleId,
-      cateId,
-    })
-    setTitle(title)
-    updateArticleTitleByTitleDebounce({
-      title,
-      id: articleId,
-    })
-  }
+  useEffect(() => {
+    return useEditorStore.subscribe(
+      (state) => state.cover,
+      (curSidebars, preSidebars) => {
+        if (curSidebars !== preSidebars) {
+          updateArticleCover({
+            articleId: articleId,
+            coverUrl: curSidebars,
+          })
+        }
+      },
+      {
+        equalityFn: shallow,
+      }
+    )
+  }, [])
 
   const onContentHandle = (content: string) => {
     updateArticleContentDebounce({
@@ -79,12 +101,8 @@ export default function ArticlePage({
     })
   }
 
-  const onCoverHandle = (coverUrl: string) => {
-    setCoverUrl(coverUrl)
-    updateArticleCover({
-      articleId,
-      coverUrl,
-    })
+  const onTitleHandle = (articleTitle: string) => {
+    changeTitle(articleTitle)
   }
 
   return isLoading ? (
@@ -98,9 +116,9 @@ export default function ArticlePage({
       articleId={articleId}
       onTitle={onTitleHandle}
       onContent={onContentHandle}
-      onCover={onCoverHandle}
-      coverUrl={coverUrl || defaultCoverUrl}
-      title={title || (currentArticle?.title as string)}
+      onCover={changeEditorCover}
+      coverUrl={cover}
+      title={title}
       defaultContent={currentArticle?.content || ''}
     ></Editor>
   )
