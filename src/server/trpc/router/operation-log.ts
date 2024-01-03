@@ -14,7 +14,7 @@ export const OperationLogRouter = router({
     )
     .mutation(async ({ input: { current, size } }) => {
       const limit = size + 1
-      return db.transaction(async (trx) => {
+      return db.transaction(async () => {
         const data = await db
           .select()
           .from(operationLog)

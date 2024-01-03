@@ -12,7 +12,7 @@ const handler = async (req: Request) => {
     endpoint: '/api/trpc',
     req,
     router: appRouter,
-    createContext: async ({ req, resHeaders }) => {
+    createContext: async () => {
       const session = await getServerAuthSession()
       return {
         session,

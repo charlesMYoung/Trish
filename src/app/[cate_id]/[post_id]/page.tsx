@@ -1,6 +1,6 @@
 import Editor from '@/components/editor/editor'
 import { trpc } from '@/utils/trpc-rsc'
-import { Metadata, ResolvingMetadata } from 'next'
+import { Metadata } from 'next'
 
 const getArticle = (id: string, cateId: string) => {
   return trpc.getArticleByCateIdAndId({
@@ -13,10 +13,7 @@ type Props = {
   params: { cate_id: string; post_id: string }
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // fetch data
   const product = await getArticle(params.post_id, params.cate_id)
 

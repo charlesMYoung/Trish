@@ -1,7 +1,6 @@
-import { CreateNextContextOptions } from '@trpc/server/adapters/next'
 import { getServerAuthSession } from './next-auth'
 
-export const createContext = async (opts: CreateNextContextOptions) => {
+export const createContext = async () => {
   const session = await getServerAuthSession()
   return {
     session,

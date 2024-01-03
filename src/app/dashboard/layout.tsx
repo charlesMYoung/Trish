@@ -5,9 +5,12 @@ import ProtectedRoute from './protection'
 
 export default function DashboardLayout({
   children,
+  authModal,
 }: {
   children: React.ReactNode
+  authModal: React.ReactNode
 }) {
+  console.log('rest>>>>>>>', authModal)
   return (
     <NextAuthProvider>
       <ProtectedRoute>
@@ -17,6 +20,7 @@ export default function DashboardLayout({
             <Toolbar />
             <div className="box-border p-4">
               <main className="mt-4">{children}</main>
+              1111{authModal}
             </div>
           </ScrollShadow>
         </section>

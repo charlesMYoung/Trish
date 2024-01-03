@@ -6,8 +6,8 @@ type CardSkeleton = {
   count: number
 }
 
-export const CardSkeleton = ({ count }: CardSkeleton) => {
-  return Array(10)
+export const CardSkeleton = ({ count = 10 }: CardSkeleton) => {
+  return Array(count)
     .fill(0)
     .map((_, index) => {
       return (

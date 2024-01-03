@@ -53,11 +53,6 @@ export const Footer = () => {
               href="https://github.com/charlesMYoung"
               className="flex items-center"
             >
-              <img
-                src="https://flowbite.com/docs/images/logo.svg"
-                className="me-3 h-8"
-                alt="FlowBite Logo"
-              />
               <span className="self-center whitespace-nowrap text-2xl font-semibold text-default-800">
                 CYatime
               </span>
