@@ -1,9 +1,14 @@
 'use client'
 import { Navbar, NavbarContent, NavbarItem } from '@nextui-org/navbar'
-import { Switch } from '@nextui-org/react'
-import { MdTipsAndUpdates } from 'react-icons/md'
+import { Button } from '@nextui-org/react'
+import { useTheme } from 'next-themes'
+import { MdLightMode, MdNightlight, MdTipsAndUpdates } from 'react-icons/md'
 
 export function Toolbar() {
+  const { theme, setTheme } = useTheme()
+  const handleSwitchLight = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
   return (
     <Navbar position="static">
       <NavbarContent justify="center">
@@ -13,8 +18,10 @@ export function Toolbar() {
         <NavbarItem className="hidden text-2xl text-default-400 lg:flex">
           <MdTipsAndUpdates />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">
-          <Switch defaultSelected aria-label="Automatic updates" />
+        <NavbarItem className="hidden lg:flex text-default-400 ">
+          <Button isIconOnly onPress={handleSwitchLight} variant="light">
+            {theme === 'light' ? <MdNightlight /> : <MdLightMode />}
+          </Button>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

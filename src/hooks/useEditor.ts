@@ -34,7 +34,7 @@ export const useEditor = ({
   useEffect(() => {
     if (!editor.current) {
       editor.current = new EditorJS({
-        data: { blocks: toObject(defaultContent) },
+        data: { blocks: toObject(defaultContent, []) },
         holder: editorRef.current as HTMLDivElement,
         readOnly,
         tools: {
