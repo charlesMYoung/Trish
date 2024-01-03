@@ -2,6 +2,7 @@
 import { trpc } from '@/utils/trpc-client'
 import {
   Pagination,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -9,52 +10,77 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/react'
+import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
 
 export default function Operation() {
-  const myQuery = trpc.infiniteOperationLog.useInfiniteQuery(
-    {
-      limit: 10,
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      // initialCursor: 1, // <-- optional you can pass an initialCursor
-    }
-  )
+  const {
+    data,
+    mutate: getLogByPagination,
+    isLoading,
+  } = trpc.getLogByPagination.useMutation()
+
+  const session = useSession()
+  console.log('session', session)
+
+  useEffect(() => {
+    getLogByPagination({
+      current: 1,
+      size: 50,
+    })
+  }, [])
+
+  const onPaginationChange = (page: number) => {
+    getLogByPagination({
+      current: page,
+      size: 50,
+    })
+  }
+
+  const loadingState = isLoading || data?.data.length === 0 ? 'loading' : 'idle'
+
   return (
-    <>
-      <Table aria-label="Example static collection table">
-        <TableHeader>
-          <TableColumn>NAME</TableColumn>
-          <TableColumn>ROLE</TableColumn>
-          <TableColumn>STATUS</TableColumn>
-        </TableHeader>
-        <TableBody>
-          <TableRow key="1">
-            <TableCell>Tony Reichert</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-          </TableRow>
-          <TableRow key="2">
-            <TableCell>Zoey Lang</TableCell>
-            <TableCell>Technical Lead</TableCell>
-            <TableCell>Paused</TableCell>
-          </TableRow>
-          <TableRow key="3">
-            <TableCell>Jane Fisher</TableCell>
-            <TableCell>Senior Developer</TableCell>
-            <TableCell>Active</TableCell>
-          </TableRow>
-          <TableRow key="4">
-            <TableCell>William Howard</TableCell>
-            <TableCell>Community Manager</TableCell>
-            <TableCell>Vacation</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-      <div className="flex flex-col gap-5">
-        <p>1 Boundary (default)</p>
-        <Pagination initialPage={3} total={10} color="secondary" />
-      </div>
-    </>
+    <Table
+      color="danger"
+      selectionMode="multiple"
+      defaultSelectedKeys={['2', '3']}
+      aria-label="operation logs"
+      bottomContent={
+        <div className="flex w-full justify-center">
+          {data ? (
+            <Pagination
+              showControls
+              showShadow
+              initialPage={1}
+              total={data.total}
+              color="secondary"
+              page={data.current}
+              onChange={onPaginationChange}
+            />
+          ) : null}
+        </div>
+      }
+    >
+      <TableHeader>
+        <TableColumn>时间</TableColumn>
+        <TableColumn>级别</TableColumn>
+        <TableColumn>信息</TableColumn>
+      </TableHeader>
+      <TableBody
+        items={data?.data ?? []}
+        loadingContent={<Spinner />}
+        loadingState={loadingState}
+      >
+        {(item) => {
+          return (
+            <TableRow key={item.id}>
+              <TableCell>{item.created_at}</TableCell>
+              <TableCell>{item.level}</TableCell>
+              <TableCell>{item.message}</TableCell>
+            </TableRow>
+          )
+        }}
+      </TableBody>
+    </Table>
   )
 }

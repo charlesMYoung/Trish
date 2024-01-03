@@ -1,7 +1,6 @@
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import {
-  bigserial,
   boolean,
   pgEnum,
   pgTable,
@@ -141,6 +140,5 @@ export const operationLog = pgTable('t_operation_log', {
   user_id: varchar('user_id'),
   level: varchar('level'),
   message: text('message'),
-  cursor: bigserial('cursor', { mode: 'number' }),
   created_at: timestamp('created_at').defaultNow(),
 })

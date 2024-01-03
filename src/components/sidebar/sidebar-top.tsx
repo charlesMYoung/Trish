@@ -8,10 +8,16 @@ import {
   User,
 } from '@nextui-org/react'
 import { signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
 export function SidebarTop() {
   const { data: session } = useSession()
+  const { push } = useRouter()
+  const logoutHandle = () => {
+    signOut()
+    push('/')
+  }
   return (
     <div
       className={twMerge(
@@ -33,7 +39,7 @@ export function SidebarTop() {
           />
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
-          <DropdownItem key="logout" color="danger" onPress={() => signOut}>
+          <DropdownItem key="logout" color="danger" onPress={logoutHandle}>
             退出
           </DropdownItem>
         </DropdownMenu>

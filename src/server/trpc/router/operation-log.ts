@@ -1,34 +1,51 @@
 import { db } from '@/server/db'
 import { operationLog } from '@/server/db/schema'
 import { protectedProcedure, router } from '@/server/trpc'
-import { desc, gt } from 'drizzle-orm'
+import { count, desc } from 'drizzle-orm'
 import z from 'zod'
 
 export const OperationLogRouter = router({
-  infiniteOperationLog: protectedProcedure
+  getLogByPagination: protectedProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().nullish(), // <-- "cursor" needs to exist, but can be any type
+        current: z.number().default(1),
+        size: z.number().default(50),
       })
     )
-    .query(async ({ input: { limit, cursor } }) => {
-      limit = limit ?? 50
-      const items = await db
-        .select()
-        .from(operationLog)
-        .limit(limit)
-        .offset(gt(operationLog.cursor, cursor))
-        .orderBy(desc(operationLog.cursor))
+    .mutation(async ({ input: { current, size } }) => {
+      const limit = size + 1
+      return db.transaction(async (trx) => {
+        const data = await db
+          .select()
+          .from(operationLog)
+          .limit(limit)
+          .offset((current - 1) * size)
+          .orderBy(desc(operationLog.created_at))
 
-      let nextCursor: typeof cursor | undefined = undefined
-      if (items.length > limit) {
-        const nextItem = items.pop()
-        nextCursor = nextItem!.cursor
-      }
-      return {
-        items,
-        nextCursor,
-      }
+        const total = await db
+          .select({ value: count(operationLog.id) })
+          .from(operationLog)
+        return {
+          current,
+          size,
+          total: total[0].value,
+          data,
+        }
+      })
+    }),
+  insertLog: protectedProcedure
+    .input(
+      z.object({
+        level: z.string(),
+        message: z.string(),
+        user_id: z.string(),
+      })
+    )
+    .mutation(async ({ input: { level, message, user_id } }) => {
+      return db.insert(operationLog).values({
+        level,
+        message,
+        user_id,
+      })
     }),
 })
