@@ -2,7 +2,7 @@ import { db } from '@/server/db'
 import { queryCoverByArticleId } from '@/server/db/prepared'
 import { article, image } from '@/server/db/schema'
 import { protectedProcedure, publicProcedure, router } from '@/server/trpc'
-import { count, eq } from 'drizzle-orm'
+import { and, count, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const ArticleRoute = router({
@@ -185,4 +185,56 @@ export const ArticleRoute = router({
       .from(article)
       .then((resp) => resp[0].value)
   }),
+
+  updateArticleCover: protectedProcedure
+    .input(
+      z.object({
+        articleId: z.string(),
+        coverUrl: z.string(),
+      })
+    )
+    .mutation(async ({ input: { articleId, coverUrl } }) => {
+      return db.transaction(async (tx) => {
+        const covers = await queryCoverByArticleId
+          .execute({
+            id: articleId,
+          })
+          .catch(async (error) => {
+            console.error('error', error)
+            await tx.rollback()
+            return []
+          })
+
+        if (coverUrl === '') {
+          await db
+            .delete(image)
+            .where(
+              and(eq(image.article_id, articleId), eq(image.type, 'COVER'))
+            )
+          return {}
+        }
+
+        if (covers.length === 0) {
+          await db.insert(image).values({
+            url: coverUrl,
+            type: 'COVER',
+            article_id: articleId,
+          })
+        } else {
+          await db
+            .update(image)
+            .set({
+              url: coverUrl,
+              type: 'COVER',
+              modified_at: new Date(),
+            })
+            .where(eq(image.id, covers[0].id))
+            .catch(async (error) => {
+              console.error('error', error)
+              await tx.rollback()
+            })
+        }
+        return {}
+      })
+    }),
 })

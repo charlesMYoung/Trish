@@ -5,7 +5,7 @@ import { useSidebarStore } from '@/hooks'
 import { trpc } from '@/utils/trpc-client'
 import { Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function ArticlePage({
   params,
@@ -15,8 +15,18 @@ export default function ArticlePage({
   const [cateId, articleId] = params.slugs || []
   const [title, setTitle] = useState<string>('')
   const [coverUrl, setCoverUrl] = useState<string>('')
+  const utils = trpc.useUtils()
 
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
+
+  const { mutate: updateArticleCover } = trpc.updateArticleCover.useMutation({
+    onSuccess() {
+      utils.client.getArticleByCateIdAndId.mutate({
+        id: articleId,
+        cateId,
+      })
+    },
+  })
 
   const {
     data: currentArticle,
@@ -42,16 +52,15 @@ export default function ArticlePage({
       id: articleId,
       cateId,
     })
-    setTitle(currentArticle?.title || '')
-    const coverUrlFromServe =
-      currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
-    if (coverUrlFromServe) {
-      setCoverUrl(coverUrlFromServe)
-    }
   }, [])
 
+  const defaultCoverUrl = useMemo(() => {
+    return currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
+  }, [currentArticle])
+
+  console.log('defaultCoverUrl', defaultCoverUrl)
+
   const onTitleHandle = (title: string) => {
-    console.log('title', title)
     updateArticleTitleById(title, {
       articleId,
       cateId,
@@ -72,7 +81,10 @@ export default function ArticlePage({
 
   const onCoverHandle = (coverUrl: string) => {
     setCoverUrl(coverUrl)
-    console.log('coverUrl', coverUrl)
+    updateArticleCover({
+      articleId,
+      coverUrl,
+    })
   }
 
   return isLoading ? (
@@ -87,8 +99,8 @@ export default function ArticlePage({
       onTitle={onTitleHandle}
       onContent={onContentHandle}
       onCover={onCoverHandle}
-      coverUrl={coverUrl}
-      title={title}
+      coverUrl={coverUrl || defaultCoverUrl}
+      title={title || (currentArticle?.title as string)}
       defaultContent={currentArticle?.content || ''}
     ></Editor>
   )

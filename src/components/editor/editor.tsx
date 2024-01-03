@@ -1,18 +1,11 @@
 'use client'
 
-import { toJSON, toObject } from '@/utils/common'
-import Checklist from '@editorjs/checklist'
-import CodeTool from '@editorjs/code'
-import EditorJS, { OutputBlockData } from '@editorjs/editorjs'
-import Header from '@editorjs/header'
-import Image from '@editorjs/image'
-import InlineCode from '@editorjs/inline-code'
-import LinkTool from '@editorjs/link'
-import List from '@editorjs/list'
-import Table from '@editorjs/table'
+import { GalleryList } from '@/config/appConfig'
+import { useEditor } from '@/hooks'
+import { rangeRadom } from '@/utils/common'
 import { useDebounceFn } from 'ahooks'
-import { useEffect, useRef } from 'react'
-import { EditorCover } from './editor-cover'
+import { Cover } from '../cover/cover'
+import { TitleInput } from './titleInput'
 
 export type EditorProps = {
   defaultContent?: string
@@ -35,78 +28,43 @@ const Editor = ({
   onCover,
   onContent,
 }: EditorProps) => {
-  const editor = useRef<EditorJS | null>(null)
-  const editorRef = useRef<HTMLDivElement | null>(null)
-
-  const { run: onEditHandle } = useDebounceFn(async () => {
-    const data = await editor?.current?.save()
-    onContent && onContent(toJSON<OutputBlockData[]>(data?.blocks || []))
-    console.log('editor data23', data?.blocks)
+  const { run: onEditHandle } = useDebounceFn(async (value) => {
+    onContent && onContent(value)
   })
 
-  useEffect(() => {
-    if (!editor.current) {
-      editor.current = new EditorJS({
-        data: { blocks: toObject(defaultContent) },
-        holder: editorRef.current as HTMLDivElement,
-        readOnly,
-        tools: {
-          header: Header,
-          list: List,
-          checklist: {
-            class: Checklist,
-            inlineToolbar: true,
-          },
-          linkTool: {
-            class: LinkTool,
-            config: {
-              headers: {
-                'X-ARTICLE-ID': articleId,
-              },
-              endpoint: `http://localhost:3000/api/hyperLink`, // Your backend endpoint for url data fetching,
-            },
-          },
-          inlineCode: InlineCode,
-          code: CodeTool,
-          table: Table,
-          image: {
-            class: Image,
-            config: {
-              endpoints: {
-                byFile: `http://localhost:3000/api/image?type=CONTENT&id=${articleId}`, // Your backend file uploader endpoint
-              },
-            },
-          },
-        },
-        placeholder: '请输入...',
-        onReady: () => {
-          console.log('Editor.js is ready to work!')
-        },
-        onChange: () => {
-          onEditHandle()
-        },
-      })
+  const { editorRef } = useEditor({
+    readOnly: readOnly,
+    id: articleId,
+    onChange: (content) => {
+      onEditHandle(content)
+    },
+    defaultContent,
+  })
+
+  const onAddCoverPressHandle = () => {
+    const maxLength = GalleryList.length
+    const maxRadomIndex = rangeRadom(maxLength) - 1
+    const gallery = GalleryList[maxRadomIndex]
+    if (gallery && gallery.url) {
+      onCover && onCover(gallery.url)
     }
-    return () => {
-      if (editor.current && editor.current.destroy) {
-        editor.current.destroy()
-      }
-    }
-  }, [])
+  }
 
   return (
     <>
-      <EditorCover
-        readOnly={readOnly}
-        titleValue={title}
-        coverValue={coverUrl}
-        onTitleChange={onTitle}
-        onCoverChange={onCover}
-      ></EditorCover>
+      <Cover onChange={onCover} value={coverUrl} />
+      <TitleInput
+        value={title}
+        onChange={onTitle}
+        defaultValue={title}
+        coverUrl={coverUrl}
+        onAddCoverPress={onAddCoverPressHandle}
+      />
       <div
         tabIndex={0}
         ref={editorRef}
-        className="dark-mode prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
+        className="dark-mode prose prose-sm mx-auto dark:prose-invert 
+        sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
       ></div>
     </>
   )
