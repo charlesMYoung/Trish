@@ -10,14 +10,14 @@ import { useDebounceFn } from 'ahooks'
 import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
-import { Collapse } from '../collapse/collapse'
-import { AddArticle } from './add-article-action'
-import { ArticleTitle } from './article-title'
-import { DropDownMenu } from './dropdown-menu'
-import { PopoverInput } from './popover-input'
-import { SidebarItem } from './sidebar-item'
-import { MenuTitle } from './sidebar-menu'
-import { SidebarTop } from './sidebar-top'
+import { Collapse } from '@/components/collapse/collapse'
+import { AddArticle } from '@/components/sidebar/add-article-action'
+import { ArticleTitle } from '@/components/sidebar/article-title'
+import { DropDownMenu } from '@/components/sidebar/dropdown-menu'
+import { PopoverInput } from '@/components/sidebar/popover-input'
+import { SidebarItem } from '@/components/sidebar/sidebar-item'
+import { MenuTitle } from '@/components/sidebar/sidebar-menu'
+import { SidebarTop } from '@/components/sidebar/sidebar-top'
 
 type MenuParam = Pick<Category, 'id' | 'name'>
 
@@ -27,7 +27,7 @@ type DiffResult = {
   del: MenuParam[]
 }
 
-export function SideBar() {
+export default function SideBarPage() {
   const pathName = usePathname()
   const { slugs } = useParams<{ slugs: string[] }>()
 

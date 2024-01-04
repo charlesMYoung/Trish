@@ -1,26 +1,26 @@
-import { SideBar, Toolbar } from '@/components'
+import { Toolbar } from '@/components'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
 import { NextAuthProvider } from './auth-provider'
 import ProtectedRoute from './protection'
 
 export default function DashboardLayout({
   children,
-  authModal,
+  sidebar,
+  main,
 }: {
   children: React.ReactNode
-  authModal: React.ReactNode
+  sidebar: React.ReactNode
+  main: React.ReactNode
 }) {
-  console.log('rest>>>>>>>', authModal)
   return (
     <NextAuthProvider>
       <ProtectedRoute>
         <section className="flex h-screen">
-          <SideBar />
+          {sidebar}
           <ScrollShadow className="container">
             <Toolbar />
             <div className="box-border p-4">
-              <main className="mt-4">{children}</main>
-              1111{authModal}
+              <main className="mt-4">{main}</main>
             </div>
           </ScrollShadow>
         </section>
