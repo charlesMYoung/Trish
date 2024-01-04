@@ -1,10 +1,8 @@
 'use client'
 
+import { trpc } from '@/utils/trpc-client'
 import {
   Button,
-  Checkbox,
-  Input,
-  Link,
   Modal,
   ModalBody,
   ModalContent,
@@ -12,49 +10,60 @@ import {
   ModalHeader,
   useDisclosure,
 } from '@nextui-org/react'
+import { BuiltInProviderType } from 'next-auth/providers/index'
+import { ClientSafeProvider, LiteralUnion, signIn } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { FaGithub } from 'react-icons/fa'
+import AuthProvider from './auth-provider'
 
 export default function LoginModal() {
   const { onOpenChange } = useDisclosure()
+  const [providers, setProviders] =
+    useState<Record<LiteralUnion<BuiltInProviderType>, ClientSafeProvider>>()
+
+  const { mutate: insertLogMutate } = trpc.insertLog.useMutation()
+
+  useEffect(() => {
+    AuthProvider().then((p) => {
+      p && setProviders(p)
+    })
+  }, [])
+
+  const handleLogin = async (providerId: string) => {
+    signIn(providerId)
+    insertLogMutate({
+      level: 'info',
+      message: `登录成功`,
+      user_id: providerId,
+    })
+  }
 
   return (
     <Modal isOpen={true} onOpenChange={onOpenChange} placement="top-center">
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
-            <ModalBody>
-              <Input
-                autoFocus
-                label="Email"
-                placeholder="Enter your email"
-                variant="bordered"
-              />
-              <Input
-                label="Password"
-                placeholder="Enter your password"
-                type="password"
-                variant="bordered"
-              />
-              <div className="flex justify-between px-1 py-2">
-                <Checkbox
-                  classNames={{
-                    label: 'text-small',
-                  }}
-                >
-                  Remember me
-                </Checkbox>
-                <Link color="primary" href="#" size="sm">
-                  Forgot password?
-                </Link>
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="flat" onPress={onClose}>
-                Close
-              </Button>
-              <Button color="primary" onPress={onClose}>
-                Sign in
-              </Button>
+            <ModalHeader className="flex flex-col gap-1 text-center">
+              登录
+            </ModalHeader>
+            <ModalBody></ModalBody>
+            <ModalFooter className="flex flex-col">
+              {providers &&
+                Object.values(providers).map((provider: any) => (
+                  <Button
+                    key={provider.id}
+                    href={provider.signinUrl}
+                    color="secondary"
+                    className="w-full"
+                    variant="shadow"
+                    onPress={() => {
+                      handleLogin(provider.id)
+                    }}
+                    startContent={<FaGithub />}
+                  >
+                    使用 {provider.name} 登录
+                  </Button>
+                ))}
             </ModalFooter>
           </>
         )}

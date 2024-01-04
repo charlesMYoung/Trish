@@ -1,20 +1,22 @@
 import { Toolbar } from '@/components'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
+import { getServerSession } from 'next-auth'
 import { NextAuthProvider } from './auth-provider'
-import ProtectedRoute from './protection'
 
-export default function DashboardLayout({
-  children,
+export default async function DashboardLayout({
   sidebar,
   main,
+  login,
 }: {
   children: React.ReactNode
   sidebar: React.ReactNode
   main: React.ReactNode
+  login: React.ReactNode
 }) {
+  const session = await getServerSession()
   return (
     <NextAuthProvider>
-      <ProtectedRoute>
+      {session && session.user ? (
         <section className="flex h-screen">
           {sidebar}
           <ScrollShadow className="container">
@@ -24,7 +26,9 @@ export default function DashboardLayout({
             </div>
           </ScrollShadow>
         </section>
-      </ProtectedRoute>
+      ) : (
+        login
+      )}
     </NextAuthProvider>
   )
 }

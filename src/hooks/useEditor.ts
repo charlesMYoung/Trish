@@ -27,8 +27,12 @@ export const useEditor = ({
   const editorRef = useRef<HTMLDivElement | null>(null)
 
   const onChangeHandle = async () => {
-    const data = await editor?.current?.save()
-    onChange && onChange(toJSON<OutputBlockData[]>(data?.blocks || []))
+    if (editor && editor.current) {
+      if (editor?.current.save) {
+        const data = await editor?.current.save()
+        onChange && onChange(toJSON<OutputBlockData[]>(data?.blocks || []))
+      }
+    }
   }
 
   useEffect(() => {

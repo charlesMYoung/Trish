@@ -1,6 +1,6 @@
 import { db } from '@/server/db'
 import { operationLog } from '@/server/db/schema'
-import { protectedProcedure, router } from '@/server/trpc'
+import { protectedProcedure, publicProcedure, router } from '@/server/trpc'
 import { count, desc } from 'drizzle-orm'
 import z from 'zod'
 
@@ -33,7 +33,7 @@ export const OperationLogRouter = router({
         }
       })
     }),
-  insertLog: protectedProcedure
+  insertLog: publicProcedure
     .input(
       z.object({
         level: z.string(),
