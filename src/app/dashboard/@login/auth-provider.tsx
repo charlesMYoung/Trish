@@ -2,6 +2,6 @@
 
 import { getProviders } from 'next-auth/react'
 
-export default function GetAuthProviders() {
+export default async function GetAuthProviders() {
   return getProviders()
 }
