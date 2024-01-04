@@ -18,7 +18,7 @@ import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { MdLightMode, MdNightlight, MdRssFeed } from 'react-icons/md'
 
-export function AppNavbar() {
+export default function AppNavbar() {
   const { data: categoriesFromServer } = trpc.getAllCategory.useQuery<
     Category[]
   >(void 0, {
@@ -54,7 +54,7 @@ export function AppNavbar() {
             >
               <Link
                 as={NextLink}
-                href={`/${cate.id}`}
+                href={`/blog/${cate.id}`}
                 color={cate.id !== pathname.cate_id ? 'foreground' : undefined}
               >
                 {cate.name}
@@ -82,7 +82,7 @@ export function AppNavbar() {
               className="w-full"
               as={NextLink}
               key={item.id}
-              href={`/${item.id}`}
+              href={`/blog/${item.id}`}
               color={item.id !== pathname.cate_id ? 'foreground' : undefined}
             >
               {item.name}

@@ -34,7 +34,7 @@ export default function Cate({
               key={item.id}
               isPressable
               as={NextLink}
-              href={`/${cate_id}/${item.id}`}
+              href={`/blog/${cate_id}/${item.id}`}
             >
               <CardHeader className="text-3xl text-primary-500">
                 {item.title}

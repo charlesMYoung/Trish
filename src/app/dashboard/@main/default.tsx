@@ -12,8 +12,8 @@ export default function DashboardDefault() {
   console.log('session', session, status)
   return (
     <div className="mb-4">
-      <div className="mb-4 text-large text-default-500">快速预览 pages</div>
-      <div className="flex space-x-4">
+      <div className="mb-4 text-large text-default-500">快速预览</div>
+      <div className="flex w-full space-x-4">
         <InfoCard
           title="文章"
           icon={<FaFileAlt />}

@@ -43,7 +43,6 @@ export default function Operation() {
     <Table
       color="danger"
       selectionMode="multiple"
-      defaultSelectedKeys={['2', '3']}
       aria-label="operation logs"
       bottomContent={
         <div className="flex w-full justify-center">
