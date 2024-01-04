@@ -14,7 +14,7 @@ export const ArticleRoute = router({
       })
     }),
 
-  getArticleByCateIdAndId: protectedProcedure
+  getArticleByCateIdAndId: publicProcedure
     .input(
       z.object({
         id: z.string(),

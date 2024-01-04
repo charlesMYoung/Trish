@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@nextui-org/react'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export default function Operation() {
   const {
@@ -37,6 +37,10 @@ export default function Operation() {
     })
   }
 
+  const pageCount = useMemo(() => {
+    return data?.total ? Math.ceil(data.total / data.size) : 0
+  }, [data?.total])
+
   const loadingState = isLoading || data?.data.length === 0 ? 'loading' : 'idle'
 
   return (
@@ -48,10 +52,12 @@ export default function Operation() {
         <div className="flex w-full justify-center">
           {data ? (
             <Pagination
+              loop
               showControls
               showShadow
+              siblings={data.size}
               initialPage={1}
-              total={data.total}
+              total={pageCount}
               color="secondary"
               page={data.current}
               onChange={onPaginationChange}

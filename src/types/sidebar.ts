@@ -1,3 +1,4 @@
+import { Category } from '@/server/db/schema'
 import { ReactNode } from 'react'
 
 export type Sidebar = {
@@ -7,4 +8,11 @@ export type Sidebar = {
   children?: Sidebar[]
   icon?: ReactNode
   isActive?: boolean
+}
+
+export type MenuParam = Pick<Category, 'id' | 'name'>
+export type DiffResult = {
+  add: MenuParam[]
+  modi: MenuParam[]
+  del: MenuParam[]
 }

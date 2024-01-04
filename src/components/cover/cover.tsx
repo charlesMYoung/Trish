@@ -40,6 +40,7 @@ export const Cover = ({ value, onChange }: CoverProps) => {
 
   return (
     <motion.div
+      className="w-full"
       animate={{
         opacity: [0, 1],
       }}
