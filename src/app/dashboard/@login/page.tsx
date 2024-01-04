@@ -41,7 +41,7 @@ export default function LoginModal() {
   return (
     <Modal isOpen={true} onOpenChange={onOpenChange} placement="top-center">
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1 text-center">
               登录
@@ -49,7 +49,7 @@ export default function LoginModal() {
             <ModalBody></ModalBody>
             <ModalFooter className="flex flex-col">
               {providers &&
-                Object.values(providers).map((provider: any) => (
+                Object.values(providers).map((provider) => (
                   <Button
                     key={provider.id}
                     href={provider.signinUrl}
