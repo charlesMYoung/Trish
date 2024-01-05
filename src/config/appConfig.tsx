@@ -1,5 +1,5 @@
 import { Sidebar } from '@/types/sidebar'
-import { MdOutlineTipsAndUpdates } from 'react-icons/md'
+import { MdBrowserUpdated } from 'react-icons/md'
 import { PiReadCvLogoThin } from 'react-icons/pi'
 import { RiDashboard2Fill } from 'react-icons/ri'
 
@@ -33,7 +33,7 @@ export const SideBarConfig: Sidebar[] = [
       {
         name: '系统更新',
         id: 'update',
-        icon: <MdOutlineTipsAndUpdates />,
+        icon: <MdBrowserUpdated />,
         href: '/dashboard/update',
       },
     ],

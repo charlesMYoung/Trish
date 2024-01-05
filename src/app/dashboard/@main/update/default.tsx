@@ -1,3 +1,4 @@
+import Page from './page'
 export default function Update() {
-  return <>Update default</>
+  return <Page></Page>
 }

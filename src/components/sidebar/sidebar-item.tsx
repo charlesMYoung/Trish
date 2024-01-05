@@ -21,7 +21,7 @@ export function SidebarItem({
     <div
       className={twMerge(
         'flex items-center rounded-xl pl-3.5 transition-all duration-150 hover:bg-primary-100 active:scale-[0.98]',
-        isActive ? 'bg-primary-200 [&_svg_path]:fill-primary-500' : ''
+        isActive ? 'bg-primary-200 ' : ''
       )}
     >
       <Link

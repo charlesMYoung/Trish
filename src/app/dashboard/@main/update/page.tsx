@@ -1,3 +1,7 @@
+'use client'
+
+import { Card } from '@nextui-org/react'
+
 export default function Update() {
-  return <>Update default</>
+  return <Card>Update default</Card>
 }
