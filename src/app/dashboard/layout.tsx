@@ -17,13 +17,11 @@ export default async function DashboardLayout({
   return (
     <NextAuthProvider>
       {session && session.user ? (
-        <section className="flex h-screen">
-          {sidebar}
-          <ScrollShadow className="container">
-            <Toolbar />
-            <div className="box-border p-4">
-              <main className="mt-4">{main}</main>
-            </div>
+        <section className="flex h-screen flex-col">
+          <Toolbar />
+          <ScrollShadow className="flex flex-1">
+            {sidebar}
+            <main className="mt-4 box-border flex-1 p-4">{main}</main>
           </ScrollShadow>
         </section>
       ) : (

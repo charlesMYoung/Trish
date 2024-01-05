@@ -4,9 +4,11 @@ import Editor from '@/components/editor/editor'
 import { useSidebarStore } from '@/hooks'
 import { trpc } from '@/utils/trpc-client'
 import { useEditorStore } from '@/zustand'
-import { Skeleton } from '@nextui-org/react'
+import { Button, Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { MdViewCozy } from 'react-icons/md'
 import { shallow } from 'zustand/shallow'
 
 export default function ArticlePage({
@@ -22,6 +24,7 @@ export default function ArticlePage({
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
   const initEditor = useEditorStore.use.initEditor()
   const { mutate: updateArticleCover } = trpc.updateArticleCover.useMutation({})
+  const route = useRouter()
 
   const {
     data: currentArticle,
@@ -54,10 +57,8 @@ export default function ArticlePage({
       id: articleId,
       cateId,
     })
-  }, [])
 
-  useEffect(() => {
-    return useEditorStore.subscribe(
+    const titleStoreSub = useEditorStore.subscribe(
       (state) => state.title,
       (curSidebars, preSidebars) => {
         if (curSidebars !== preSidebars) {
@@ -75,10 +76,7 @@ export default function ArticlePage({
         equalityFn: shallow,
       }
     )
-  }, [])
-
-  useEffect(() => {
-    return useEditorStore.subscribe(
+    const coverStoreSub = useEditorStore.subscribe(
       (state) => state.cover,
       (curSidebars, preSidebars) => {
         if (curSidebars !== preSidebars) {
@@ -92,6 +90,10 @@ export default function ArticlePage({
         equalityFn: shallow,
       }
     )
+    return () => {
+      titleStoreSub()
+      coverStoreSub()
+    }
   }, [])
 
   const onContentHandle = (content: string) => {
@@ -105,6 +107,10 @@ export default function ArticlePage({
     changeTitle(articleTitle)
   }
 
+  const onArticleViewHandle = () => {
+    route.push(`/blog/post/${articleId}`)
+  }
+
   return isLoading ? (
     <div className="flex flex-col space-y-2">
       <Skeleton className="flex h-64 w-full rounded-lg" />
@@ -112,14 +118,25 @@ export default function ArticlePage({
       <Skeleton className=" flex h-screen w-full rounded-lg" />
     </div>
   ) : (
-    <Editor
-      articleId={articleId}
-      onTitle={onTitleHandle}
-      onContent={onContentHandle}
-      onCover={changeEditorCover}
-      coverUrl={cover}
-      title={title}
-      defaultContent={currentArticle?.content || ''}
-    ></Editor>
+    <>
+      <Editor
+        articleId={articleId}
+        onTitle={onTitleHandle}
+        onContent={onContentHandle}
+        onCover={changeEditorCover}
+        coverUrl={cover}
+        title={title}
+        defaultContent={currentArticle?.content || ''}
+      ></Editor>
+      <Button
+        isIconOnly
+        radius="full"
+        className="fixed bottom-16 right-16"
+        size="lg"
+        onPress={onArticleViewHandle}
+      >
+        <MdViewCozy></MdViewCozy>
+      </Button>
+    </>
   )
 }

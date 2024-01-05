@@ -10,7 +10,7 @@ export function Toolbar() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
   return (
-    <Navbar position="static">
+    <Navbar position="static" isBordered>
       <NavbarContent justify="center">
         <NavbarItem className="hidden w-full lg:flex"></NavbarItem>
       </NavbarContent>
@@ -18,7 +18,7 @@ export function Toolbar() {
         <NavbarItem className="hidden text-2xl text-default-400 lg:flex">
           <MdTipsAndUpdates />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex text-default-400 ">
+        <NavbarItem className="hidden text-default-400 lg:flex ">
           <Button isIconOnly onPress={handleSwitchLight} variant="light">
             {theme === 'light' ? <MdNightlight /> : <MdLightMode />}
           </Button>

@@ -5,7 +5,7 @@ const {
   DB_PORT = 0,
   DB_USER,
   DB_PASSWORD = '',
-  DB_DATABASE,
+  DB_DATABASE = '',
 } = process.env
 export default defineConfig({
   schema: './src/server/db/schema.ts',
@@ -13,10 +13,10 @@ export default defineConfig({
   out: './drizzle',
   dbCredentials: {
     user: DB_USER,
-    password: DB_DATABASE,
+    password: DB_PASSWORD,
     host: DB_HOST,
     port: DB_PORT as number,
-    database: DB_PASSWORD,
+    database: DB_DATABASE,
   },
   verbose: true,
   strict: true,

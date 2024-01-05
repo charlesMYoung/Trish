@@ -141,12 +141,10 @@ export default function SideBarPage() {
 
   return (
     <motion.div
-      animate={{ width: !md ? '0' : '240px' }}
-      className="sticky left-0 top-0 box-border  
-    flex h-full w-72 flex-col space-y-2
-     border-r-1 border-default-100 px-4"
+      className="sticky left-0 top-0 box-border hidden h-full w-72 space-y-2
+     border-r-1 border-default-100 pl-4 md:flex md:w-72 lg:w-80"
     >
-      <ScrollShadow>
+      <ScrollShadow className="flex-1">
         <SidebarTop />
         {sidebars.map((sidebar) => {
           return (
