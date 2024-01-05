@@ -2,20 +2,19 @@ import Editor from '@/components/editor/editor'
 import { trpc } from '@/utils/trpc-rsc'
 import { Metadata } from 'next'
 
-const getArticle = (id: string, cateId: string) => {
-  return trpc.getArticleByCateIdAndId({
+const getArticle = (id: string) => {
+  return trpc.getArticleById({
     id,
-    cateId,
   })
 }
 
 type Props = {
-  params: { cate_id: string; post_id: string }
+  params: { post_id: string }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // fetch data
-  const product = await getArticle(params.post_id, params.cate_id)
+  const product = await getArticle(params.post_id)
 
   return {
     title: product?.title,
@@ -23,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Post({ params }: Props) {
-  const { cate_id, post_id } = params || []
-  const currentArticle = await getArticle(post_id, cate_id)
+  const { post_id } = params || []
+  const currentArticle = await getArticle(post_id)
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-between px-24">

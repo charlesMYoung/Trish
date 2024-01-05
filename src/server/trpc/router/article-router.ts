@@ -10,6 +10,17 @@ export const ArticleRoute = router({
     .input(z.object({ id: z.string() }))
     .query(({ input: { id } }) => {
       return db.query.article.findFirst({
+        columns: {
+          id: true,
+          title: true,
+          content: true,
+          is_release: true,
+          created_at: true,
+          modified_at: true,
+        },
+        with: {
+          images: true,
+        },
         where: (article, { eq }) => eq(article.id, id),
       })
     }),

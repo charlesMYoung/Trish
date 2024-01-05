@@ -54,7 +54,7 @@ export default function AppNavbar() {
             >
               <Link
                 as={NextLink}
-                href={`/blog/${cate.id}`}
+                href={`/blog/category/${cate.id}`}
                 color={cate.id !== pathname.cate_id ? 'foreground' : undefined}
               >
                 {cate.name}

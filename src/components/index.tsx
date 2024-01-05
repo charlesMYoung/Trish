@@ -1,6 +1,5 @@
 export * from './collapse/collapse'
 export * from './cover/cover'
-export * from './footer/footer'
 export * from './info-card/info-card'
 export * from './skeleton/article'
 export * from './toolbar/toolbar'
