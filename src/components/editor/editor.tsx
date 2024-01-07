@@ -54,6 +54,7 @@ const Editor = ({
     <>
       <Cover onChange={onCover} value={coverUrl} />
       <TitleInput
+        readOnly={readOnly}
         value={title}
         onChange={onTitle}
         coverUrl={coverUrl}
@@ -62,8 +63,8 @@ const Editor = ({
       <div
         tabIndex={0}
         ref={editorRef}
-        className="dark-mode prose prose-sm mx-auto dark:prose-invert
-        sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
+        className="dark-mode prose prose-sm mx-auto sm:prose
+        lg:prose-lg xl:prose-xl 2xl:prose-2xl dark:prose-invert focus:outline-none"
       ></div>
     </>
   )

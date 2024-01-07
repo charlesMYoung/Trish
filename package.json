@@ -34,6 +34,7 @@
     "@trpc/server": "^10.44.1",
     "ahooks": "^3.7.8",
     "clsx": "^2.0.0",
+    "dayjs": "^1.11.10",
     "drizzle-orm": "^0.29.1",
     "formidable": "^3.5.1",
     "framer-motion": "^10.16.5",

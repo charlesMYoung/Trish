@@ -1,10 +1,14 @@
 'use client'
 
 import { CardSkeleton } from '@/components'
+import { Category } from '@/server/db/schema'
+import { groupByArray } from '@/utils/common'
 import { trpc } from '@/utils/trpc-client'
-import { Card, CardBody, CardHeader, Image } from '@nextui-org/react'
+import { Link } from '@nextui-org/react'
+import dayjs from 'dayjs'
 import NextLink from 'next/link'
-import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
+import { useEffect, useMemo } from 'react'
 
 export default function Cate({
   params: { cate_id },
@@ -17,55 +21,84 @@ export default function Cate({
     data,
   } = trpc.getArticleByCateId.useMutation()
 
+  const { data: categoriesFromServer } = trpc.getAllCategory.useQuery<
+    Category[]
+  >(void 0, {
+    refetchOnWindowFocus: false,
+  })
+  const pathname = useParams<{ cate_id: string }>()
+
   useEffect(() => {
     getArticleByCateId({
       id: cate_id,
     })
   }, [])
 
+  const groupYear = useMemo(() => {
+    if (Array.isArray(data) && data.length > 0) {
+      const result = data.map((item) => {
+        return {
+          ...item,
+          year: dayjs(item.release_date).year(),
+        }
+      })
+      return groupByArray(result, 'year')
+    }
+    return []
+  }, [data])
+
   return (
-    <div className="container mx-auto grid grid-cols-2 gap-4 p-24 md:grid-cols-4">
-      {isLoading ? (
-        <CardSkeleton count={10}></CardSkeleton>
-      ) : Array.isArray(data) && data.length > 0 ? (
-        data.map((item) => {
+    <div className="prose mx-auto ">
+      <div className="flex w-full space-x-6 py-10">
+        {categoriesFromServer?.map((cate) => {
           return (
-            <Card
-              key={item.id}
-              isPressable
+            <Link
+              key={cate.id}
               as={NextLink}
-              href={`/blog/post/${item.id}`}
+              className="text-2xl"
+              href={`/blog/category/${cate.id}`}
+              color={cate.id !== pathname.cate_id ? 'foreground' : undefined}
             >
-              <CardHeader className="text-3xl text-primary-500">
-                {item.title}
-              </CardHeader>
-              <CardBody>
-                {item.images.find((img) => img.type === 'COVER') ? (
-                  <Image
-                    src={
-                      item.images.find((img) => img.type === 'COVER')?.url || ''
-                    }
-                    alt={item.title || ''}
-                    removeWrapper
-                    width={'100%'}
-                    className="h-full w-full"
-                  ></Image>
-                ) : (
-                  <Image
-                    src={'/images/chat.jpg'}
-                    alt={item.title || ''}
-                    removeWrapper
-                    width={'100%'}
-                    className="h-full w-full"
-                  ></Image>
-                )}
-              </CardBody>
-            </Card>
+              {cate.name}
+            </Link>
           )
-        })
-      ) : (
-        <div>没有数据</div>
-      )}
+        })}
+      </div>
+      <div className="grid grid-cols-1 gap-4 space-y-28 py-20">
+        {isLoading ? (
+          <CardSkeleton count={10}></CardSkeleton>
+        ) : groupYear.length > 0 ? (
+          groupYear.map(({ key, value }) => {
+            return (
+              <div key={key} className="relative flex">
+                <div className="text-stroke absolute -left-6 -top-16 select-none text-9xl font-bold opacity-20">
+                  {key}
+                </div>
+                <div className="flex w-full flex-col space-y-8">
+                  {value.map((link) => {
+                    return (
+                      <Link
+                        className="text-2xl text-default-500"
+                        as={NextLink}
+                        href={`/blog/post/${link.id}`}
+                        size="lg"
+                        key={link.id}
+                      >
+                        {link.title}
+                        <span className="ml-2 text-xl text-default-200">
+                          {dayjs(link.release_date).format('MM-DD')}
+                        </span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })
+        ) : (
+          <div className="text-2xl">没有数据</div>
+        )}
+      </div>
     </div>
   )
 }

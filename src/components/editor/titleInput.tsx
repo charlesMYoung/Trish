@@ -9,7 +9,7 @@ export type TitleInputProps = {
   onChange?: (value: string) => void
   value?: string
   defaultValue?: string
-  readonly?: boolean
+  readOnly?: boolean
   coverUrl?: string
   onAddCoverPress?: () => void
 }
@@ -19,7 +19,7 @@ export function TitleInput({
   value,
   coverUrl,
   defaultValue,
-  readonly,
+  readOnly,
   onAddCoverPress,
 }: TitleInputProps) {
   const [inputTitleState, setInputTitleState] = useControllableValue<string>({
@@ -31,11 +31,11 @@ export function TitleInput({
 
   return (
     <div
-      className="prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl"
+      className="prose prose-sm mx-auto sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl dark:prose-invert"
       ref={inputTitleRef}
     >
       <TitleInputTool
-        isShow={isInputHovering && !readonly && !coverUrl}
+        isShow={isInputHovering && !readOnly && !coverUrl}
         onButtonPress={onAddCoverPress}
       ></TitleInputTool>
       <Input
@@ -45,7 +45,7 @@ export function TitleInput({
         value={inputTitleState}
         defaultValue={defaultValue}
         tabIndex={0}
-        isReadOnly={readonly}
+        isReadOnly={readOnly}
         placeholder="无标题"
         classNames={{
           input: ['bg-transparent', 'hover:bg-transparent', 'text-md', 'z-10'],
