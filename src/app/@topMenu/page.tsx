@@ -10,10 +10,12 @@ import {
 import { Button, Link } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
 import { MdLightMode, MdNightlight, MdRssFeed } from 'react-icons/md'
 
 export default function TopMenu() {
   const { theme, setTheme } = useTheme()
+  const pathName = usePathname()
 
   const handleSwitchLight = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -30,15 +32,13 @@ export default function TopMenu() {
       <NavbarContent justify="end">
         {TopMenus?.map((menu) => {
           return (
-            <NavbarItem className="hidden w-full lg:flex" key={menu.name}>
-              <Link as={NextLink} href={menu.url}>
+            <NavbarItem className="" key={menu.name}>
+              <Link as={NextLink} href={menu.url} color={'foreground'}>
                 {menu.name}
               </Link>
             </NavbarItem>
           )
         })}
-      </NavbarContent>
-      <NavbarContent justify="end">
         <NavbarItem className="hidden text-2xl text-default-400 lg:flex">
           <Button isIconOnly onPress={handleSwitchLight} variant="light">
             {theme === 'light' ? <MdNightlight /> : <MdLightMode />}

@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .text-stroke {
-    -webkit-text-stroke-color: rgba(170, 170, 170, 1);
-    -webkit-text-stroke-width: 2px;
-    @apply !text-transparent;
-  }
+@font-face {
+  font-family: 'smileysans';
+  src:
+    url('/fonts/SmileySans-Oblique.otf.woff2') format('woff2'),
+    url('/fonts/SmileySans-Oblique.ttf.woff2') format('woff2');
 }
+
 .ce-toolbar__content {
   @apply !max-w-none;
 }

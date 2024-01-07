@@ -1,6 +1,6 @@
 'use client'
 
-import { CardSkeleton } from '@/components'
+import { ListSkeleton } from '@/components'
 import { Category } from '@/server/db/schema'
 import { groupByArray } from '@/utils/common'
 import { trpc } from '@/utils/trpc-client'
@@ -48,8 +48,8 @@ export default function Cate({
   }, [data])
 
   return (
-    <div className="prose mx-auto ">
-      <div className="flex w-full space-x-6 py-10">
+    <div className="prose mx-auto px-6 lg:prose-lg xl:prose-xl md:px-0">
+      <div className="flex w-full flex-col space-y-4 py-10 md:flex-row md:space-x-6 md:space-y-0">
         {categoriesFromServer?.map((cate) => {
           return (
             <Link
@@ -66,12 +66,12 @@ export default function Cate({
       </div>
       <div className="grid grid-cols-1 gap-4 space-y-28 py-20">
         {isLoading ? (
-          <CardSkeleton count={10}></CardSkeleton>
+          <ListSkeleton count={10}></ListSkeleton>
         ) : groupYear.length > 0 ? (
           groupYear.map(({ key, value }) => {
             return (
               <div key={key} className="relative flex">
-                <div className="text-stroke absolute -left-6 -top-16 select-none text-9xl font-bold opacity-20">
+                <div className="text-stroke-2 absolute -left-6 -top-16 select-none text-9xl font-bold !text-transparent opacity-20">
                   {key}
                 </div>
                 <div className="flex w-full flex-col space-y-8">
