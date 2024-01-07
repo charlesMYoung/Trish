@@ -129,6 +129,8 @@ export default function ArticlePage({
         defaultContent={currentArticle?.content || ''}
       ></Editor>
       <Button
+        variant="shadow"
+        color="primary"
         isIconOnly
         radius="full"
         className="fixed bottom-16 right-16"

@@ -26,7 +26,7 @@ export default async function Post({ params }: Props) {
   const currentArticle = await getArticle(post_id)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between px-24">
+    <div className="flex min-h-screen flex-col px-6">
       <Editor
         readOnly
         articleId={post_id}

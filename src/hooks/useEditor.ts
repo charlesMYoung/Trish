@@ -69,7 +69,7 @@ export const useEditor = ({
             },
           },
         },
-        placeholder: '请输入...',
+        placeholder: readOnly ? '暂无内容...' : '请输入...',
         onReady: () => {
           console.log('Editor.js is ready to work!')
         },

@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/react'
+import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 import { useEffect, useMemo } from 'react'
 
@@ -79,7 +80,9 @@ export default function Operation() {
         {(item) => {
           return (
             <TableRow key={item.id}>
-              <TableCell>{item.created_at}</TableCell>
+              <TableCell>
+                {dayjs(item.created_at).format('YYYY/MM/DD HH:mm:ss')}
+              </TableCell>
               <TableCell>{item.level}</TableCell>
               <TableCell>{item.message}</TableCell>
             </TableRow>

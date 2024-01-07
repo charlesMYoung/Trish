@@ -31,7 +31,7 @@ export function TitleInput({
 
   return (
     <div
-      className="prose prose-sm mx-auto sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl dark:prose-invert"
+      className="container prose prose-sm mx-auto sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl dark:prose-invert"
       ref={inputTitleRef}
     >
       <TitleInputTool
@@ -48,9 +48,16 @@ export function TitleInput({
         isReadOnly={readOnly}
         placeholder="无标题"
         classNames={{
-          input: ['bg-transparent', 'hover:bg-transparent', 'text-md', 'z-10'],
+          input: [
+            'bg-transparent',
+            'hover:bg-transparent',
+            'z-10',
+            'text-2xl',
+            'lg:text-6xl',
+          ],
           innerWrapper: ['bg-transparent', 'hover:bg-transparent'],
           inputWrapper: [
+            'px-0 ',
             'bg-transparent z-10',
             'border-none',
             'hover:bg-transparent',
