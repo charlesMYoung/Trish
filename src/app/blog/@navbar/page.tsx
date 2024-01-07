@@ -82,7 +82,7 @@ export default function AppNavbar() {
               className="w-full"
               as={NextLink}
               key={item.id}
-              href={`/blog/${item.id}`}
+              href={`/category/${item.id}`}
               color={item.id !== pathname.cate_id ? 'foreground' : undefined}
             >
               {item.name}

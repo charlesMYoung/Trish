@@ -66,3 +66,14 @@ export const GalleryList = [
     url: '/images/postbg.jpg',
   },
 ]
+
+export const TopMenus = [
+  {
+    name: 'Blog',
+    url: '/blog',
+  },
+  {
+    name: '联系',
+    url: '/contact',
+  },
+]

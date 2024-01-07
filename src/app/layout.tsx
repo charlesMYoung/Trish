@@ -11,14 +11,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  topMenu,
 }: {
   children: React.ReactNode
+  topMenu: React.ReactNode
 }) {
   return (
     <html lang="en">
       <body>
         <TRPCProvider>
-          <UIProviders>{children}</UIProviders>
+          <UIProviders>
+            {topMenu}
+            {children}
+          </UIProviders>
         </TRPCProvider>
       </body>
     </html>

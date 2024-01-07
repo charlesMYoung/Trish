@@ -141,10 +141,10 @@ export default function SideBarPage() {
 
   return (
     <motion.div
-      className="sticky left-0 top-0 box-border hidden h-full w-72 space-y-2
+      className="sticky left-0 top-0 box-border hidden h-full
      border-r-1 border-default-100 pl-4 md:flex md:w-72 lg:w-80"
     >
-      <ScrollShadow className="flex-1">
+      <ScrollShadow className="flex-1 space-y-2 ">
         <SidebarTop />
         {sidebars.map((sidebar) => {
           return (
@@ -152,76 +152,81 @@ export default function SideBarPage() {
               <MenuTitle onAdd={onAddHandle} id={sidebar.id}>
                 {sidebar.name}
               </MenuTitle>
-              {Array.isArray(sidebar.children) &&
-                sidebar.children.map((subSidebar) => {
-                  if (Array.isArray(subSidebar.children)) {
-                    return (
-                      <Collapse
-                        id={subSidebar.id}
-                        items={subSidebar.children?.map((child) => {
-                          return (
-                            <ArticleTitle
-                              onSidebarDel={() => {
-                                deleteArticleTitleById(subSidebar.id, child.id)
-                                delArticleById({
-                                  id: child.id,
-                                })
-                              }}
-                              isActive={child.id === articleId}
-                              key={child.id}
-                              href={child.href || ''}
-                            >
-                              {child.name || 'no title'}
-                            </ArticleTitle>
-                          )
-                        })}
-                        isActived={cateId === subSidebar.id}
-                        startContent={subSidebar.icon || ''}
-                        key={subSidebar.id}
-                        onCollapseChange={onCollapseChange}
-                        onHover={setHoverId}
-                        title={
-                          <div className="flex w-full items-center justify-between">
-                            <PopoverInput
-                              onPopoverInputChange={editMenu}
-                              onClose={() => setActiveId('')}
-                              id={subSidebar.id}
-                              key={subSidebar.id + 'PopoverInput'}
-                              name={subSidebar.name as string}
-                              activeId={activeId}
-                            ></PopoverInput>
+              <div className="space-y-3">
+                {Array.isArray(sidebar.children) &&
+                  sidebar.children.map((subSidebar) => {
+                    if (Array.isArray(subSidebar.children)) {
+                      return (
+                        <Collapse
+                          id={subSidebar.id}
+                          items={subSidebar.children?.map((child) => {
+                            return (
+                              <ArticleTitle
+                                onSidebarDel={() => {
+                                  deleteArticleTitleById(
+                                    subSidebar.id,
+                                    child.id
+                                  )
+                                  delArticleById({
+                                    id: child.id,
+                                  })
+                                }}
+                                isActive={child.id === articleId}
+                                key={child.id}
+                                href={child.href || ''}
+                              >
+                                {child.name || 'no title'}
+                              </ArticleTitle>
+                            )
+                          })}
+                          isActived={cateId === subSidebar.id}
+                          startContent={subSidebar.icon || ''}
+                          key={subSidebar.id}
+                          onCollapseChange={onCollapseChange}
+                          onHover={setHoverId}
+                          title={
+                            <div className="flex w-full items-center justify-between">
+                              <PopoverInput
+                                onPopoverInputChange={editMenu}
+                                onClose={() => setActiveId('')}
+                                id={subSidebar.id}
+                                key={subSidebar.id + 'PopoverInput'}
+                                name={subSidebar.name as string}
+                                activeId={activeId}
+                              ></PopoverInput>
 
-                            {hoverId === subSidebar.id ||
-                            showDropdownId === subSidebar.id ? (
-                              <div>
-                                <DropDownMenu
-                                  key={subSidebar.id + 'DropDownMenu'}
-                                  onOpenChange={setShowDropdownId}
-                                  id={subSidebar.id}
-                                  onAction={onDropdownHandle}
-                                ></DropDownMenu>
-                                <AddArticle
-                                  categoryId={subSidebar.id}
-                                  onAddArticle={onAddArticle}
-                                />
-                              </div>
-                            ) : null}
-                          </div>
-                        }
-                      ></Collapse>
+                              {hoverId === subSidebar.id ||
+                              showDropdownId === subSidebar.id ? (
+                                <div>
+                                  <DropDownMenu
+                                    key={subSidebar.id + 'DropDownMenu'}
+                                    onOpenChange={setShowDropdownId}
+                                    id={subSidebar.id}
+                                    onAction={onDropdownHandle}
+                                  ></DropDownMenu>
+                                  <AddArticle
+                                    categoryId={subSidebar.id}
+                                    onAddArticle={onAddArticle}
+                                  />
+                                </div>
+                              ) : null}
+                            </div>
+                          }
+                        ></Collapse>
+                      )
+                    }
+                    return (
+                      <SidebarItem
+                        isActive={pathName === subSidebar.href}
+                        key={subSidebar.id}
+                        href={subSidebar.href || ''}
+                        icon={subSidebar.icon}
+                      >
+                        {subSidebar.name}
+                      </SidebarItem>
                     )
-                  }
-                  return (
-                    <SidebarItem
-                      isActive={pathName === subSidebar.href}
-                      key={subSidebar.id}
-                      href={subSidebar.href || ''}
-                      icon={subSidebar.icon}
-                    >
-                      {subSidebar.name}
-                    </SidebarItem>
-                  )
-                })}
+                  })}
+              </div>
             </div>
           )
         })}
