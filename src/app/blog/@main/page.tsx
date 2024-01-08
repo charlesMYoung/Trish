@@ -69,7 +69,7 @@ export default function BlogPost() {
           groupYear.map(({ key, value }) => {
             return (
               <div key={key} className="relative flex">
-                <div className="text-stroke-2 absolute -left-6 -top-16 select-none text-9xl font-bold opacity-10">
+                <div className="text-stroke-2 absolute -left-6 -top-16 select-none text-9xl font-bold text-transparent opacity-10">
                   {key}
                 </div>
                 <div className="flex w-full flex-col space-y-8">
