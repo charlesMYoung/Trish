@@ -10,6 +10,8 @@ import { createSelectors } from './createSelectors'
 
 export interface SidebarState {
   sidebars: Sidebar[]
+  isShowBar: boolean
+  showBar: (isShow: boolean) => void
   initMenus: (menus: Category[]) => void
   insertMenu: (menu: Pick<Category, 'id' | 'name'>) => void
   insertArticleToCategory: (articleId: string, categoryId: string) => void
@@ -35,6 +37,11 @@ const sidebarState: StateCreator<
   ]
 > = (set) => ({
   sidebars: SideBarConfig,
+  isShowBar: false,
+  showBar: (isShow) =>
+    set((state) => {
+      state.isShowBar = isShow
+    }),
   initMenus: (categories: Category[]) =>
     set((state) => {
       state.sidebars = state.sidebars.map((item) => {

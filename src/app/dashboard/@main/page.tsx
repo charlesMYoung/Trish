@@ -13,7 +13,7 @@ export default function DashboardDefault() {
   return (
     <div className="mb-4">
       <div className="mb-4 text-large text-default-500">快速预览</div>
-      <div className="flex w-full flex-col space-x-4 md:flex-row">
+      <div className="flex w-full flex-col space-y-6 md:flex-row md:space-x-4 md:space-y-0">
         <InfoCard
           title="文章"
           icon={<FaFileAlt />}

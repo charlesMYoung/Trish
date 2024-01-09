@@ -45,6 +45,7 @@ export default function SideBarPage() {
     deleteArticleTitleById,
   } = useSidebarStore()
   const sidebars = useSidebarStore.use.sidebars()
+  const isShowBar = useSidebarStore.use.isShowBar()
 
   const { data: articles, mutate: getArticleByCateId } =
     trpc.getArticleByCateId.useMutation()
@@ -55,7 +56,7 @@ export default function SideBarPage() {
   const { mutate: deleteCategoryById } = trpc.deleteCategoryById.useMutation()
 
   const { run: updateCategoryDebounce } = useDebounceFn(updateCategory)
-  const { md } = useResponsive()
+  const { lg } = useResponsive()
 
   useEffect(() => {
     if (categoriesFromServer) {
@@ -141,10 +142,14 @@ export default function SideBarPage() {
 
   return (
     <motion.div
-      className="sticky left-0 top-0 box-border hidden h-full
-     border-r-1 border-default-100 pl-4 md:flex md:w-72 lg:w-80"
+      animate={{
+        opacity: isShowBar || lg ? '1' : '0',
+        width: isShowBar || lg ? '20rem' : '0px',
+      }}
+      className="sticky left-0 top-0 box-border flex
+     h-full border-r-1 border-default-100 pl-4"
     >
-      <ScrollShadow className="flex-1 space-y-2 ">
+      <ScrollShadow className="flex-1 space-y-2 pr-4">
         <SidebarTop />
         {sidebars.map((sidebar) => {
           return (

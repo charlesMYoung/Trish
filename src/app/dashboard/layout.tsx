@@ -1,7 +1,7 @@
 import { Toolbar } from '@/components'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
 import { getServerSession } from 'next-auth'
-import { NextAuthProvider } from './auth-provider'
+import { NextAuthProvider } from './provider/auth-provider'
 
 export default async function DashboardLayout({
   sidebar,
