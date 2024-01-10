@@ -10,6 +10,7 @@ import {
   Tabs,
 } from '@nextui-org/react'
 import { ChangeEventHandler, useState } from 'react'
+import { FaCloudUploadAlt, FaLink, FaUnsplash } from 'react-icons/fa'
 import { IoCloudUpload } from 'react-icons/io5'
 import { Upload } from '../upload-button/upload-button'
 import { BackgroundPanel } from './background-panel'
@@ -52,7 +53,36 @@ export const CoverModal = ({
       <ModalContent>
         <ModalBody className="flex w-full flex-col items-center">
           <Tabs aria-label="Options">
-            <Tab key="photos" title="通用">
+            <Tab
+              key="photos"
+              title={
+                <div className="flex items-center space-x-2">
+                  <FaUnsplash />
+                  <span>Unsplash</span>
+                </div>
+              }
+            >
+              <Input
+                size="sm"
+                className="w-full"
+                onChange={onLinkInputChange}
+                value={linkInput}
+                endContent={
+                  <Button
+                    size="sm"
+                    color="primary"
+                    onPress={() => {
+                      onCloseChange &&
+                        onCloseChange({
+                          key: CoverTabEnum.link,
+                          coverUrl: linkInput,
+                        })
+                    }}
+                  >
+                    搜索
+                  </Button>
+                }
+              ></Input>
               <BackgroundPanel
                 onChosen={(value) => {
                   onCloseChange &&
@@ -63,7 +93,15 @@ export const CoverModal = ({
                 }}
               />
             </Tab>
-            <Tab key="upload" title="上传">
+            <Tab
+              key="upload"
+              title={
+                <div className="flex items-center space-x-2">
+                  <FaCloudUploadAlt />
+                  <span>上传</span>
+                </div>
+              }
+            >
               <Upload
                 startContent={<IoCloudUpload></IoCloudUpload>}
                 onUploadImageSuccess={(coverUrl) => {
@@ -76,9 +114,22 @@ export const CoverModal = ({
               >
                 图片上传
               </Upload>
+              <div className="text-small text-default-300">
+                图片需小于1500像素
+              </div>
             </Tab>
-            <Tab key="link" title="链接">
+            <Tab
+              key="link"
+              title={
+                <div className="flex items-center space-x-2">
+                  <FaLink />
+                  <span>链接</span>
+                </div>
+              }
+            >
               <Input
+                size="sm"
+                className="w-full"
                 onChange={onLinkInputChange}
                 value={linkInput}
                 endContent={

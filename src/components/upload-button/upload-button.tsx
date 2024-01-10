@@ -53,9 +53,9 @@ export const Upload = (props: UploadButtonProps) => {
   }
 
   return (
-    <RcUpload {...uploadProps}>
+    <RcUpload {...uploadProps} className="flex items-center space-x-2">
       {props.startContent}
-      {props.children}
+      <span>{props.children}</span>
     </RcUpload>
   )
 }

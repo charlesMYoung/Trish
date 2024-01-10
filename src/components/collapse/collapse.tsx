@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/react'
 import { useHover } from 'ahooks'
 import { ReactNode, useRef, useState } from 'react'
 import { useCollapse } from 'react-collapsed'
-import { IoIosArrowBack } from 'react-icons/io'
+import { IoIosArrowForward } from 'react-icons/io'
 import { twMerge } from 'tailwind-merge'
 
 type CollapseProps = {
@@ -58,16 +58,15 @@ export const Collapse = ({
           },
         })}
       >
-        {title}
         <span
           data-open={isExpanded ? 'true' : 'false'}
           aria-hidden="true"
-          className="rotate-0 px-2 text-medium 
-                  text-default-400 transition-transform
-                data-[open=true]:-rotate-90 rtl:-rotate-180 rtl:data-[open=true]:-rotate-90"
+          className="rotate-0 text-medium text-default-400 transition-transform
+                data-[open=true]:rotate-90 rtl:-rotate-180 rtl:data-[open=true]:rotate-90"
         >
-          <IoIosArrowBack></IoIosArrowBack>
+          <IoIosArrowForward />
         </span>
+        {title}
       </Button>
       {Array.isArray(items) && items.length > 0 ? (
         <section
