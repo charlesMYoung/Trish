@@ -3,6 +3,7 @@ import { queryCoverByArticleId } from '@/server/db/prepared'
 import { article, image } from '@/server/db/schema'
 import { protectedProcedure, publicProcedure, router } from '@/server/trpc'
 import { and, count, eq } from 'drizzle-orm'
+import { createApi } from 'unsplash-js'
 import { z } from 'zod'
 
 export const ArticleRoute = router({
@@ -245,4 +246,18 @@ export const ArticleRoute = router({
         return {}
       })
     }),
+
+  getCoverList: protectedProcedure.query(() => {
+    const serverApi = createApi({
+      accessKey: process.env.UNSPLASH_ACCESS_KEY as string,
+    })
+    return serverApi.photos
+      .getRandom({
+        count: 30,
+      })
+      .then((resp) => resp.response)
+      .catch((error) => {
+        console.error('error', error)
+      })
+  }),
 })

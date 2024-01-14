@@ -52,6 +52,7 @@
     "rss": "^1.2.2",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.0.0",
+    "unsplash-js": "^7.0.19",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },

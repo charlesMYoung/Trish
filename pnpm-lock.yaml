@@ -119,6 +119,9 @@ dependencies:
   tailwind-merge:
     specifier: ^2.0.0
     version: 2.2.0
+  unsplash-js:
+    specifier: ^7.0.19
+    version: 7.0.19
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -7350,6 +7353,11 @@ packages:
   /universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
+    dev: false
+
+  /unsplash-js@7.0.19:
+    resolution: {integrity: sha512-j6qT2floy5Q2g2d939FJpwey1yw/GpQecFiSouyJtsHQPj3oqmqq3K4rI+GF8vU1zwGCT7ZwIGQd2dtCQLjYJw==}
+    engines: {node: '>=10'}
     dev: false
 
   /update-browserslist-db@1.0.13(browserslist@4.22.2):
