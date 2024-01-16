@@ -260,4 +260,74 @@ export const ArticleRoute = router({
         console.error('error', error)
       })
   }),
+
+  getHomeArticle: publicProcedure.mutation(() => {
+    return db.query.article.findFirst({
+      columns: {
+        id: true,
+        title: true,
+        content: true,
+        is_release: true,
+        created_at: true,
+        modified_at: true,
+      },
+      where: (article, { eq }) => eq(article.category_id, 'HOME'),
+    })
+  }),
+
+  upsertHomeArticleTitle: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+      })
+    )
+    .mutation(({ input: { title } }) => {
+      return db.transaction(async (tx) => {
+        const resp = await db
+          .select()
+          .from(article)
+          .where(eq(article.category_id, 'HOME'))
+          .catch(async (error) => {
+            console.error('error', error)
+            await tx.rollback()
+          })
+
+        if (resp && resp.length === 0) {
+          return db
+            .insert(article)
+            .values({
+              title,
+              category_id: 'HOME',
+            })
+            .returning({
+              title: article.title,
+            })
+        } else {
+          return db
+            .update(article)
+            .set({
+              title,
+            })
+            .where(eq(article.category_id, 'HOME'))
+            .returning({
+              title: article.title,
+            })
+        }
+      })
+    }),
+
+  updateHomeArticleContent: protectedProcedure
+    .input(
+      z.object({
+        content: z.string(),
+      })
+    )
+    .mutation(({ input: { content } }) => {
+      return db
+        .update(article)
+        .set({
+          content,
+        })
+        .where(eq(article.category_id, 'HOME'))
+    }),
 })

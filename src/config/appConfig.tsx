@@ -1,4 +1,5 @@
 import { Sidebar } from '@/types/sidebar'
+import { FiHome } from 'react-icons/fi'
 import { MdBrowserUpdated } from 'react-icons/md'
 import { PiReadCvLogoThin } from 'react-icons/pi'
 import { RiDashboard2Fill } from 'react-icons/ri'
@@ -9,6 +10,12 @@ export const SideBarConfig: Sidebar[] = [
     id: 'main',
     children: [
       {
+        name: '首页',
+        id: 'home',
+        icon: <FiHome />,
+        href: '/dashboard/home',
+      },
+      {
         name: '仪表盘',
         id: 'dashboard',
         icon: <RiDashboard2Fill />,
@@ -17,7 +24,7 @@ export const SideBarConfig: Sidebar[] = [
     ],
   },
   {
-    name: '分类',
+    name: 'Blog',
     id: 'category',
   },
   {

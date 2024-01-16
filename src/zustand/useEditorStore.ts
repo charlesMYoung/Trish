@@ -6,7 +6,7 @@ import { createSelectors } from './createSelectors'
 export interface EditorStoreProps {
   title: string
   cover: string
-  initEditor: (p: { title: string; cover: string }) => void
+  initEditor: (p: { title: string; cover?: string }) => void
   changeEditorTitle: (p: string) => void
   changeEditorCover: (p: string) => void
 }
@@ -24,7 +24,7 @@ const editorStore: StateCreator<
   initEditor: ({ title, cover }) =>
     set((state) => {
       state.title = title
-      state.cover = cover
+      state.cover = cover || ''
     }),
   changeEditorTitle: (title: string) =>
     set((state) => {

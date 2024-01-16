@@ -11,7 +11,7 @@ export type EditorProps = {
   defaultContent?: string
   title?: string
   readOnly?: boolean
-  coverUrl: string
+  coverUrl?: string
   articleId: string
   onTitle?: (title: string) => void
   onCover?: (coverUrl: string) => void
