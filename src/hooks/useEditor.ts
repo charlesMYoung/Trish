@@ -54,7 +54,7 @@ export const useEditor = ({
               headers: {
                 'X-ARTICLE-ID': id,
               },
-              endpoint: `http://localhost:3000/api/hyperLink`, // Your backend endpoint for url data fetching,
+              endpoint: `/api/hyperLink`, // Your backend endpoint for url data fetching,
             },
           },
           inlineCode: InlineCode,
@@ -64,7 +64,7 @@ export const useEditor = ({
             class: Image,
             config: {
               endpoints: {
-                byFile: `http://localhost:3000/api/image?type=CONTENT&id=${id}`, // Your backend file uploader endpoint
+                byFile: `/api/image?type=CONTENT&id=${id}`, // Your backend file uploader endpoint
               },
             },
           },
