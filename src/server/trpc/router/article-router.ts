@@ -261,6 +261,23 @@ export const ArticleRoute = router({
       })
   }),
 
+  mutationCoverList: protectedProcedure.mutation(() => {
+    const serverApi = createApi({
+      accessKey: process.env.UNSPLASH_ACCESS_KEY as string,
+    })
+    return serverApi.photos
+      .getRandom({
+        count: 30,
+      })
+      .then((resp) => {
+        console.log('resp===', resp)
+        return resp.response
+      })
+      .catch((error) => {
+        console.error('error', error)
+      })
+  }),
+
   getHomeArticle: publicProcedure.mutation(() => {
     return db.query.article.findFirst({
       columns: {

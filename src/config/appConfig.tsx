@@ -47,40 +47,9 @@ export const SideBarConfig: Sidebar[] = [
   },
 ]
 
-export const GalleryList = [
-  {
-    name: 'chat',
-    url: '/images/chat.jpg',
-  },
-  {
-    name: 'postbg',
-    url: '/images/postbg.jpg',
-  },
-  {
-    name: 'chat2',
-    url: '/images/chat.jpg',
-  },
-  {
-    name: 'postbg3',
-    url: '/images/postbg.jpg',
-  },
-  {
-    name: 'chat4',
-    url: '/images/chat.jpg',
-  },
-  {
-    name: 'postbg5',
-    url: '/images/postbg.jpg',
-  },
-]
-
 export const TopMenus = [
   {
     name: 'Blog',
     url: '/blog',
-  },
-  {
-    name: '联系',
-    url: '/contact',
   },
 ]

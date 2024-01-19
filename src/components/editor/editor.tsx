@@ -1,8 +1,7 @@
 'use client'
 
-import { GalleryList } from '@/config/appConfig'
 import { useEditor } from '@/hooks'
-import { rangeRadom } from '@/utils/common'
+import { trpc } from '@/utils/trpc-client'
 import { useDebounceFn } from 'ahooks'
 import { Cover } from '../cover/cover'
 import { TitleInput } from './titleInput'
@@ -32,6 +31,21 @@ const Editor = ({
     onContent && onContent(value)
   })
 
+  const { mutate } = trpc.mutationCoverList.useMutation({
+    onSuccess: (unsplashData) => {
+      console.log(unsplashData)
+      if (unsplashData) {
+        const [firstData] = Array.isArray(unsplashData) ? unsplashData : []
+        if (firstData && firstData.urls) {
+          onCover && onCover(firstData.urls.regular)
+        }
+      }
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
+
   const { editorRef } = useEditor({
     readOnly: readOnly,
     id: articleId,
@@ -41,24 +55,17 @@ const Editor = ({
     defaultContent,
   })
 
-  const onAddCoverPressHandle = () => {
-    const maxLength = GalleryList.length
-    const maxRadomIndex = rangeRadom(maxLength) - 1
-    const gallery = GalleryList[maxRadomIndex]
-    if (gallery && gallery.url) {
-      onCover && onCover(gallery.url)
-    }
-  }
-
   return (
     <>
-      <Cover onChange={onCover} value={coverUrl} />
+      <Cover onChange={onCover} value={coverUrl} readOnly={readOnly} />
       <TitleInput
         readOnly={readOnly}
         value={title}
         onChange={onTitle}
         coverUrl={coverUrl}
-        onAddCoverPress={onAddCoverPressHandle}
+        onAddCoverPress={() => {
+          mutate()
+        }}
       />
       <div
         tabIndex={0}

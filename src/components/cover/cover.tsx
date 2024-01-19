@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  Image,
-  useDisclosure,
-} from '@nextui-org/react'
+import { Button, Card, Image, useDisclosure } from '@nextui-org/react'
 import { useControllableValue, useHover } from 'ahooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
@@ -17,8 +11,9 @@ import { CoverCloseParam, CoverModal } from './modal-cover'
 export type CoverProps = {
   value?: string
   onChange?: (value: string) => void
+  readOnly?: boolean
 }
-export const Cover = ({ value, onChange }: CoverProps) => {
+export const Cover = ({ value, onChange, readOnly }: CoverProps) => {
   const coverModalRef = useRef(null)
   const isCoverModalHovering = useHover(coverModalRef)
   const [coverUrl, setCoverUrl] = useControllableValue<string>({
@@ -61,26 +56,25 @@ export const Cover = ({ value, onChange }: CoverProps) => {
             className="z-0 h-full w-full object-cover"
             alt="cover_image"
           />
-          {isCoverModalHovering ? (
+          {!readOnly && isCoverModalHovering ? (
             <div className="absolute right-3 top-3 z-20 flex space-x-2">
-              <ButtonGroup>
-                <Button
-                  isIconOnly
-                  variant="ghost"
-                  onPress={onOpen}
-                  color="primary"
-                >
-                  <TbArrowsExchange />
-                </Button>
-                <Button
-                  isIconOnly
-                  variant="ghost"
-                  color="primary"
-                  onPress={onRemoveCoverHandle}
-                >
-                  <FaTrash />
-                </Button>
-              </ButtonGroup>
+              <Button
+                isIconOnly
+                variant="light"
+                onPress={onOpen}
+                className="rounded-full"
+              >
+                <TbArrowsExchange />
+              </Button>
+              <Button
+                isIconOnly
+                color="danger"
+                variant="light"
+                onPress={onRemoveCoverHandle}
+                className="rounded-full"
+              >
+                <FaTrash />
+              </Button>
             </div>
           ) : (
             []
