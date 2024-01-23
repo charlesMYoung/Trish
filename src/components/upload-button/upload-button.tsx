@@ -32,7 +32,7 @@ export const Upload = (props: UploadButtonProps) => {
       }
       if (filename) formData.append(filename, file)
       try {
-        const res = await fetch(`/sample&type=cover`, {
+        const res = await fetch(`r`, {
           method: 'POST',
           body: formData,
           headers: headers,

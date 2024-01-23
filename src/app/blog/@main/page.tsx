@@ -7,7 +7,6 @@ import { trpc } from '@/utils/trpc-client'
 import { Link } from '@nextui-org/react'
 import dayjs from 'dayjs'
 import NextLink from 'next/link'
-import { useParams } from 'next/navigation'
 import { useMemo } from 'react'
 
 export default function BlogPost() {
@@ -30,8 +29,6 @@ export default function BlogPost() {
       }
     },
   })
-  const pathname = useParams<{ cate_id: string }>()
-
   const groupYear = useMemo(() => {
     if (Array.isArray(data) && data.length > 0) {
       const result = data.map((item) => {

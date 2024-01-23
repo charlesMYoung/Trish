@@ -10,12 +10,10 @@ import {
 import { Button, Link } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import NextLink from 'next/link'
-import { usePathname } from 'next/navigation'
 import { MdLightMode, MdNightlight, MdRssFeed } from 'react-icons/md'
 
 export default function TopMenu() {
   const { theme, setTheme } = useTheme()
-  const pathName = usePathname()
 
   const handleSwitchLight = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')

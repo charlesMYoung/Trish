@@ -270,7 +270,6 @@ export const ArticleRoute = router({
         count: 30,
       })
       .then((resp) => {
-        console.log('resp===', resp)
         return resp.response
       })
       .catch((error) => {

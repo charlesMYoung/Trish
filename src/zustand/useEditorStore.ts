@@ -43,7 +43,7 @@ export const useEditorStore = createSelectors(
   create<EditorStoreProps>()(
     immer(
       devtools(subscribeWithSelector(editorStore), {
-        enabled: true,
+        enabled: process.env.NODE_ENV === 'development',
         name: 'sidebar-store',
       })
     )

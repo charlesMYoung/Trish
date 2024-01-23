@@ -3,7 +3,13 @@ import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import { Pool } from 'pg'
 import * as schema from './schema'
 
-const { DB_HOST, DB_PORT = 0, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env
+const {
+  DB_HOST = '',
+  DB_PORT = 0,
+  DB_USER,
+  DB_PASSWORD = '',
+  DB_DATABASE = '',
+} = process.env
 
 const pool = new Pool({
   user: DB_USER,

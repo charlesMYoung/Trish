@@ -6,6 +6,8 @@ async function getHomeArticle() {
   const data = await trpc.getHomeArticle()
   return data
 }
+//HACK: force-dynamic to force re-generate metadata
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   // fetch data

@@ -187,7 +187,7 @@ export const useSidebarStore = createSelectors(
   create<SidebarState>()(
     immer(
       devtools(subscribeWithSelector(sidebarState), {
-        enabled: true,
+        enabled: process.env.NODE_ENV === 'development',
         name: 'sidebar-store',
       })
     )
