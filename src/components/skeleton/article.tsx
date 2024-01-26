@@ -1,17 +1,17 @@
 'use client'
 
-import { Card, Skeleton } from '@nextui-org/react'
+import { Skeleton } from '@nextui-org/react'
 
 type CardSkeleton = {
   count: number
 }
 
-export const CardSkeleton = ({ count }: CardSkeleton) => {
-  return Array(10)
+export const ListSkeleton = ({ count = 10 }: CardSkeleton) => {
+  return Array(count)
     .fill(0)
     .map((_, index) => {
       return (
-        <Card className="space-y-5 p-4" radius="lg" key={index}>
+        <div className="space-y-5 p-4" key={index}>
           <Skeleton className="rounded-lg">
             <div className="h-24 rounded-lg bg-default-300"></div>
           </Skeleton>
@@ -26,7 +26,7 @@ export const CardSkeleton = ({ count }: CardSkeleton) => {
               <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
             </Skeleton>
           </div>
-        </Card>
+        </div>
       )
     })
 }

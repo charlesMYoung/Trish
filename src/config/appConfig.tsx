@@ -1,5 +1,6 @@
 import { Sidebar } from '@/types/sidebar'
-import { MdOutlineTipsAndUpdates } from 'react-icons/md'
+import { FiHome } from 'react-icons/fi'
+import { MdBrowserUpdated } from 'react-icons/md'
 import { PiReadCvLogoThin } from 'react-icons/pi'
 import { RiDashboard2Fill } from 'react-icons/ri'
 
@@ -9,6 +10,12 @@ export const SideBarConfig: Sidebar[] = [
     id: 'main',
     children: [
       {
+        name: '首页',
+        id: 'home',
+        icon: <FiHome />,
+        href: '/dashboard/home',
+      },
+      {
         name: '仪表盘',
         id: 'dashboard',
         icon: <RiDashboard2Fill />,
@@ -17,7 +24,7 @@ export const SideBarConfig: Sidebar[] = [
     ],
   },
   {
-    name: '分类',
+    name: 'Blog',
     id: 'category',
   },
   {
@@ -33,36 +40,16 @@ export const SideBarConfig: Sidebar[] = [
       {
         name: '系统更新',
         id: 'update',
-        icon: <MdOutlineTipsAndUpdates />,
+        icon: <MdBrowserUpdated />,
         href: '/dashboard/update',
       },
     ],
   },
 ]
 
-export const GalleryList = [
+export const TopMenus = [
   {
-    name: 'chat',
-    url: '/images/chat.jpg',
-  },
-  {
-    name: 'postbg',
-    url: '/images/postbg.jpg',
-  },
-  {
-    name: 'chat2',
-    url: '/images/chat.jpg',
-  },
-  {
-    name: 'postbg3',
-    url: '/images/postbg.jpg',
-  },
-  {
-    name: 'chat4',
-    url: '/images/chat.jpg',
-  },
-  {
-    name: 'postbg5',
-    url: '/images/postbg.jpg',
+    name: 'Blog',
+    url: '/blog',
   },
 ]

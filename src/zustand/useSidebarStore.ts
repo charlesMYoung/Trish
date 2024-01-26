@@ -1,5 +1,5 @@
 import { SideBarConfig } from '@/config/appConfig'
-import { Article, Category } from '@/db/schema'
+import { Article, Category } from '@/server/db/schema'
 import { MenuType } from '@/types/Common'
 import { Sidebar } from '@/types/sidebar'
 import type {} from '@redux-devtools/extension' // required for devtools typing
@@ -10,6 +10,8 @@ import { createSelectors } from './createSelectors'
 
 export interface SidebarState {
   sidebars: Sidebar[]
+  isShowBar: boolean
+  showBar: (isShow: boolean) => void
   initMenus: (menus: Category[]) => void
   insertMenu: (menu: Pick<Category, 'id' | 'name'>) => void
   insertArticleToCategory: (articleId: string, categoryId: string) => void
@@ -35,6 +37,11 @@ const sidebarState: StateCreator<
   ]
 > = (set) => ({
   sidebars: SideBarConfig,
+  isShowBar: false,
+  showBar: (isShow) =>
+    set((state) => {
+      state.isShowBar = isShow
+    }),
   initMenus: (categories: Category[]) =>
     set((state) => {
       state.sidebars = state.sidebars.map((item) => {
@@ -180,7 +187,7 @@ export const useSidebarStore = createSelectors(
   create<SidebarState>()(
     immer(
       devtools(subscribeWithSelector(sidebarState), {
-        enabled: true,
+        enabled: process.env.NODE_ENV === 'development',
         name: 'sidebar-store',
       })
     )

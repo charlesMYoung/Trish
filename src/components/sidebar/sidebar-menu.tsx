@@ -12,7 +12,7 @@ export function MenuTitle({
   onAdd: () => void
 }) {
   return (
-    <div className="flex items-center justify-between text-sm">
+    <div className="mb-4 flex items-center justify-between text-sm">
       {children}
       {id === 'category' && (
         <Button isIconOnly size="sm" variant="flat" onPress={onAdd}>

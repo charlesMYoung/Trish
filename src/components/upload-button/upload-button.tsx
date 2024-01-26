@@ -32,7 +32,7 @@ export const Upload = (props: UploadButtonProps) => {
       }
       if (filename) formData.append(filename, file)
       try {
-        const res = await fetch(`/sample&type=cover`, {
+        const res = await fetch(`r`, {
           method: 'POST',
           body: formData,
           headers: headers,
@@ -53,9 +53,9 @@ export const Upload = (props: UploadButtonProps) => {
   }
 
   return (
-    <RcUpload {...uploadProps}>
+    <RcUpload {...uploadProps} className="flex items-center space-x-2">
       {props.startContent}
-      {props.children}
+      <span>{props.children}</span>
     </RcUpload>
   )
 }

@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'smileysans';
+  src:
+    url('/fonts/SmileySans-Oblique.otf.woff2') format('woff2'),
+    url('/fonts/SmileySans-Oblique.ttf.woff2') format('woff2');
+}
+
 .ce-toolbar__content {
   @apply !max-w-none;
 }

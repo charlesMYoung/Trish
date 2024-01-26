@@ -1,121 +1,79 @@
 'use client'
 
-import Checklist from '@editorjs/checklist'
-import CodeTool from '@editorjs/code'
-import EditorJS, { OutputBlockData } from '@editorjs/editorjs'
-import Header from '@editorjs/header'
-import Image from '@editorjs/image'
-import InlineCode from '@editorjs/inline-code'
-import LinkTool from '@editorjs/link'
-import List from '@editorjs/list'
-import Table from '@editorjs/table'
+import { useEditor } from '@/hooks'
+import { trpc } from '@/utils/trpc-client'
 import { useDebounceFn } from 'ahooks'
-import { useEffect, useRef } from 'react'
-import { EditorCover } from './editor-cover'
+import { Cover } from '../cover/cover'
+import { TitleInput } from './titleInput'
 
-export type TipTapEditorProps = {
+export type EditorProps = {
   defaultContent?: string
-  title: string
-  coverUrl: string
+  title?: string
+  readOnly?: boolean
+  coverUrl?: string
   articleId: string
-  onTitle: (title: string) => void
-  onCover: (coverUrl: string) => void
-  onContent: (content: string) => void
+  onTitle?: (title: string) => void
+  onCover?: (coverUrl: string) => void
+  onContent?: (content: string) => void
 }
 
-export const Editor = ({
+const Editor = ({
   defaultContent = '',
-  title = '',
-  coverUrl = '',
   articleId,
+  coverUrl,
+  title,
+  readOnly = false,
   onTitle,
   onCover,
   onContent,
-}: TipTapEditorProps) => {
-  const editor = useRef<EditorJS | null>(null)
-  const editorRef = useRef<HTMLDivElement | null>(null)
-
-  const toJSON = (object: OutputBlockData[]) => {
-    return JSON.stringify(object)
-  }
-
-  const { run: onEditHandle } = useDebounceFn(async () => {
-    const data = await editor?.current?.save()
-    onContent(toJSON(data?.blocks || []))
-    console.log('editor data23', data?.blocks)
+}: EditorProps) => {
+  const { run: onEditHandle } = useDebounceFn(async (value) => {
+    onContent && onContent(value)
   })
 
-  const jsonContent: (j: string) => OutputBlockData[] = (jsonStr) => {
-    try {
-      return JSON.parse(jsonStr)
-    } catch (e) {
-      console.trace('[jsonContent] error', jsonContent)
-      return [] as OutputBlockData[]
-    }
-  }
-
-  useEffect(() => {
-    if (!editor.current) {
-      editor.current = new EditorJS({
-        data: { blocks: jsonContent(defaultContent) },
-        holder: editorRef.current as HTMLDivElement,
-        tools: {
-          header: Header,
-          list: List,
-          checklist: {
-            class: Checklist,
-            inlineToolbar: true,
-          },
-          linkTool: {
-            class: LinkTool,
-            config: {
-              headers: {
-                'X-ARTICLE-ID': articleId,
-              },
-              endpoint: `http://localhost:3000/api/hyperLink`, // Your backend endpoint for url data fetching,
-            },
-          },
-          inlineCode: InlineCode,
-          code: CodeTool,
-          table: Table,
-          image: {
-            class: Image,
-            config: {
-              endpoints: {
-                byFile: `http://localhost:3000/api/image?type=CONTENT&id=${articleId}`, // Your backend file uploader endpoint
-              },
-            },
-          },
-        },
-        placeholder: '请输入...',
-        onReady: () => {
-          console.log('Editor.js is ready to work!')
-        },
-        onChange: () => {
-          onEditHandle()
-        },
-      })
-    }
-    return () => {
-      if (editor.current && editor.current.destroy) {
-        editor.current.destroy()
+  const { mutate } = trpc.mutationCoverList.useMutation({
+    onSuccess: (unsplashData) => {
+      console.log(unsplashData)
+      if (unsplashData) {
+        const [firstData] = Array.isArray(unsplashData) ? unsplashData : []
+        if (firstData && firstData.urls) {
+          onCover && onCover(firstData.urls.regular)
+        }
       }
-    }
-  }, [])
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
+
+  const { editorRef } = useEditor({
+    readOnly: readOnly,
+    id: articleId,
+    onChange: (content) => {
+      onEditHandle(content)
+    },
+    defaultContent,
+  })
 
   return (
     <>
-      <EditorCover
-        titleValue={title}
-        coverValue={coverUrl}
-        onTitleChange={onTitle}
-        onCoverChange={onCover}
-      ></EditorCover>
+      <Cover onChange={onCover} value={coverUrl} readOnly={readOnly} />
+      <TitleInput
+        readOnly={readOnly}
+        value={title}
+        onChange={onTitle}
+        coverUrl={coverUrl}
+        onAddCoverPress={() => {
+          mutate()
+        }}
+      />
       <div
         tabIndex={0}
         ref={editorRef}
-        className="dark-mode prose prose-sm mx-auto dark:prose-invert sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl focus:outline-none"
+        className="dark-mode container prose prose-sm mx-auto sm:prose
+        lg:prose-lg xl:prose-xl 2xl:prose-2xl dark:prose-invert focus:outline-none"
       ></div>
     </>
   )
 }
+export default Editor

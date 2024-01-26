@@ -19,22 +19,22 @@ export const InfoCard = ({
   valueClass,
 }: InfoCardProps) => {
   return (
-    <Card>
+    <Card className="w-full flex-initial">
       <CardHeader className="absolute top-1 z-10 h-full flex-col !items-start">
-        <div className="leading-1 flex items-center text-2xl font-bold uppercase text-zinc-50">
+        <div className="leading-1 flex items-center text-5xl font-bold uppercase text-zinc-50  md:text-3xl">
           {icon} <span className="ml-2">{title}</span>
         </div>
         <div
           className={twMerge(
             'text-blue-300',
-            'flex w-full flex-1 items-end justify-end text-6xl font-medium',
+            'flex w-full flex-1 items-end justify-end text-9xl font-medium md:text-5xl',
             valueClass
           )}
         >
           {value}
         </div>
       </CardHeader>
-      <div className="aspect-video w-72">
+      <div className="aspect-video">
         <Image
           fill
           src={bgImg}
