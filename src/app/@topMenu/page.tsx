@@ -25,7 +25,7 @@ export default function TopMenu() {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit">ACME</p>
+        <p className="font-bold text-inherit">Aiden.Young</p>
       </NavbarBrand>
       <NavbarContent justify="end">
         {TopMenus?.map((menu) => {
