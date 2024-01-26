@@ -21,6 +21,8 @@ const pool = new Pool({
 const db = drizzle(pool, { schema, logger: false })
 await migrate(db, {
   migrationsFolder: 'drizzle',
+}).catch((err: Error) => {
+  console.error(err)
 })
 
 export { db }
