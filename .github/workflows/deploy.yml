@@ -24,4 +24,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: yy921010/trish:latest,yy921010/trish:0.0.1
+          tags: yy921010/trish:latest,yy921010/trish:0.0.2
