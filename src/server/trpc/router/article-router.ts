@@ -195,6 +195,22 @@ export const ArticleRoute = router({
       .then((resp) => resp[0].value)
   }),
 
+  updateArticleCoverRelease: protectedProcedure
+    .input(
+      z.object({
+        articleId: z.string(),
+        isRelease: z.boolean(),
+      })
+    )
+    .mutation(async ({ input: { articleId, isRelease } }) => {
+      return db
+        .update(article)
+        .set({
+          is_release: isRelease,
+        })
+        .where(eq(article.id, articleId))
+    }),
+
   updateArticleCover: protectedProcedure
     .input(
       z.object({

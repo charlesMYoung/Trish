@@ -1,4 +1,3 @@
-import { Toolbar } from '@/components'
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
 import { getServerSession } from 'next-auth'
 import { NextAuthProvider } from './provider/auth-provider'
@@ -18,10 +17,9 @@ export default async function DashboardLayout({
     <NextAuthProvider>
       {session && session.user ? (
         <section className="flex h-screen flex-col">
-          <Toolbar />
           <ScrollShadow className="flex flex-1">
             {sidebar}
-            <main className="mt-4 box-border flex-1 p-4">{main}</main>
+            <main className="box-border flex-1 px-4">{main}</main>
           </ScrollShadow>
         </section>
       ) : (
