@@ -28,7 +28,7 @@ export default function ArticlePage({
   const route = useRouter()
 
   const { mutate: updateArticleCoverRelease } =
-    trpc.updateArticleCoverRelease.useMutation()
+    trpc.updateArticleRelease.useMutation()
 
   const {
     data: currentArticle,
