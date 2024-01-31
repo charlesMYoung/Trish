@@ -29,7 +29,7 @@ export default function TopMenu() {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit" onClick={backHome}>
+        <p className="cursor-pointer font-bold text-inherit" onClick={backHome}>
           Aiden.Young
         </p>
       </NavbarBrand>
