@@ -63,7 +63,7 @@ dependencies:
     specifier: ^3.7.8
     version: 3.7.8(react@18.2.0)
   clsx:
-    specifier: ^2.0.0
+    specifier: ^2.1.0
     version: 2.1.0
   dayjs:
     specifier: ^1.11.10
@@ -120,7 +120,7 @@ dependencies:
     specifier: ^2.2.1
     version: 2.2.1
   tailwind-merge:
-    specifier: ^2.0.0
+    specifier: ^2.2.0
     version: 2.2.0
   unsplash-js:
     specifier: ^7.0.19

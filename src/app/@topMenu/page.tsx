@@ -19,9 +19,6 @@ export default function TopMenu() {
   const handleSwitchLight = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
-
-  const handleRss = () => {}
-
   const backHome = () => {
     route.push('/')
   }
@@ -49,13 +46,7 @@ export default function TopMenu() {
           </Button>
         </NavbarItem>
         <NavbarItem className="text-default-400 lg:flex">
-          <Button
-            isIconOnly
-            onPress={handleRss}
-            variant="light"
-            as={NextLink}
-            href="/feed.xml"
-          >
+          <Button isIconOnly variant="light" as={NextLink} href="/feed.xml">
             <MdRssFeed></MdRssFeed>
           </Button>
         </NavbarItem>
