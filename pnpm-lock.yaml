@@ -166,6 +166,9 @@ devDependencies:
   eslint-config-next:
     specifier: ^14.0.4
     version: 14.1.0(eslint@8.56.0)(typescript@5.3.3)
+  eslint-plugin-oxlint:
+    specifier: ^0.2.3
+    version: 0.2.3
   oxlint:
     specifier: ^0.2.8
     version: 0.2.8
@@ -4627,6 +4630,10 @@ packages:
       minimatch: 3.1.2
       object.entries: 1.1.7
       object.fromentries: 2.0.7
+    dev: true
+
+  /eslint-plugin-oxlint@0.2.3:
+    resolution: {integrity: sha512-Grdd+CmeyDxJAar251bh4n9CYZh/3uc0wIc7rrtaRgq7wFibM2oikpzGvA5QDM7/Yvnw/brajWGbIJlLK7pBGA==}
     dev: true
 
   /eslint-plugin-react-hooks@4.6.0(eslint@8.56.0):

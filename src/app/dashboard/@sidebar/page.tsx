@@ -19,8 +19,6 @@ import { SidebarTop } from '~/components/sidebar/sidebar-top'
 import { useSidebarStore } from '~/hooks'
 import { type Category } from '~/server/db/schema'
 import { api } from '~/trpc/react'
-import { MenuType } from '~/types/common'
-import { type MenuParam } from '~/types/sidebar'
 import { diffChildren } from '~/utils/sidebar'
 
 export default function SideBarPage() {
@@ -57,6 +55,7 @@ export default function SideBarPage() {
   const { mutate: deleteCategoryById } =
     api.category.deleteCategoryById.useMutation()
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { run: updateCategoryDebounce } = useDebounceFn(updateCategory)
   const { lg } = useResponsive()
 
@@ -64,14 +63,14 @@ export default function SideBarPage() {
     if (categoriesFromServer) {
       initMenus(categoriesFromServer)
     }
-  }, [categoriesFromServer])
+  }, [categoriesFromServer, initMenus])
 
   useEffect(() => {
-    const [article] = articles || []
+    const [article] = articles ?? []
     if (article) {
       insertArticleToCategoryFromServe(
-        articles || [],
-        article.category_id || ''
+        articles ?? [],
+        article.category_id ?? ''
       )
     }
   }, [articles])
@@ -81,24 +80,25 @@ export default function SideBarPage() {
       (state) => state.sidebars,
       (curSidebars, preSidebars) => {
         const { children: curChildren = [] } =
-          curSidebars.find((cur) => cur.id === MenuType.CATEGORY) || {}
+          curSidebars.find((cur) => cur.id === 'category') ?? {}
         const { children: preChildren = [] } =
-          preSidebars.find((cur) => cur.id === MenuType.CATEGORY) || {}
+          preSidebars.find((cur) => cur.id === 'category') ?? {}
         const { add, del, modi } = diffChildren(curChildren, preChildren)
         if (Array.isArray(add) && add.length > 0 && add.length === 1) {
-          //@ts-ignore
-          const [{ id, name = '' }] = add  // Add type assertion here
-          insertCategory({
-            name: name || '',
-            id,
-          })
+          const [firstIndex] = add
+          if (firstIndex) {
+            insertCategory({
+              name: firstIndex.name ?? '',
+              id: firstIndex.id,
+            })
+          }
         }
         if (Array.isArray(modi) && modi.length > 0) {
-          //@ts-ignore
-          const [{ id, name = '' }] = modi  // Add type assertion here
+          const [firstIndex] = modi
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           updateCategoryDebounce({
-            name: name || '',
-            id,
+            name: firstIndex?.name ?? '',
+            id: firstIndex?.id,
           })
         }
         if (del.length > 0) {
@@ -182,14 +182,14 @@ export default function SideBarPage() {
                                 }}
                                 isActive={child.id === articleId}
                                 key={child.id}
-                                href={child.href || ''}
+                                href={child.href ?? ''}
                               >
-                                {child.name || 'no title'}
+                                {child.name ?? 'no title'}
                               </ArticleTitle>
                             )
                           })}
                           isActived={cateId === subSidebar.id}
-                          startContent={subSidebar.icon || ''}
+                          startContent={subSidebar.icon ?? ''}
                           key={subSidebar.id}
                           onCollapseChange={onCollapseChange}
                           onHover={setHoverId}
@@ -228,7 +228,7 @@ export default function SideBarPage() {
                       <SidebarItem
                         isActive={pathName === subSidebar.href}
                         key={subSidebar.id}
-                        href={subSidebar.href || ''}
+                        href={subSidebar.href ?? ''}
                         icon={subSidebar.icon}
                       >
                         {subSidebar.name}

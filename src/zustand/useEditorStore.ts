@@ -1,4 +1,4 @@
-import { type StateCreator, create } from 'zustand'
+import { create, type StateCreator } from 'zustand'
 import { devtools, subscribeWithSelector } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { createSelectors } from './createSelectors'
@@ -24,7 +24,7 @@ const editorStore: StateCreator<
   initEditor: ({ title, cover }) =>
     set((state) => {
       state.title = title
-      state.cover = cover || ''
+      state.cover = cover ?? ''
     }),
   changeEditorTitle: (title: string) =>
     set((state) => {

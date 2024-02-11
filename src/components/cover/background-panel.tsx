@@ -34,40 +34,39 @@ export const BackgroundPanel = ({ onChosen }: BackgroundProps) => {
   }, [unsplashData])
   return (
     <div className="grid grid-cols-2 md:grid-cols-4">
-      {showUnsplash &&
-        showUnsplash.map((item) => {
-          return (
-            <Card
-              className="m-2 aspect-video w-40 cursor-pointer"
-              key={item.user}
-              isFooterBlurred
-            >
-              <Image
-                onClick={() => {
-                  onChosenHandle({
-                    name: item.user,
-                    url: item.url,
-                  })
-                }}
-                src={item.thumb}
-                alt={item.thumb}
-                fill
-                className="z-0 h-full w-full object-cover"
-              />
-              <CardFooter className="absolute bottom-0 z-10 justify-between border-t-1 border-zinc-100/50 bg-white/30">
-                <div>
-                  <Link
-                    className="text-tiny text-black"
-                    href={item.origin}
-                    size="sm"
-                  >
-                    {item.user}
-                  </Link>
-                </div>
-              </CardFooter>
-            </Card>
-          )
-        })}
+      {showUnsplash?.map((item) => {
+        return (
+          <Card
+            className="m-2 aspect-video w-40 cursor-pointer"
+            key={item.user}
+            isFooterBlurred
+          >
+            <Image
+              onClick={() => {
+                onChosenHandle({
+                  name: item.user,
+                  url: item.url,
+                })
+              }}
+              src={item.thumb}
+              alt={item.thumb}
+              fill
+              className="z-0 h-full w-full object-cover"
+            />
+            <CardFooter className="absolute bottom-0 z-10 justify-between border-t-1 border-zinc-100/50 bg-white/30">
+              <div>
+                <Link
+                  className="text-tiny text-black"
+                  href={item.origin}
+                  size="sm"
+                >
+                  {item.user}
+                </Link>
+              </div>
+            </CardFooter>
+          </Card>
+        )
+      })}
     </div>
   )
 }

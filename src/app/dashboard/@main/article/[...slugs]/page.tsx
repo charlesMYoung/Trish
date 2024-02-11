@@ -1,15 +1,15 @@
 'use client'
 
-import Editor from '~/components/editor/editor'
-import { useSidebarStore } from '~/hooks'
-import { useEditorStore } from '~/zustand'
 import { Button, Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { MdViewCozy } from 'react-icons/md'
 import { shallow } from 'zustand/shallow'
+import Editor from '~/components/editor/editor'
+import { useSidebarStore } from '~/hooks'
 import { api } from '~/trpc/react'
+import { useEditorStore } from '~/zustand'
 
 export default function ArticlePage({
   params,
@@ -17,18 +17,16 @@ export default function ArticlePage({
   params: { slugs: string[] }
 }) {
   const [cateId, articleId] = params.slugs || []
+  const route = useRouter()
 
-  if(!cateId || !articleId){
-    return <>数据错误</>
-  }
   const title = useEditorStore.use.title()
   const cover = useEditorStore.use.cover()
   const changeTitle = useEditorStore.use.changeEditorTitle()
   const changeEditorCover = useEditorStore.use.changeEditorCover()
   const updateArticleTitleById = useSidebarStore.use.updateArticleTitleById()
   const initEditor = useEditorStore.use.initEditor()
-  const { mutate: updateArticleCover } = api.article.updateArticleCover.useMutation({})
-  const route = useRouter()
+  const { mutate: updateArticleCover } =
+    api.article.updateArticleCover.useMutation({})
 
   const {
     data: currentArticle,
@@ -37,25 +35,32 @@ export default function ArticlePage({
   } = api.article.getArticleByCateIdAndId.useMutation({
     onSuccess(data) {
       initEditor({
-        title: data?.title || '',
-        cover: data?.images.find((item) => item.type === 'COVER')?.url || '',
+        title: data?.title ?? '',
+        cover: data?.images.find((item) => item.type === 'COVER')?.url ?? '',
       })
     },
   })
 
   const { mutate: updateTitleByTitleMutate } =
-  api.article.updateArticleTitleByTitle.useMutation()
+    api.article.updateArticleTitleByTitle.useMutation()
 
   const { mutate: updateArticleContent } =
-  api.article.updateArticleContent.useMutation({})
+    api.article.updateArticleContent.useMutation({})
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { run: updateArticleTitleByTitleDebounce } = useDebounceFn(
     updateTitleByTitleMutate
   )
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { run: updateArticleContentDebounce } =
     useDebounceFn(updateArticleContent)
 
+  if (!cateId || !articleId) {
+    return <>数据错误</>
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getArticleByCateIdAndId({
       id: articleId || '',
@@ -66,6 +71,7 @@ export default function ArticlePage({
       (state) => state.title,
       (curSidebars, preSidebars) => {
         if (curSidebars !== preSidebars) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           updateArticleTitleByTitleDebounce({
             title: curSidebars,
             id: articleId,
@@ -101,6 +107,7 @@ export default function ArticlePage({
   }, [])
 
   const onContentHandle = (content: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     updateArticleContentDebounce({
       content,
       id: articleId,
@@ -130,7 +137,7 @@ export default function ArticlePage({
         onCover={changeEditorCover}
         coverUrl={cover}
         title={title}
-        defaultContent={currentArticle?.content || ''}
+        defaultContent={currentArticle?.content ?? ''}
       ></Editor>
       <Button
         variant="shadow"

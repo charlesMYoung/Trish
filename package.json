@@ -9,8 +9,7 @@
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start",
-    "lintox": "oxlint --fix"
+    "start": "next start"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.6",

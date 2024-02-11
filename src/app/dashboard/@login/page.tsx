@@ -10,11 +10,15 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import { type BuiltInProviderType } from 'next-auth/providers/index'
-import { type ClientSafeProvider, type LiteralUnion, signIn } from 'next-auth/react'
+import {
+  signIn,
+  type ClientSafeProvider,
+  type LiteralUnion,
+} from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
-import AuthProvider from './auth-provider'
 import { api } from '~/trpc/react'
+import AuthProvider from './auth-provider'
 
 export default function LoginModal() {
   const { onOpenChange } = useDisclosure()
@@ -24,13 +28,13 @@ export default function LoginModal() {
   const { mutate: insertLogMutate } = api.log.insertLog.useMutation()
 
   useEffect(() => {
-    AuthProvider().then((p) => {
+    void AuthProvider().then((p) => {
       p && setProviders(p)
     })
   }, [])
 
   const handleLogin = async (providerId: string) => {
-    signIn(providerId)
+    await signIn(providerId)
     insertLogMutate({
       level: 'info',
       message: `登录成功`,
@@ -57,7 +61,7 @@ export default function LoginModal() {
                     className="w-full"
                     variant="shadow"
                     onPress={() => {
-                      handleLogin(provider.id)
+                      void handleLogin(provider.id)
                     }}
                     startContent={<FaGithub />}
                   >

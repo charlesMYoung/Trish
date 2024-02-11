@@ -1,14 +1,14 @@
 'use client'
 
-import Editor from '~/components/editor/editor'
-import { useEditorStore } from '~/zustand'
 import { Button, Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { MdViewCozy } from 'react-icons/md'
 import { shallow } from 'zustand/shallow'
+import Editor from '~/components/editor/editor'
 import { api } from '~/trpc/react'
+import { useEditorStore } from '~/zustand'
 
 export default function HomeAdmin() {
   const { mutate: updateArticleTitle } =
@@ -24,7 +24,7 @@ export default function HomeAdmin() {
   } = api.article.getHomeArticle.useMutation({
     onSuccess(data) {
       initEditor({
-        title: data?.title || '',
+        title: data?.title ?? '',
       })
     },
   })
@@ -32,13 +32,16 @@ export default function HomeAdmin() {
   const { mutate: updateArticleContent } =
     api.article.updateHomeArticleContent.useMutation()
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { run: updateArticleTitleByTitleDebounce } =
     useDebounceFn(updateArticleTitle)
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { run: updateArticleContentDebounce } =
     useDebounceFn(updateArticleContent)
 
   const onContentHandle = (content: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     updateArticleContentDebounce({
       content,
     })
@@ -50,6 +53,7 @@ export default function HomeAdmin() {
       (state) => state.title,
       (curSidebars, preSidebars) => {
         if (curSidebars !== preSidebars) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           updateArticleTitleByTitleDebounce({
             title: curSidebars,
           })
@@ -81,7 +85,7 @@ export default function HomeAdmin() {
         onTitle={changeTitle}
         onContent={onContentHandle}
         title={title || ''}
-        defaultContent={homeArticle?.content || ''}
+        defaultContent={homeArticle?.content ?? ''}
       ></Editor>
       <Button
         variant="shadow"

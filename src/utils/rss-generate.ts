@@ -6,7 +6,7 @@ import RSS from 'rss'
 import { db } from '~/server/db'
 
 export default async function generateRssFeed() {
-  const site_url = process.env.SITE_URL || ''
+  const site_url = process.env.SITE_URL ?? ''
 
   const feedOptions = {
     title: 'cyatime | RSS Feed',
@@ -32,10 +32,10 @@ export default async function generateRssFeed() {
   // Add each individual post to the feed.
   articles.map((post) => {
     feed.item({
-      title: post.title || '',
-      description: post.description || '',
+      title: post.title ?? '',
+      description: post.description ?? '',
       url: `${site_url}/post/${post.id}`,
-      date: post.release_date || new Date(),
+      date: post.release_date ?? new Date(),
     })
   })
 

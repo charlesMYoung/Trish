@@ -1,7 +1,7 @@
-import { toJSON, toObject } from '~/utils/common'
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Checklist from '@editorjs/checklist'
 import CodeTool from '@editorjs/code'
-import EditorJS, { type OutputBlockData } from '@editorjs/editorjs'
+import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import Image from '@editorjs/image'
 import InlineCode from '@editorjs/inline-code'
@@ -9,6 +9,7 @@ import LinkTool from '@editorjs/link'
 import List from '@editorjs/list'
 import Table from '@editorjs/table'
 import { useEffect, useRef } from 'react'
+import { toJSON, toObject } from '~/utils/common'
 
 export type UseEditorProps = {
   defaultContent: string
@@ -27,10 +28,10 @@ export const useEditor = ({
   const editorRef = useRef<HTMLDivElement | null>(null)
 
   const onChangeHandle = async () => {
-    if (editor && editor.current) {
+    if (editor?.current) {
       if (editor?.current.save) {
         const data = await editor?.current.save()
-        onChange && onChange(toJSON<OutputBlockData[]>(data?.blocks || []))
+        onChange && onChange(toJSON(data?.blocks || []))
       }
     }
   }
@@ -73,11 +74,11 @@ export const useEditor = ({
         onReady: () => {
           console.log('Editor.js is ready to work!')
         },
-        onChange: () => onChangeHandle(),
+        onChange: () => void onChangeHandle(),
       })
     }
     return () => {
-      if (editor.current && editor.current.destroy) {
+      if (editor.current?.destroy) {
         editor.current.destroy()
       }
     }

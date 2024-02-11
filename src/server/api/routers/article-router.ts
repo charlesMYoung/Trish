@@ -1,15 +1,15 @@
 import { and, count, eq } from 'drizzle-orm'
 import { createApi } from 'unsplash-js'
 import { z } from 'zod'
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
-import { article, image } from '~/server/db/schema'
 import { queryCoverByArticleId } from '~/server/db/prepare'
+import { article, image } from '~/server/db/schema'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 export const ArticleRoute = createTRPCRouter({
   getArticleById: publicProcedure
     .input(z.object({ id: z.string() }))
-    .query(({ input: { id },ctx }) => {
-      return ctx.db.query.article.findFirst({  
+    .query(({ input: { id }, ctx }) => {
+      return ctx.db.query.article.findFirst({
         columns: {
           id: true,
           title: true,
@@ -32,7 +32,7 @@ export const ArticleRoute = createTRPCRouter({
         cateId: z.string(),
       })
     )
-    .mutation(({ input: { id, cateId },ctx }) => {
+    .mutation(({ input: { id, cateId }, ctx }) => {
       return ctx.db.query.article.findFirst({
         columns: {
           id: true,
@@ -58,7 +58,7 @@ export const ArticleRoute = createTRPCRouter({
         title: z.string(),
       })
     )
-    .mutation(({ input: { id, title },ctx }) => {
+    .mutation(({ input: { id, title }, ctx }) => {
       return ctx.db
         .update(article)
         .set({
@@ -74,7 +74,7 @@ export const ArticleRoute = createTRPCRouter({
         content: z.string(),
       })
     )
-    .mutation(({ input: { id, content },ctx }) => {
+    .mutation(({ input: { id, content }, ctx }) => {
       return ctx.db
         .update(article)
         .set({
@@ -90,7 +90,7 @@ export const ArticleRoute = createTRPCRouter({
         cateId: z.string(),
       })
     )
-    .mutation(({ input: { id, cateId },ctx }) => {
+    .mutation(({ input: { id, cateId }, ctx }) => {
       return ctx.db.insert(article).values({
         id,
         category_id: cateId,
@@ -107,7 +107,7 @@ export const ArticleRoute = createTRPCRouter({
       })
     )
     .mutation(
-      async ({ input: { id, title, content, coverUrl, categoryId },ctx }) => {
+      async ({ input: { id, title, content, coverUrl, categoryId }, ctx }) => {
         return ctx.db.transaction(async (tx) => {
           const articleResult = await ctx.db
             .insert(article)
@@ -132,7 +132,7 @@ export const ArticleRoute = createTRPCRouter({
             })
             .catch(async (error) => {
               console.trace('upsetArticle error', error)
-              await tx.rollback()
+              tx.rollback()
             })
 
           const covers = await queryCoverByArticleId.execute({
@@ -153,7 +153,7 @@ export const ArticleRoute = createTRPCRouter({
                 type: 'COVER',
                 modified_at: new Date(),
               })
-              .where(eq(image.id, covers[0]?.id || ''))
+              .where(eq(image.id, covers[0]?.id ?? ''))
           }
           return articleResult
         })
@@ -166,7 +166,7 @@ export const ArticleRoute = createTRPCRouter({
         id: z.string(),
       })
     )
-    .mutation(({ input: { id },ctx }) => {
+    .mutation(({ input: { id }, ctx }) => {
       return ctx.db.query.article.findMany({
         columns: {
           category_id: true,
@@ -183,11 +183,11 @@ export const ArticleRoute = createTRPCRouter({
 
   delArticleById: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(({ input: { id },ctx }) => {
+    .mutation(({ input: { id }, ctx }) => {
       return ctx.db.delete(article).where(eq(article.id, id))
     }),
 
-  countArticle: publicProcedure.query(({ctx}) => {
+  countArticle: publicProcedure.query(({ ctx }) => {
     return ctx.db
       .select({ value: count(article.id) })
       .from(article)
@@ -201,7 +201,7 @@ export const ArticleRoute = createTRPCRouter({
         coverUrl: z.string(),
       })
     )
-    .mutation(async ({ input: { articleId, coverUrl },ctx }) => {
+    .mutation(async ({ input: { articleId, coverUrl }, ctx }) => {
       return ctx.db.transaction(async (tx) => {
         const covers = await queryCoverByArticleId
           .execute({
@@ -209,7 +209,7 @@ export const ArticleRoute = createTRPCRouter({
           })
           .catch(async (error) => {
             console.error('error', error)
-            await tx.rollback()
+            tx.rollback()
             return []
           })
 
@@ -236,10 +236,10 @@ export const ArticleRoute = createTRPCRouter({
               type: 'COVER',
               modified_at: new Date(),
             })
-            .where(eq(image.id, covers[0]?.id || ''))
+            .where(eq(image.id, covers[0]?.id ?? ''))
             .catch(async (error) => {
               console.error('error', error)
-              await tx.rollback()
+              tx.rollback()
             })
         }
         return {}
@@ -276,7 +276,7 @@ export const ArticleRoute = createTRPCRouter({
       })
   }),
 
-  getHomeArticle: publicProcedure.mutation(({ctx}) => {
+  getHomeArticle: publicProcedure.mutation(({ ctx }) => {
     return ctx.db.query.article.findFirst({
       columns: {
         id: true,
@@ -296,7 +296,7 @@ export const ArticleRoute = createTRPCRouter({
         title: z.string(),
       })
     )
-    .mutation(({ input: { title } ,ctx}) => {
+    .mutation(({ input: { title }, ctx }) => {
       return ctx.db.transaction(async (tx) => {
         const resp = await ctx.db
           .select()
@@ -304,7 +304,7 @@ export const ArticleRoute = createTRPCRouter({
           .where(eq(article.category_id, 'HOME'))
           .catch(async (error) => {
             console.error('error', error)
-            await tx.rollback()
+            tx.rollback()
           })
 
         if (resp && resp.length === 0) {
@@ -337,7 +337,7 @@ export const ArticleRoute = createTRPCRouter({
         content: z.string(),
       })
     )
-    .mutation(({ input: { content },ctx }) => {
+    .mutation(({ input: { content }, ctx }) => {
       return ctx.db
         .update(article)
         .set({

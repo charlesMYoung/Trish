@@ -1,10 +1,10 @@
 'use client'
 
-import { useEditor } from '~/hooks'
 import { useDebounceFn } from 'ahooks'
+import { useEditor } from '~/hooks'
+import { api } from '~/trpc/react'
 import { Cover } from '../cover/cover'
 import { TitleInput } from './titleInput'
-import { api } from '~/trpc/react'
 
 export type EditorProps = {
   defaultContent?: string
@@ -27,7 +27,8 @@ const Editor = ({
   onCover,
   onContent,
 }: EditorProps) => {
-  const { run: onEditHandle } = useDebounceFn(async (value) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { run: onEditHandle } = useDebounceFn(async (value: string) => {
     onContent && onContent(value)
   })
 
@@ -50,6 +51,7 @@ const Editor = ({
     readOnly: readOnly,
     id: articleId,
     onChange: (content) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       onEditHandle(content)
     },
     defaultContent,

@@ -1,6 +1,7 @@
 'use client'
 
 import RcUpload, { type UploadProps } from 'rc-upload'
+import { type UploadRequestError } from 'rc-upload/lib/interface'
 
 export type UploadButtonProps = {
   startContent?: React.ReactNode
@@ -23,7 +24,7 @@ export const Upload = (props: UploadButtonProps) => {
     onError(err) {
       console.log('onError', err)
     },
-    async customRequest({ data, file, filename, headers, onError, onSuccess }) {
+    customRequest({ data, file, filename, headers, onError, onSuccess }) {
       const formData = new FormData()
       if (data) {
         Object.keys(data).forEach((key) => {
@@ -31,18 +32,18 @@ export const Upload = (props: UploadButtonProps) => {
         })
       }
       if (filename) formData.append(filename, file)
-      try {
-        const res = await fetch(`r`, {
-          method: 'POST',
-          body: formData,
-          headers: headers,
-        }).then((resp) => resp.json())
-
-        onSuccess && onSuccess(res)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        onError && onError(err, null)
-      }
+      fetch(`r`, {
+        method: 'POST',
+        body: formData,
+        headers: headers,
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          onSuccess && onSuccess(data)
+        })
+        .catch((err: UploadRequestError) => {
+          onError && onError(err, null)
+        })
 
       return {
         abort() {

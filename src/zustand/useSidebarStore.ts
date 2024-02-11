@@ -1,10 +1,9 @@
 import type {} from '@redux-devtools/extension' // required for devtools typing
-import { type StateCreator, create } from 'zustand'
+import { create, type StateCreator } from 'zustand'
 import { devtools, subscribeWithSelector } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { SideBarConfig } from '~/config/appConfig'
 import { type Article, type Category } from '~/server/db/schema'
-import { MenuType } from '~/types/common'
 import { type Sidebar } from '~/types/sidebar'
 import { createSelectors } from './createSelectors'
 
@@ -45,7 +44,7 @@ const sidebarState: StateCreator<
   initMenus: (categories: Category[]) =>
     set((state: SidebarState) => {
       state.sidebars = state.sidebars.map((item) => {
-        if (item.id === MenuType.CATEGORY) {
+        if (item.id === 'category') {
           item.children = categories.map((category) => {
             const sidebarExit = item.children?.find(
               (sidebar) => sidebar.id === category.id
@@ -55,7 +54,7 @@ const sidebarState: StateCreator<
               name: category.name,
               href: '',
               icon: '',
-              children: sidebarExit?.children || [],
+              children: sidebarExit?.children ?? [],
             }
           })
         }
@@ -65,7 +64,7 @@ const sidebarState: StateCreator<
   editMenu: (name: string, menuId: string) =>
     set((state: SidebarState) => {
       state.sidebars.forEach((item) => {
-        if (item.id === MenuType.CATEGORY) {
+        if (item.id === 'category') {
           item.children?.forEach((subItem) => {
             if (subItem.id === menuId) {
               subItem.name = name
@@ -78,7 +77,7 @@ const sidebarState: StateCreator<
   insertMenu: (menu) =>
     set((state: SidebarState) => {
       state.sidebars = state.sidebars.map((item) => {
-        if (item.id === MenuType.CATEGORY) {
+        if (item.id === 'category') {
           item.children?.push({
             id: menu.id,
             name: menu.name,
@@ -93,7 +92,7 @@ const sidebarState: StateCreator<
   deleteMenu: (menuId: string) =>
     set((state: SidebarState) => {
       state.sidebars = state.sidebars.map((item) => {
-        if (item.id === MenuType.CATEGORY) {
+        if (item.id === 'category') {
           item.children = item.children?.filter(
             (category) => category.id !== menuId
           )
@@ -104,7 +103,7 @@ const sidebarState: StateCreator<
   insertArticleToCategory: (articleId, categoryId) => {
     return set((state: SidebarState) => {
       state.sidebars.forEach((item) => {
-        if (item.id === MenuType.CATEGORY) {
+        if (item.id === 'category') {
           item.children?.forEach((category) => {
             if (category.id === categoryId) {
               category.children?.push({
@@ -125,7 +124,7 @@ const sidebarState: StateCreator<
   insertArticleToCategoryFromServe(articles, cateId) {
     return set((state: SidebarState) => {
       state.sidebars.forEach((item) => {
-        if (item.id === MenuType.CATEGORY) {
+        if (item.id === 'category') {
           item.children?.forEach((category) => {
             if (category.id === cateId) {
               category.children = articles?.map((article) => {

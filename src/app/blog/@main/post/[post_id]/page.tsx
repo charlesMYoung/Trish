@@ -1,5 +1,5 @@
-import Editor from '~/components/editor/editor'
 import { type Metadata } from 'next'
+import Editor from '~/components/editor/editor'
 import { api } from '~/trpc/server'
 
 const getArticle = (id: string) => {
@@ -31,10 +31,10 @@ export default async function Post({ params }: Props) {
         readOnly
         articleId={post_id}
         coverUrl={
-          currentArticle?.images.find((img) => img.type === 'COVER')?.url || ''
+          currentArticle?.images.find((img) => img.type === 'COVER')?.url ?? ''
         }
-        title={currentArticle?.title || ''}
-        defaultContent={currentArticle?.content || ''}
+        title={currentArticle?.title ?? ''}
+        defaultContent={currentArticle?.content ?? ''}
       ></Editor>
     </div>
   )

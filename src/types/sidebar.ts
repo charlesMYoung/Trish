@@ -1,5 +1,5 @@
-import { type Category } from '~/server/db/schema'
 import { type ReactNode } from 'react'
+import { type Category } from '~/server/db/schema'
 
 export type Sidebar = {
   id: string

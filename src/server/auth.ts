@@ -7,6 +7,7 @@ import {
 import { type Adapter } from 'next-auth/adapters'
 import { env } from '~/env'
 
+import GitHubProvider from 'next-auth/providers/github'
 import { db } from '~/server/db'
 import { createTable } from '~/server/db/schema'
 
@@ -71,9 +72,3 @@ export const authOptions: NextAuthOptions = {
  * @see https://next-auth.js.org/configuration/nextjs
  */
 export const getServerAuthSession = () => getServerSession(authOptions)
-function GitHubProvider(arg0: {
-  clientId: string
-  clientSecret: string
-}): import('next-auth/providers/index').Provider {
-  throw new Error('Function not implemented.')
-}

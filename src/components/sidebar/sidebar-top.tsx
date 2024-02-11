@@ -14,8 +14,8 @@ import { twMerge } from 'tailwind-merge'
 export function SidebarTop() {
   const { data: session } = useSession()
   const { push } = useRouter()
-  const logoutHandle = () => {
-    signOut()
+  const logoutHandle = async () => {
+    await signOut()
     push('/')
   }
   return (
@@ -31,7 +31,7 @@ export function SidebarTop() {
             as="button"
             avatarProps={{
               isBordered: true,
-              src: session?.user?.image!,
+              src: session?.user?.image ?? '',
             }}
             className="transition-transform"
             description={session?.user?.email}

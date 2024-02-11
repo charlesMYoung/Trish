@@ -1,13 +1,11 @@
-import { type Metadata } from "next";
-import { unstable_noStore as noStore } from "next/cache";
-import Link from "next/link";
-import Editor from "~/components/editor/editor";
-import { api } from "~/trpc/server";
+import { type Metadata } from 'next'
+import Editor from '~/components/editor/editor'
+import { api } from '~/trpc/server'
 
 async function getHomeArticle() {
-  const data = await api.article.getHomeArticle.mutate();
+  const data = await api.article.getHomeArticle.mutate()
   return data
-} 
+}
 
 //HACK: force-dynamic to force re-generate metadata
 export const dynamic = 'force-dynamic'
@@ -27,10 +25,9 @@ export default async function Home() {
       <Editor
         readOnly
         articleId={''}
-        title={homeData?.title || ''}
-        defaultContent={homeData?.content || ''}
+        title={homeData?.title ?? ''}
+        defaultContent={homeData?.content ?? ''}
       ></Editor>
     </main>
   )
 }
-
