@@ -1,7 +1,9 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
+  pgEnum,
   pgTableCreator,
   primaryKey,
   serial,
@@ -10,6 +12,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
+import { createId } from '@paralleldrive/cuid2'
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -41,7 +44,7 @@ export const posts = createTable(
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }),
   emailVerified: timestamp("emailVerified", {
     mode: "date",
   }).default(sql`CURRENT_TIMESTAMP`),
@@ -114,3 +117,91 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export const postImageType = pgEnum('type', ['CONTENT', 'AVATAR', 'COVER'])
+
+export const article = createTable('article', {
+  id: varchar('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  title: varchar('title', {
+    length: 100,
+  }),
+  description: text('description'),
+  is_release: boolean('is_release').default(false),
+  content: text('content'),
+  release_date: timestamp('release_date').defaultNow(),
+  created_at: timestamp('created_at').defaultNow(),
+  modified_at: timestamp('modified_at').defaultNow(),
+
+  category_id: varchar('category_id'),
+})
+
+export type Article = typeof article.$inferSelect
+
+export const articleRelation = relations(article, ({ one, many }) => ({
+  category: one(category, {
+    fields: [article.category_id],
+    references: [category.id],
+  }),
+  images: many(image),
+}))
+
+export const image = createTable('image', {
+  id: varchar('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  name: varchar('name', {
+    length: 100,
+  }),
+  url: varchar('url', {
+    length: 256,
+  }),
+  path: varchar('path', {
+    length: 256,
+  }),
+  type: postImageType('type'),
+  created_at: timestamp('created_at').defaultNow(),
+  modified_at: timestamp('modified_at').defaultNow(),
+
+  article_id: varchar('article_id'),
+})
+
+export type Image = typeof image.$inferSelect
+
+export const imageRelation = relations(image, ({ one }) => ({
+  article: one(article, {
+    fields: [image.article_id],
+    references: [article.id],
+  }),
+}))
+
+export const category = createTable('category', {
+  id: varchar('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  name: varchar('name', {
+    length: 100,
+  }),
+  created_at: timestamp('created_at').defaultNow(),
+  modified_at: timestamp('modified_at').defaultNow(),
+})
+
+export type Category = typeof category.$inferSelect
+
+export const categoryRelation = relations(category, ({ many }) => ({
+  articles: many(article),
+}))
+
+
+export const operationLog = createTable('operation_log', {
+  id: varchar('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  user_id: varchar('user_id'),
+  level: varchar('level'),
+  message: text('message'),
+  created_at: timestamp('created_at').defaultNow(),
+})
+
+

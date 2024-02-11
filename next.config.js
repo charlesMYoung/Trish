@@ -5,6 +5,16 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+    output: 'standalone',
+    images: {
+      formats: ['image/avif', 'image/webp'],
+      remotePatterns: [
+        {
+          hostname: '*.unsplash.com',
+        },
+      ],
+    },
+};
 
 export default config;
