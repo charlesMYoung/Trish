@@ -1,6 +1,6 @@
 import { ScrollShadow } from '@nextui-org/scroll-shadow'
-import { getServerSession } from 'next-auth'
 import { Toolbar } from '~/components'
+import { getServerAuthSession } from '~/server/auth'
 import { NextAuthProvider } from './provider/auth-provider'
 
 export default async function DashboardLayout({
@@ -13,7 +13,7 @@ export default async function DashboardLayout({
   main: React.ReactNode
   login: React.ReactNode
 }) {
-  const session = await getServerSession()
+  const session = await getServerAuthSession()
   return (
     <NextAuthProvider>
       {session && session.user ? (

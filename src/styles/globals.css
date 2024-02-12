@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'smileysans';
+  src:
+    url('/fonts/SmileySans-Oblique.otf.woff2') format('woff2'),
+    url('/fonts/SmileySans-Oblique.ttf.woff2') format('woff2');
+}
+
+.ce-toolbar__content {
+  @apply !max-w-none;
+}
+
+.ce-block__content {
+  @apply !max-w-none;
+}
+
+@media (prefers-reduced-motion) {
+  path {
+    animation: none !important;
+    stroke-dasharray: unset !important;
+  }
+}
+@keyframes grow {
+  0% {
+    stroke-dashoffset: 1px;
+    stroke-dasharray: 0 3370.09912109375px;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  40% {
+    stroke-dasharray: 3370.09912109375px 0;
+  }
+  /* Moving back */
+  85% {
+    stroke-dasharray: 3370.09912109375px 0;
+  }
+  95%,
+  to {
+    stroke-dasharray: 0 3370.09912109375px;
+  }
+}
+.logo path {
+  stroke-dashoffset: 2px;
+  stroke-dasharray: 3370.09912109375px 0;
+  animation: grow 10s ease forwards infinite;
+  transform-origin: center;
+  stroke: #6f6c6c;
+  animation-delay: 0s;
+}
