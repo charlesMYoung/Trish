@@ -3,7 +3,12 @@
 import Editor from '@/components/editor/editor'
 import { trpc } from '@/utils/trpc-client'
 import { useEditorStore } from '@/zustand'
-import { Button, Skeleton } from '@nextui-org/react'
+import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Button,
+  Skeleton,
+} from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -76,6 +81,12 @@ export default function HomeAdmin() {
     </div>
   ) : (
     <>
+      <div className="mb-4 flex h-10 items-center">
+        <Breadcrumbs>
+          <BreadcrumbItem>主菜单</BreadcrumbItem>
+          <BreadcrumbItem>首页</BreadcrumbItem>
+        </Breadcrumbs>
+      </div>
       <Editor
         articleId={'home'}
         onTitle={changeTitle}

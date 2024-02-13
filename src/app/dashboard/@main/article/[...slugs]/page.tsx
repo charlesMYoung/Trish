@@ -1,5 +1,6 @@
 'use client'
 
+import { Toolbar } from '@/components'
 import Editor from '@/components/editor/editor'
 import { useSidebarStore } from '@/hooks'
 import { trpc } from '@/utils/trpc-client'
@@ -25,6 +26,9 @@ export default function ArticlePage({
   const initEditor = useEditorStore.use.initEditor()
   const { mutate: updateArticleCover } = trpc.updateArticleCover.useMutation({})
   const route = useRouter()
+
+  const { mutate: updateArticleCoverRelease } =
+    trpc.updateArticleRelease.useMutation()
 
   const {
     data: currentArticle,
@@ -111,6 +115,13 @@ export default function ArticlePage({
     route.push(`/blog/post/${articleId}`)
   }
 
+  const onSwitchRelease = (isRelease: boolean) => {
+    updateArticleCoverRelease({
+      articleId: articleId,
+      isRelease,
+    })
+  }
+
   return isLoading ? (
     <div className="flex flex-col space-y-2">
       <Skeleton className="flex h-64 w-full rounded-lg" />
@@ -119,6 +130,10 @@ export default function ArticlePage({
     </div>
   ) : (
     <>
+      <Toolbar
+        isRelease={currentArticle?.is_release || false}
+        onSwitchRelease={onSwitchRelease}
+      />
       <Editor
         articleId={articleId}
         onTitle={onTitleHandle}

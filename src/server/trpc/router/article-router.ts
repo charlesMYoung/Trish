@@ -2,6 +2,7 @@ import { db } from '@/server/db'
 import { queryCoverByArticleId } from '@/server/db/prepared'
 import { article, image } from '@/server/db/schema'
 import { protectedProcedure, publicProcedure, router } from '@/server/trpc'
+import generateRssFeed from '@/utils/rss-generate'
 import { and, count, eq } from 'drizzle-orm'
 import { createApi } from 'unsplash-js'
 import { z } from 'zod'
@@ -194,6 +195,33 @@ export const ArticleRoute = router({
       .from(article)
       .then((resp) => resp[0].value)
   }),
+
+  updateArticleRelease: protectedProcedure
+    .input(
+      z.object({
+        articleId: z.string(),
+        isRelease: z.boolean(),
+      })
+    )
+    .mutation(async ({ input: { articleId, isRelease } }) => {
+      if (isRelease) {
+        await generateRssFeed()
+        return db
+          .update(article)
+          .set({
+            is_release: isRelease,
+            release_date: new Date(),
+          })
+          .where(eq(article.id, articleId))
+      }
+
+      return db
+        .update(article)
+        .set({
+          is_release: isRelease,
+        })
+        .where(eq(article.id, articleId))
+    }),
 
   updateArticleCover: protectedProcedure
     .input(

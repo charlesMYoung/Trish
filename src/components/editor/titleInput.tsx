@@ -61,6 +61,7 @@ export function TitleInput({
             'bg-transparent z-10',
             'border-none',
             'hover:bg-transparent',
+            'shadow-none',
             'data-[hover=true]:bg-transparent',
             'group-data-[focus=true]:bg-transparent',
           ],
