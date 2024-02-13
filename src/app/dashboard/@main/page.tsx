@@ -1,9 +1,10 @@
 'use client'
 
-import { InfoCard } from '~/components'
+import { BreadcrumbItem, Breadcrumbs } from '@nextui-org/react'
 import { useSession } from 'next-auth/react'
 import { FaFileAlt, FaTag } from 'react-icons/fa'
 import { FaCommentDots, FaImage } from 'react-icons/fa6'
+import { InfoCard } from '~/components'
 import { api } from '~/trpc/react'
 
 export default function DashboardDefault() {
@@ -12,7 +13,12 @@ export default function DashboardDefault() {
   console.log('session', session, status)
   return (
     <div className="mb-4">
-      <div className="mb-4 text-large text-default-500">快速预览</div>
+      <div className="mb-4 flex h-10 items-center">
+        <Breadcrumbs>
+          <BreadcrumbItem>主菜单</BreadcrumbItem>
+          <BreadcrumbItem>仪表盘</BreadcrumbItem>
+        </Breadcrumbs>
+      </div>
       <div className="flex w-full flex-col space-y-6 md:flex-row md:space-x-4 md:space-y-0">
         <InfoCard
           title="文章"

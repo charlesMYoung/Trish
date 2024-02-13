@@ -10,9 +10,9 @@ export default async function generateRssFeed() {
 
   const feedOptions = {
     title: 'cyatime | RSS Feed',
-    description: 'Welcome to this blog posts!',
+    description: '这里记录我的成长',
     site_url: site_url,
-    feed_url: `${process.env.SITE_URL}/rss.xml`,
+    feed_url: `${process.env.SITE_URL}/feed.xml`,
     image_url: `${process.env.SITE_URL}/logo.jpeg`,
     pubDate: new Date(),
     copyright: `All rights reserved ${new Date().getFullYear()}`,
@@ -27,21 +27,23 @@ export default async function generateRssFeed() {
       description: true,
       release_date: true,
     },
+    where(fields, operators) {
+      return operators.and(operators.eq(fields.is_release, true))
+    },
   })
 
-  // Add each individual post to the feed.
   articles.map((post) => {
     feed.item({
       title: post.title ?? '',
       description: post.description ?? '',
-      url: `${site_url}/post/${post.id}`,
+      url: `${site_url}/blog/post/${post.id}`,
       date: post.release_date ?? new Date(),
     })
   })
 
   // Write the RSS feed to a file as XML.
   fs.writeFileSync(
-    path.join(process.cwd(), 'public/rss.xml'),
+    path.join(process.cwd(), 'public/feed.xml'),
     feed.xml({ indent: true })
   )
 }

@@ -3,6 +3,7 @@ import { createApi } from 'unsplash-js'
 import { z } from 'zod'
 import { queryCoverByArticleId } from '~/server/db/prepare'
 import { article, image } from '~/server/db/schema'
+import generateRssFeed from '~/utils/rss-generate'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 export const ArticleRoute = createTRPCRouter({
@@ -23,6 +24,33 @@ export const ArticleRoute = createTRPCRouter({
         },
         where: (article, { eq }) => eq(article.id, id),
       })
+    }),
+
+  updateArticleRelease: protectedProcedure
+    .input(
+      z.object({
+        articleId: z.string(),
+        isRelease: z.boolean(),
+      })
+    )
+    .mutation(async ({ input: { articleId, isRelease }, ctx }) => {
+      if (isRelease) {
+        await generateRssFeed()
+        return ctx.db
+          .update(article)
+          .set({
+            is_release: isRelease,
+            release_date: new Date(),
+          })
+          .where(eq(article.id, articleId))
+      }
+
+      return ctx.db
+        .update(article)
+        .set({
+          is_release: isRelease,
+        })
+        .where(eq(article.id, articleId))
     }),
 
   getArticleByCateIdAndId: publicProcedure

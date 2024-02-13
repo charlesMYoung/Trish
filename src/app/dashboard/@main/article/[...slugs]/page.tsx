@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { MdViewCozy } from 'react-icons/md'
 import { shallow } from 'zustand/shallow'
+import { Toolbar } from '~/components'
 import Editor from '~/components/editor/editor'
 import { useSidebarStore } from '~/hooks'
 import { api } from '~/trpc/react'
@@ -27,6 +28,9 @@ export default function ArticlePage({
   const initEditor = useEditorStore.use.initEditor()
   const { mutate: updateArticleCover } =
     api.article.updateArticleCover.useMutation({})
+
+  const { mutate: updateArticleCoverRelease } =
+    api.article.updateArticleRelease.useMutation()
 
   const {
     data: currentArticle,
@@ -114,6 +118,13 @@ export default function ArticlePage({
     })
   }
 
+  const onSwitchRelease = (isRelease: boolean) => {
+    updateArticleCoverRelease({
+      articleId: articleId,
+      isRelease,
+    })
+  }
+
   const onTitleHandle = (articleTitle: string) => {
     changeTitle(articleTitle)
   }
@@ -130,6 +141,10 @@ export default function ArticlePage({
     </div>
   ) : (
     <>
+      <Toolbar
+        isRelease={currentArticle?.is_release ?? false}
+        onSwitchRelease={onSwitchRelease}
+      />
       <Editor
         articleId={articleId}
         onTitle={onTitleHandle}
