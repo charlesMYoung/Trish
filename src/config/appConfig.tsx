@@ -1,8 +1,8 @@
-import { type Sidebar } from '~/types/sidebar'
 import { FiHome } from 'react-icons/fi'
 import { MdBrowserUpdated } from 'react-icons/md'
 import { PiReadCvLogoThin } from 'react-icons/pi'
 import { RiDashboard2Fill } from 'react-icons/ri'
+import { type Sidebar } from '~/types/sidebar'
 
 export const SideBarConfig: Sidebar[] = [
   {
@@ -28,7 +28,7 @@ export const SideBarConfig: Sidebar[] = [
     id: 'category',
   },
   {
-    name: '系统',
+    name: '通用',
     id: 'system',
     children: [
       {

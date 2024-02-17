@@ -145,13 +145,12 @@ export default function SideBarPage() {
   }
 
   return (
-    <motion.div
+    <motion.aside
       animate={{
         opacity: isShowBar || lg ? '1' : '0',
         width: isShowBar || lg ? '20rem' : '0px',
       }}
-      className="sticky left-0 top-0 box-border flex
-     h-full border-r-1 border-default-100 pl-4"
+      className="sticky left-0 top-0 box-border flex h-full border-r-1 border-default-100 pl-4"
     >
       <ScrollShadow className="flex-1 space-y-2 pr-4">
         <SidebarTop />
@@ -240,6 +239,6 @@ export default function SideBarPage() {
           )
         })}
       </ScrollShadow>
-    </motion.div>
+    </motion.aside>
   )
 }

@@ -20,7 +20,8 @@ export default function RootLayout({
   topMenu: React.ReactNode
 }) {
   const pathname = usePathname()
-  const isShowTopMenu = pathname.includes('/dashboard')
+  const isShowTopMenu =
+    pathname.includes('/dashboard') || pathname.includes('/login')
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
