@@ -32,7 +32,7 @@ export const LoginForm = () => {
   }
 
   return (
-    <Card>
+    <Card className="w-96">
       <CardHeader>欢迎回来！</CardHeader>
       <CardBody className="space-y-4">
         <Input

@@ -1,11 +1,14 @@
-'use client'
-import '~/styles/globals.css'
-
+import { dir } from 'i18next'
 import { Inter } from 'next/font/google'
-import { usePathname } from 'next/navigation'
-
+import { headers } from 'next/headers'
+import '~/styles/globals.css'
 import { TRPCReactProvider } from '~/trpc/react'
 import { UIProviders } from './providers'
+const languages = ['en', 'de']
+
+export async function generateStaticParams() {
+  return languages.map((lng) => ({ lng }))
+}
 
 const inter = Inter({
   subsets: ['latin'],
@@ -15,19 +18,22 @@ const inter = Inter({
 export default function RootLayout({
   children,
   topMenu,
+  params: { lng },
 }: {
   children: React.ReactNode
   topMenu: React.ReactNode
+  params: {
+    lng: string
+  }
 }) {
-  const pathname = usePathname()
-  const isShowTopMenu =
-    pathname.includes('/dashboard') || pathname.includes('/login')
+  const headersList = headers()
+  const fullUrl = headersList.get('referer') ?? ''
   return (
-    <html lang="en">
+    <html lang={lng} dir={dir(lng)}>
       <body className={`font-sans ${inter.variable}`}>
         <UIProviders>
           <TRPCReactProvider>
-            {!isShowTopMenu ? topMenu : ''}
+            {!/(login|dashboard)/.test(fullUrl) ? topMenu : null}
             {children}
           </TRPCReactProvider>
         </UIProviders>

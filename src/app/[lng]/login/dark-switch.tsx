@@ -6,7 +6,6 @@ import { useDark } from '~/hooks/useDark'
 
 export const DarkSwitch = () => {
   const { isDark, toggle } = useDark()
-  console.log('isDark', isDark)
   return (
     <Switch
       onValueChange={toggle}
