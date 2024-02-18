@@ -1,0 +1,9 @@
+{
+  "title": "Welcome to back",
+  "email": "Email",
+  "version": "current version",
+  "placeholder": "please enter your email",
+  "login-by-email": "Login by email",
+  "or": "OR",
+  "login-submit": "Login with {{provider}}"
+}

@@ -1,0 +1,9 @@
+{
+  "title": "欢迎回来",
+  "email": "邮箱",
+  "version": "当前版本",
+  "placeholder": "请输入邮箱",
+  "login-by-email": "邮箱登录",
+  "or": "或",
+  "login-submit": "使用 {{provider}} 登录"
+}

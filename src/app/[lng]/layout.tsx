@@ -28,12 +28,13 @@ export default function RootLayout({
 }) {
   const headersList = headers()
   const fullUrl = headersList.get('referer') ?? ''
+  console.log('fullUrl', fullUrl)
   return (
     <html lang={lng} dir={dir(lng)}>
       <body className={`font-sans ${inter.variable}`}>
         <UIProviders>
           <TRPCReactProvider>
-            {!/(login|dashboard)/.test(fullUrl) ? topMenu : null}
+            {!/(login|dashboard)/.test(fullUrl) && fullUrl ? topMenu : null}
             {children}
           </TRPCReactProvider>
         </UIProviders>

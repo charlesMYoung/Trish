@@ -16,11 +16,15 @@ import {
   type LiteralUnion,
 } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from '~/app/i18n/client'
 import AuthProvider from './auth-provider'
 
-export const LoginForm = () => {
+export const LoginForm = ({ lng }: { lng: string }) => {
   const [providers, setProviders] =
     useState<Record<LiteralUnion<BuiltInProviderType>, ClientSafeProvider>>()
+
+  const { t } = useTranslation(lng, 'login')
+
   useEffect(() => {
     void AuthProvider().then((p) => {
       p && setProviders(p)
@@ -33,12 +37,12 @@ export const LoginForm = () => {
 
   return (
     <Card className="w-96">
-      <CardHeader>欢迎回来！</CardHeader>
+      <CardHeader>{t('title')}</CardHeader>
       <CardBody className="space-y-4">
         <Input
           type="email"
-          label="Email"
-          placeholder="you@example.com"
+          label={t('email')}
+          placeholder={t('placeholder')}
           labelPlacement="outside"
           startContent={
             <Icon
@@ -48,11 +52,11 @@ export const LoginForm = () => {
           }
         />
         <Button className="w-full" variant="shadow" color="primary">
-          通过邮箱登录
+          {t('login-by-email')}
         </Button>
         <div className="flex space-x-1 items-center">
           <Divider className="flex-1" />
-          <span className="text-sm text-default-500">或者</span>
+          <span className="text-sm text-default-500">{t('or')}</span>
           <Divider className="flex-1" />
         </div>
         {providers &&
@@ -69,7 +73,9 @@ export const LoginForm = () => {
                 <Icon icon="mdi:github" className="text-default-500 text-lg" />
               }
             >
-              使用 {provider.name} 登录
+              {t('login-submit', {
+                provider: provider.name,
+              })}
             </Button>
           ))}
       </CardBody>
