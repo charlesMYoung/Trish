@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   const headersList = headers()
   const fullUrl = headersList.get('referer') ?? ''
-  console.log('fullUrl', fullUrl)
+  console.log('fullUrl', fullUrl, 'result', !/(login|dashboard)/.test(fullUrl))
   return (
     <html lang={lng} dir={dir(lng)}>
       <body className={`font-sans ${inter.variable}`}>

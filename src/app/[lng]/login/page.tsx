@@ -2,6 +2,7 @@ import { useTranslation } from '~/app/i18n'
 import { Logo } from '~/components/logo/logo'
 import { cn } from '~/utils/cn'
 import { DarkSwitch } from './dark-switch'
+import { LangSwitch } from './lan-switch'
 import { LoginForm } from './login-form'
 import { SideLoginImage } from './side-image'
 
@@ -37,6 +38,7 @@ export default async function Login({
         <div className="h-screen px-5 flex flex-col justify-between py-4">
           <div className="w-full flex justify-end">
             <DarkSwitch />
+            <LangSwitch lng={lng}></LangSwitch>
           </div>
           <div className="flex justify-center">
             <LoginForm lng={lng} />
