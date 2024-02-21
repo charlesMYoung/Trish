@@ -1,42 +1,50 @@
-import acceptLanguage from 'accept-language'
-import { NextResponse, type NextRequest } from 'next/server'
-import { cookieName, fallbackLng, languages } from '~/app/i18n/settings'
+import { withAuth } from 'next-auth/middleware'
+import createIntlMiddleware from 'next-intl/middleware'
+import { type NextRequest } from 'next/server'
+import { locales } from './navigation'
 
-acceptLanguage.languages(languages)
+const publicPages = [
+  '/',
+  '/login',
+  // (/secret requires auth)
+]
 
-export const config = {
-  // matcher: '/:lng*',
-  matcher: [
-    '/((?!api|_next/static|_next/image|images|assets|favicon.ico|sw.js).*)',
-  ],
+const intlMiddleware = createIntlMiddleware({
+  locales,
+  localePrefix: 'as-needed',
+  defaultLocale: 'en',
+})
+
+const authMiddleware = withAuth(
+  // Note that this callback is only invoked if
+  // the `authorized` callback has returned `true`
+  // and not for pages listed in `pages`.
+  (req) => intlMiddleware(req),
+  {
+    pages: {
+      signIn: '/login',
+    },
+  }
+)
+
+export default function middleware(req: NextRequest) {
+  const publicPathnameRegex = RegExp(
+    `^(/(${locales.join('|')}))?(${publicPages
+      .flatMap((p) => (p === '/' ? ['', '/'] : p))
+      .join('|')})/?$`,
+    'i'
+  )
+  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname)
+
+  if (isPublicPage) {
+    return intlMiddleware(req)
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return (authMiddleware as unknown)(req)
+  }
 }
 
-export function middleware(req: NextRequest) {
-  let lng
-  if (req.cookies.has(cookieName))
-    lng = acceptLanguage.get(req.cookies.get(cookieName)?.value)
-  if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))
-  if (!lng) lng = fallbackLng
-
-  // Redirect if lng in path is not supported
-  if (
-    !languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
-    !req.nextUrl.pathname.startsWith('/_next')
-  ) {
-    return NextResponse.redirect(
-      new URL(`/${lng}${req.nextUrl.pathname}`, req.url)
-    )
-  }
-
-  if (req.headers.has('referer')) {
-    const refererUrl = new URL(req.headers.get('referer')!)
-    const lngInReferer = languages.find((l) =>
-      refererUrl.pathname.startsWith(`/${l}`)
-    )
-    const response = NextResponse.next()
-    if (lngInReferer) response.cookies.set(cookieName, lngInReferer)
-    return response
-  }
-
-  return NextResponse.next()
+export const config = {
+  // Skip all paths that should not be internationalized
+  matcher: ['/((?!api|_next|.*\\..*).*)'],
 }

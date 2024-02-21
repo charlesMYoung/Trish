@@ -15,15 +15,15 @@ import {
   type ClientSafeProvider,
   type LiteralUnion,
 } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from '~/app/i18n/client'
 import AuthProvider from './auth-provider'
 
-export const LoginForm = ({ lng }: { lng: string }) => {
+export const LoginForm = () => {
   const [providers, setProviders] =
     useState<Record<LiteralUnion<BuiltInProviderType>, ClientSafeProvider>>()
-  const { t } = useTranslation(lng, 'login')
+  const t = useTranslations('Login')
   const search = useSearchParams()
   const errorMsg = search.get('error')
 

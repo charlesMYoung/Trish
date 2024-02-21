@@ -1,17 +1,13 @@
-import { useTranslation } from '~/app/i18n'
+import { useTranslations } from 'next-intl'
+import LocaleSwitcher from '~/components/locale-switcher/locale-switcher'
 import { Logo } from '~/components/logo/logo'
 import { cn } from '~/utils/cn'
 import { DarkSwitch } from './dark-switch'
-import { LangSwitch } from './lan-switch'
 import { LoginForm } from './login-form'
 import { SideLoginImage } from './side-image'
 
-export default async function Login({
-  params: { lng },
-}: {
-  params: { lng: string }
-}) {
-  const { t } = await useTranslation(lng, 'login')
+export default function Login() {
+  const t = useTranslations('Login')
   return (
     <div className={cn('h-full', 'flex')}>
       <div className="flex-col justify-between flex-1 hidden md:flex">
@@ -38,10 +34,10 @@ export default async function Login({
         <div className="h-screen px-5 flex flex-col justify-between py-4">
           <div className="w-full flex justify-end">
             <DarkSwitch />
-            <LangSwitch lng={lng}></LangSwitch>
+            <LocaleSwitcher />
           </div>
           <div className="flex justify-center">
-            <LoginForm lng={lng} />
+            <LoginForm />
           </div>
           <div />
         </div>
