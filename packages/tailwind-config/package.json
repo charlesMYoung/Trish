@@ -1,0 +1,13 @@
+{
+  "name": "@trish/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./tailwind.config.ts"
+  },
+  "dependencies": {
+    "@nextui-org/react": "^2.2.9",
+    "@tailwindcss/typography": "^0.5.10",
+    "tailwindcss": "^3.4.1"
+  }
+}
