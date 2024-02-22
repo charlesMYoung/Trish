@@ -39,8 +39,7 @@ export default function middleware(req: NextRequest) {
   if (isPublicPage) {
     return intlMiddleware(req)
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (authMiddleware as unknown)(req)
+    return (authMiddleware as (req: NextRequest) => void)(req)
   }
 }
 
