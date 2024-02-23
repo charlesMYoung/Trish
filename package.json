@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "turbo dev",
-    "build":"turbo build"
+    "build": "turbo build"
   },
   "author": "",
   "license": "MIT",

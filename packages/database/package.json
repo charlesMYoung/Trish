@@ -1,0 +1,25 @@
+{
+  "name": "@trish/database",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@trish/config-ts": "workspace:*",
+    "drizzle-orm": "^0.29.3",
+    "next-auth": "^4.24.5",
+    "postgres": "^3.4.3"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.20.9",
+    "tsup": "^8.0.2",
+    "typescript": "^5.1.6"
+  }
+}

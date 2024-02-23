@@ -1,0 +1,8 @@
+{
+  "name": "@trish/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  }
+}

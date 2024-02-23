@@ -7,7 +7,7 @@ export default getRequestConfig(async ({ locale }) => {
   if (!locales.includes(locale as 'en' | 'zh')) notFound()
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-    messages: (await import(`../messages/${locale}.json`)).default,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    messages: require(`@trish/i18n/messages/${locale}.json`),
   }
 })
