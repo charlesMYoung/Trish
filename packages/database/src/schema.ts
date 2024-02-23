@@ -1,5 +1,5 @@
-import { createId } from '@paralleldrive/cuid2'
-import { relations, sql } from 'drizzle-orm'
+import { createId } from "@paralleldrive/cuid2";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -11,8 +11,8 @@ import {
   text,
   timestamp,
   varchar,
-} from 'drizzle-orm/pg-core'
-import { type AdapterAccount } from 'next-auth/adapters'
+} from "drizzle-orm/pg-core";
+import { type AdapterAccount } from "next-auth/adapters";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -20,124 +20,124 @@ import { type AdapterAccount } from 'next-auth/adapters'
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `trish_${name}`)
+export const createTable = pgTableCreator((name) => `trish_${name}`);
 
 export const posts = createTable(
-  'post',
+  "post",
   {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 256 }),
-    createdById: varchar('createdById', { length: 255 })
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 256 }),
+    createdById: varchar("createdById", { length: 255 })
       .notNull()
       .references(() => users.id),
-    createdAt: timestamp('created_at')
+    createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp('updatedAt'),
+    updatedAt: timestamp("updatedAt"),
   },
   (example) => ({
-    createdByIdIdx: index('createdById_idx').on(example.createdById),
-    nameIndex: index('name_idx').on(example.name),
+    createdByIdIdx: index("createdById_idx").on(example.createdById),
+    nameIndex: index("name_idx").on(example.name),
   })
-)
+);
 
-export const users = createTable('user', {
-  id: varchar('id', { length: 255 }).notNull().primaryKey(),
-  name: varchar('name', { length: 255 }),
-  email: varchar('email', { length: 255 }),
-  emailVerified: timestamp('emailVerified', {
-    mode: 'date',
+export const users = createTable("user", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }),
+  emailVerified: timestamp("emailVerified", {
+    mode: "date",
   }).default(sql`CURRENT_TIMESTAMP`),
-  image: varchar('image', { length: 255 }),
-})
+  image: varchar("image", { length: 255 }),
+});
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
-}))
+}));
 
 export const accounts = createTable(
-  'account',
+  "account",
   {
-    userId: varchar('userId', { length: 255 })
+    userId: varchar("userId", { length: 255 })
       .notNull()
       .references(() => users.id),
-    type: varchar('type', { length: 255 })
-      .$type<AdapterAccount['type']>()
+    type: varchar("type", { length: 255 })
+      .$type<AdapterAccount["type"]>()
       .notNull(),
-    provider: varchar('provider', { length: 255 }).notNull(),
-    providerAccountId: varchar('providerAccountId', { length: 255 }).notNull(),
-    refresh_token: text('refresh_token'),
-    access_token: text('access_token'),
-    expires_at: integer('expires_at'),
-    token_type: varchar('token_type', { length: 255 }),
-    scope: varchar('scope', { length: 255 }),
-    id_token: text('id_token'),
-    session_state: varchar('session_state', { length: 255 }),
+    provider: varchar("provider", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: varchar("token_type", { length: 255 }),
+    scope: varchar("scope", { length: 255 }),
+    id_token: text("id_token"),
+    session_state: varchar("session_state", { length: 255 }),
   },
   (account) => ({
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-    userIdIdx: index('account_userId_idx').on(account.userId),
+    userIdIdx: index("account_userId_idx").on(account.userId),
   })
-)
+);
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}))
+}));
 
 export const sessions = createTable(
-  'session',
+  "session",
   {
-    sessionToken: varchar('sessionToken', { length: 255 })
+    sessionToken: varchar("sessionToken", { length: 255 })
       .notNull()
       .primaryKey(),
-    userId: varchar('userId', { length: 255 })
+    userId: varchar("userId", { length: 255 })
       .notNull()
       .references(() => users.id),
-    expires: timestamp('expires', { mode: 'date' }).notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (session) => ({
-    userIdIdx: index('session_userId_idx').on(session.userId),
+    userIdIdx: index("session_userId_idx").on(session.userId),
   })
-)
+);
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}))
+}));
 
 export const verificationTokens = createTable(
-  'verificationToken',
+  "verificationToken",
   {
-    identifier: varchar('identifier', { length: 255 }).notNull(),
-    token: varchar('token', { length: 255 }).notNull(),
-    expires: timestamp('expires', { mode: 'date' }).notNull(),
+    identifier: varchar("identifier", { length: 255 }).notNull(),
+    token: varchar("token", { length: 255 }).notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
-)
+);
 
-export const postImageType = pgEnum('type', ['CONTENT', 'AVATAR', 'COVER'])
+export const postImageType = pgEnum("type", ["CONTENT", "AVATAR", "COVER"]);
 
-export const article = createTable('article', {
-  id: varchar('id')
+export const article = createTable("article", {
+  id: varchar("id")
     .$defaultFn(() => createId())
     .primaryKey(),
-  title: varchar('title', {
+  title: varchar("title", {
     length: 100,
   }),
-  description: text('description'),
-  is_release: boolean('is_release').default(false),
-  content: text('content'),
-  release_date: timestamp('release_date').defaultNow(),
-  created_at: timestamp('created_at').defaultNow(),
-  modified_at: timestamp('modified_at').defaultNow(),
+  description: text("description"),
+  is_release: boolean("is_release").default(false),
+  content: text("content"),
+  release_date: timestamp("release_date").defaultNow(),
+  created_at: timestamp("created_at").defaultNow(),
+  modified_at: timestamp("modified_at").defaultNow(),
 
-  category_id: varchar('category_id'),
-})
+  category_id: varchar("category_id"),
+});
 
-export type Article = typeof article.$inferSelect
+export type Article = typeof article.$inferSelect;
 
 export const articleRelation = relations(article, ({ one, many }) => ({
   category: one(category, {
@@ -145,60 +145,60 @@ export const articleRelation = relations(article, ({ one, many }) => ({
     references: [category.id],
   }),
   images: many(image),
-}))
+}));
 
-export const image = createTable('image', {
-  id: varchar('id')
+export const image = createTable("image", {
+  id: varchar("id")
     .$defaultFn(() => createId())
     .primaryKey(),
-  name: varchar('name', {
+  name: varchar("name", {
     length: 100,
   }),
-  url: varchar('url', {
+  url: varchar("url", {
     length: 256,
   }),
-  path: varchar('path', {
+  path: varchar("path", {
     length: 256,
   }),
-  type: postImageType('type'),
-  created_at: timestamp('created_at').defaultNow(),
-  modified_at: timestamp('modified_at').defaultNow(),
+  type: postImageType("type"),
+  created_at: timestamp("created_at").defaultNow(),
+  modified_at: timestamp("modified_at").defaultNow(),
 
-  article_id: varchar('article_id'),
-})
+  article_id: varchar("article_id"),
+});
 
-export type Image = typeof image.$inferSelect
+export type Image = typeof image.$inferSelect;
 
 export const imageRelation = relations(image, ({ one }) => ({
   article: one(article, {
     fields: [image.article_id],
     references: [article.id],
   }),
-}))
+}));
 
-export const category = createTable('category', {
-  id: varchar('id')
+export const category = createTable("category", {
+  id: varchar("id")
     .$defaultFn(() => createId())
     .primaryKey(),
-  name: varchar('name', {
+  name: varchar("name", {
     length: 100,
   }),
-  created_at: timestamp('created_at').defaultNow(),
-  modified_at: timestamp('modified_at').defaultNow(),
-})
+  created_at: timestamp("created_at").defaultNow(),
+  modified_at: timestamp("modified_at").defaultNow(),
+});
 
-export type Category = typeof category.$inferSelect
+export type Category = typeof category.$inferSelect;
 
 export const categoryRelation = relations(category, ({ many }) => ({
   articles: many(article),
-}))
+}));
 
-export const operationLog = createTable('operation_log', {
-  id: varchar('id')
+export const operationLog = createTable("operation_log", {
+  id: varchar("id")
     .$defaultFn(() => createId())
     .primaryKey(),
-  user_id: varchar('user_id'),
-  level: varchar('level'),
-  message: text('message'),
-  created_at: timestamp('created_at').defaultNow(),
-})
+  user_id: varchar("user_id"),
+  level: varchar("level"),
+  message: text("message"),
+  created_at: timestamp("created_at").defaultNow(),
+});
