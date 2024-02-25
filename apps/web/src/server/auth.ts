@@ -7,9 +7,9 @@ import {
 import { type Adapter } from 'next-auth/adapters'
 import { env } from '~/env'
 
+import { db } from '@trish/database'
+import { createTable } from '@trish/database/schema'
 import GitHubProvider from 'next-auth/providers/github'
-import { db } from '~/server/db'
-import { createTable } from '~/server/db/schema'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

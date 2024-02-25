@@ -1,13 +1,13 @@
 'use client'
 
-import { ListSkeleton } from '~/components'
-import { type Category } from '~/server/db/schema'
-import { groupByArray } from '~/utils/common'
 import { Link } from '@nextui-org/react'
+import { type Category } from '@trish/database/schema'
 import dayjs from 'dayjs'
 import NextLink from 'next/link'
 import { useMemo } from 'react'
+import { ListSkeleton } from '~/components'
 import { api } from '~/trpc/react'
+import { groupByArray } from '~/utils/common'
 
 export default function BlogPost() {
   const {

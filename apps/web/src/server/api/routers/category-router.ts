@@ -1,10 +1,10 @@
+import { category } from '@trish/database/schema'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
-import { category } from '~/server/db/schema'
 
 export const CategoryRoute = createTRPCRouter({
-  getAllCategory: publicProcedure.query(({ctx}) => {
+  getAllCategory: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.category.findMany({
       columns: {
         id: true,
@@ -23,7 +23,7 @@ export const CategoryRoute = createTRPCRouter({
         name: z.string(),
       })
     )
-    .mutation(({ input: { id, name },ctx }) => {
+    .mutation(({ input: { id, name }, ctx }) => {
       return ctx.db
         .update(category)
         .set({
@@ -42,7 +42,7 @@ export const CategoryRoute = createTRPCRouter({
         id: z.string(),
       })
     )
-    .mutation(({ input: { id },ctx }) => {
+    .mutation(({ input: { id }, ctx }) => {
       return ctx.db.delete(category).where(eq(category.id, id)).returning({
         id: category.id,
         name: category.name,
@@ -56,7 +56,7 @@ export const CategoryRoute = createTRPCRouter({
         id: z.string(),
       })
     )
-    .mutation(({ input: { name },ctx}) => {
+    .mutation(({ input: { name }, ctx }) => {
       return ctx.db
         .insert(category)
         .values({

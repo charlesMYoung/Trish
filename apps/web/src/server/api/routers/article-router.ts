@@ -1,8 +1,8 @@
+import { queryCoverByArticleId } from '@trish/database/prepare'
+import { article, image } from '@trish/database/schema'
 import { and, count, eq } from 'drizzle-orm'
 import { createApi } from 'unsplash-js'
 import { z } from 'zod'
-import { queryCoverByArticleId } from '~/server/db/prepare'
-import { article, image } from '~/server/db/schema'
 import generateRssFeed from '~/utils/rss-generate'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 

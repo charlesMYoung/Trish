@@ -1,5 +1,5 @@
+import { type Category } from '@trish/database/schema'
 import { type ReactNode } from 'react'
-import { type Category } from '~/server/db/schema'
 
 export type Sidebar = {
   id: string

@@ -1,7 +1,7 @@
+import { operationLog } from '@trish/database/schema'
 import { count, desc } from 'drizzle-orm'
 import z from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
-import { operationLog } from '~/server/db/schema'
 
 export const OperationLogRouter = createTRPCRouter({
   getLogByPagination: protectedProcedure
@@ -11,7 +11,7 @@ export const OperationLogRouter = createTRPCRouter({
         size: z.number().default(50),
       })
     )
-    .mutation(async ({ input: { current, size },ctx }) => {
+    .mutation(async ({ input: { current, size }, ctx }) => {
       const limit = size + 1
       return ctx.db.transaction(async () => {
         const data = await ctx.db
@@ -40,7 +40,7 @@ export const OperationLogRouter = createTRPCRouter({
         user_id: z.string(),
       })
     )
-    .mutation(async ({ input: { level, message, user_id },ctx }) => {
+    .mutation(async ({ input: { level, message, user_id }, ctx }) => {
       return ctx.db.insert(operationLog).values({
         level,
         message,

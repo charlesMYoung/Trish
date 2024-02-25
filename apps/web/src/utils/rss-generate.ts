@@ -1,9 +1,9 @@
 'use server'
 
+import { db } from '@trish/database'
 import fs from 'fs'
 import path from 'path'
 import RSS from 'rss'
-import { db } from '~/server/db'
 
 export default async function generateRssFeed() {
   const site_url = process.env.SITE_URL ?? ''

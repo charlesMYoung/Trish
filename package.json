@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "dotenv -e .env -- turbo dev --parallel",
     "build": "turbo build"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "dotenv-cli": "^7.3.0",
     "prettier": "^3.1.0",
     "prettier-plugin-organize-imports": "^3.2.4",
     "turbo": "^1.12.4"

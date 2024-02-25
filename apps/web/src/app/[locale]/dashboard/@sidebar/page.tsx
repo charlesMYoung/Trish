@@ -2,6 +2,7 @@
 
 import { ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
+import { type Category } from '@trish/database/schema'
 import { useDebounceFn } from 'ahooks'
 import { useResponsive } from 'ahooks/lib/useResponsive'
 import { motion } from 'framer-motion'
@@ -17,7 +18,6 @@ import { SidebarItem } from '~/components/sidebar/sidebar-item'
 import { MenuTitle } from '~/components/sidebar/sidebar-menu'
 import { SidebarTop } from '~/components/sidebar/sidebar-top'
 import { useSidebarStore } from '~/hooks'
-import { type Category } from '~/server/db/schema'
 import { api } from '~/trpc/react'
 import { diffChildren } from '~/utils/sidebar'
 

@@ -1,11 +1,5 @@
 {
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "tsup.config.ts"],
   "extends": "@trish/config-ts/base.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./src/*"]
-    }
-  },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

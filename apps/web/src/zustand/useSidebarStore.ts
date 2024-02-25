@@ -1,9 +1,9 @@
 import type {} from '@redux-devtools/extension' // required for devtools typing
+import { type Article, type Category } from '@trish/database/schema'
 import { create, type StateCreator } from 'zustand'
 import { devtools, subscribeWithSelector } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { SideBarConfig } from '~/config/appConfig'
-import { type Article, type Category } from '~/server/db/schema'
 import { type Sidebar } from '~/types/sidebar'
 import { createSelectors } from './createSelectors'
 

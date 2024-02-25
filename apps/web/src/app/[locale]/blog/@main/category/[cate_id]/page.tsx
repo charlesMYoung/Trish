@@ -1,12 +1,12 @@
 'use client'
 
 import { Link } from '@nextui-org/react'
+import { type Category } from '@trish/database/schema'
 import dayjs from 'dayjs'
 import NextLink from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useMemo } from 'react'
 import { ListSkeleton } from '~/components'
-import { type Category } from '~/server/db/schema'
 import { api } from '~/trpc/react'
 import { groupByArray } from '~/utils/common'
 

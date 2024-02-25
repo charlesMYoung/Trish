@@ -60,7 +60,8 @@
     "zustand": "^4.5.0",
     "@trish/config-tailwind": "workspace:*",
     "@trish/i18n": "workspace:*",
-    "@trish/config-ts": "workspace:*"
+    "@trish/config-ts": "workspace:*",
+    "@trish/database": "workspace:*"
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",
