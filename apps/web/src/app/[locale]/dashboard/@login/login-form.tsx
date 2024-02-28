@@ -1,14 +1,7 @@
 'use client'
 
 import { Icon } from '@iconify/react'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Input,
-} from '@nextui-org/react'
+import { Button, Card, CardBody, CardHeader } from '@nextui-org/react'
 import { type BuiltInProviderType } from 'next-auth/providers/index'
 import {
   signIn,
@@ -74,27 +67,6 @@ export const LoginForm = () => {
       <Card>
         <CardHeader>{t('title')}</CardHeader>
         <CardBody className="space-y-4">
-          <Input
-            isClearable
-            type="email"
-            label={t('email')}
-            placeholder={t('placeholder')}
-            labelPlacement="outside"
-            startContent={
-              <Icon
-                icon="bx:bxs-envelope"
-                className="text-default-500 text-medium"
-              />
-            }
-          />
-          <Button className="w-full" variant="shadow" color="primary">
-            {t('login-by-email')}
-          </Button>
-          <div className="flex space-x-1 items-center">
-            <Divider className="flex-1" />
-            <span className="text-sm text-default-500">{t('or')}</span>
-            <Divider className="flex-1" />
-          </div>
           {providers &&
             Object.values(providers).map((provider) => (
               <Button

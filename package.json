@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "dotenv -e .env -- turbo dev --parallel",
-    "build": "turbo build"
+    "build": "turbo build",
+    "lint": "dotenv -e .env -- turbo lint"
   },
   "author": "",
   "license": "MIT",
