@@ -1,6 +1,11 @@
 import { type Metadata } from 'next'
-import Editor from '~/components/editor/editor'
+import dynamic from 'next/dynamic'
 import { api } from '~/trpc/server'
+
+const Editor = dynamic(() => import('~/components/editor/editor'), {
+  loading: () => null,
+  ssr: false,
+})
 
 const getArticle = (id: string) => {
   return api.article.getArticleById.query({

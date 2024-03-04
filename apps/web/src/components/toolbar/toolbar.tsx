@@ -4,7 +4,7 @@ import { Button, Switch } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import { MdLightMode, MdNightlight } from 'react-icons/md'
 import { TbLayoutSidebarRight } from 'react-icons/tb'
-import { useSidebarStore } from '~/zustand'
+import { useSidebarStore } from '~/zustand/useSidebarStore'
 
 export function Toolbar({
   isRelease,

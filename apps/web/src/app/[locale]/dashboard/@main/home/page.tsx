@@ -7,11 +7,16 @@ import {
   Skeleton,
 } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { MdViewCozy } from 'react-icons/md'
 import { shallow } from 'zustand/shallow'
-import Editor from '~/components/editor/editor'
+const Editor = dynamic(() => import('~/components/editor/editor'), {
+  loading: () => null,
+  ssr: false,
+})
+
 import { api } from '~/trpc/react'
 import { useEditorStore } from '~/zustand'
 

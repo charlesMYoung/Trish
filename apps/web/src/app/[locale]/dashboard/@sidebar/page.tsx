@@ -4,7 +4,6 @@ import { ScrollShadow } from '@nextui-org/react'
 import { createId } from '@paralleldrive/cuid2'
 import { type Category } from '@trish/database/schema'
 import { useDebounceFn } from 'ahooks'
-import { useResponsive } from 'ahooks/lib/useResponsive'
 import { motion } from 'framer-motion'
 import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -17,9 +16,9 @@ import { PopoverInput } from '~/components/sidebar/popover-input'
 import { SidebarItem } from '~/components/sidebar/sidebar-item'
 import { MenuTitle } from '~/components/sidebar/sidebar-menu'
 import { SidebarTop } from '~/components/sidebar/sidebar-top'
-import { useSidebarStore } from '~/hooks'
 import { api } from '~/trpc/react'
 import { diffChildren } from '~/utils/sidebar'
+import { useSidebarStore } from '~/zustand/useSidebarStore'
 
 export default function SideBarPage() {
   const pathName = usePathname()
@@ -57,7 +56,6 @@ export default function SideBarPage() {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { run: updateCategoryDebounce } = useDebounceFn(updateCategory)
-  const { lg } = useResponsive()
 
   useEffect(() => {
     if (categoriesFromServer) {
@@ -145,13 +143,7 @@ export default function SideBarPage() {
   }
 
   return (
-    <motion.aside
-      animate={{
-        opacity: isShowBar || lg ? '1' : '0',
-        width: isShowBar || lg ? '20rem' : '0px',
-      }}
-      className="sticky left-0 top-0 box-border flex h-full border-r-1 border-default-100 pl-4"
-    >
+    <motion.aside className="sticky left-0 top-0 box-border flex h-full border-r-1 border-default-100 pl-4">
       <ScrollShadow className="flex-1 space-y-2 pr-4">
         <SidebarTop />
         {sidebars.map((sidebar) => {

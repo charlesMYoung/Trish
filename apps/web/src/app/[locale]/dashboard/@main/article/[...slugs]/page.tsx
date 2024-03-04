@@ -2,15 +2,20 @@
 
 import { Button, Skeleton } from '@nextui-org/react'
 import { useDebounceFn } from 'ahooks'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { MdViewCozy } from 'react-icons/md'
 import { shallow } from 'zustand/shallow'
 import { Toolbar } from '~/components'
-import Editor from '~/components/editor/editor'
-import { useSidebarStore } from '~/hooks'
+const Editor = dynamic(() => import('~/components/editor/editor'), {
+  loading: () => null,
+  ssr: false,
+})
+
 import { api } from '~/trpc/react'
 import { useEditorStore } from '~/zustand'
+import { useSidebarStore } from '~/zustand/useSidebarStore'
 
 export default function ArticlePage({
   params,

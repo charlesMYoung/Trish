@@ -1,77 +1,47 @@
-'use client'
+import { useTranslations } from 'next-intl'
+import LocaleSwitcher from '~/components/locale-switcher/locale-switcher'
+import { Logo } from '~/components/logo/logo'
+import { cn } from '~/utils/cn'
+import { DarkSwitch } from './dark-switch'
+import { LoginForm } from './login-form'
+import { SideLoginImage } from './side-image'
 
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from '@nextui-org/react'
-import { type BuiltInProviderType } from 'next-auth/providers/index'
-import {
-  signIn,
-  type ClientSafeProvider,
-  type LiteralUnion,
-} from 'next-auth/react'
-import { useEffect, useState } from 'react'
-import { FaGithub } from 'react-icons/fa'
-import { api } from '~/trpc/react'
-import AuthProvider from './auth-provider'
-
-export default function LoginModal() {
-  const { onOpenChange } = useDisclosure()
-  const [providers, setProviders] =
-    useState<Record<LiteralUnion<BuiltInProviderType>, ClientSafeProvider>>()
-
-  const { mutate: insertLogMutate } = api.log.insertLog.useMutation()
-
-  useEffect(() => {
-    void AuthProvider().then((p) => {
-      p && setProviders(p)
-    })
-  }, [])
-
-  const handleLogin = async (providerId: string) => {
-    await signIn(providerId)
-    insertLogMutate({
-      level: 'info',
-      message: `登录成功`,
-      user_id: providerId,
-    })
-  }
-
+export default function Login() {
+  const t = useTranslations('Login')
   return (
-    <Modal isOpen={true} onOpenChange={onOpenChange} placement="top-center">
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader className="flex flex-col gap-1 text-center">
-              登录
-            </ModalHeader>
-            <ModalBody></ModalBody>
-            <ModalFooter className="flex flex-col">
-              {providers &&
-                Object.values(providers).map((provider) => (
-                  <Button
-                    key={provider.id}
-                    href={provider.signinUrl}
-                    color="secondary"
-                    className="w-full"
-                    variant="shadow"
-                    onPress={() => {
-                      void handleLogin(provider.id)
-                    }}
-                    startContent={<FaGithub />}
-                  >
-                    使用 {provider.name} 登录
-                  </Button>
-                ))}
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <div className={cn('h-full', 'flex')}>
+      <div className="flex-col justify-between flex-1 hidden md:flex">
+        <div className={cn('w-full h-screen relative')}>
+          <SideLoginImage />
+          <div className="text-2xl text-default-500 absolute z-20">
+            <div className="h-screen px-5 flex flex-col justify-between space-x-4 py-4">
+              <Logo />
+              <div>
+                <div className="text-4xl text-foreground">{t('title')}</div>
+                <div className="text-4xl text-primary-500">Trish</div>
+              </div>
+              <div className="top-0 text-default-600 text-sm">
+                © {new Date().getFullYear()}{' '}
+                <span className="text-secondary-500">
+                  {t('version')} - {process.env.npm_package_version}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex-1">
+        <div className="h-screen px-5 flex flex-col justify-between py-4">
+          <div className="w-full flex justify-end">
+            <DarkSwitch />
+            <LocaleSwitcher />
+          </div>
+          <div className="flex justify-center">
+            <LoginForm />
+          </div>
+          <div />
+        </div>
+      </div>
+    </div>
   )
 }

@@ -85,3 +85,4 @@ export const useEditor = ({
   }, [])
   return { editorRef, editor }
 }
+export default useEditor

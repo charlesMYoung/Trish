@@ -24,6 +24,10 @@
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-query": "^4.36.1",
+    "@trish/config-tailwind": "workspace:*",
+    "@trish/config-ts": "workspace:*",
+    "@trish/database": "workspace:*",
+    "@trish/i18n": "workspace:*",
     "@trpc/client": "^10.43.6",
     "@trpc/next": "^10.43.6",
     "@trpc/react-query": "^10.43.6",
@@ -54,11 +58,7 @@
     "unsplash-js": "^7.0.19",
     "usehooks-ts": "^2.14.0",
     "zod": "^3.22.4",
-    "zustand": "^4.5.0",
-    "@trish/config-tailwind": "workspace:*",
-    "@trish/i18n": "workspace:*",
-    "@trish/config-ts": "workspace:*",
-    "@trish/database": "workspace:*"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",

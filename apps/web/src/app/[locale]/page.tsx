@@ -1,5 +1,10 @@
 import { type Metadata } from 'next'
-import Editor from '~/components/editor/editor'
+import NextDynamic from 'next/dynamic'
+const Editor = NextDynamic(() => import('~/components/editor/editor'), {
+  loading: () => null,
+  ssr: false,
+})
+
 import { api } from '~/trpc/server'
 
 async function getHomeArticle() {
